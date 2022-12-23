@@ -351,10 +351,11 @@
                                                         OIC
                                                         <br />
                                                         प्रभारी अधिकारी<span style="color: red;">*</span></label>
-                                                    <asp:DropDownList ID="ddlOIC" runat="server" CssClass="form-control select2" OnSelectedIndexChanged="ddlOIC_SelectedIndexChanged" AutoPostBack="true">
+                                                 <%--   <asp:DropDownList ID="ddlOIC" runat="server" CssClass="form-control select2" OnSelectedIndexChanged="ddlOIC_SelectedIndexChanged" AutoPostBack="true">
                                                         <asp:ListItem Value="0">Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <small><span id="valddlOIC" class="text-danger"></span></small>
+                                                    <small><span id="valddlOIC" class="text-danger"></span></small>--%>
+                                                    <asp:TextBox ID="txtOICName" runat="server" CssClass="form-control" MaxLength="70"></asp:TextBox>
                                                 </div>
                                             </div>
 
@@ -363,7 +364,7 @@
                                                     <label>
                                                         Department<br />
                                                         विभाग</label>
-                                                    <asp:TextBox ID="txtDepartmentName" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                                    <asp:TextBox ID="txtOICDepartmentName" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                                 </div>
                                             </div>
                                         </div>

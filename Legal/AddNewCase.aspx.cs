@@ -27,21 +27,19 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                 {
                     ViewState["Emp_ID"] = Session["Emp_ID"];
                     ViewState["Office_ID"] = Session["Office_ID"];
-
-                    // FillOICDropdown();
-                    FillAdvocateDropdown();
                     FillDistrict();
+                    BindCourtName();
                     // ddlDistrict.Enabled = false;
                     if (Request.QueryString["Case_ID"] != null)
                     {
                         ViewState["Case_ID"] = objdb.Decrypt(Request.QueryString["Case_ID"].ToString());
-                        FillCaseDetail();
+                        //  FillCaseDetail();
                         btnClear.Enabled = false;
                     }
                     if (Request.QueryString["ReopenCase_ID"] != null)
                     {
                         ViewState["ReopenCase_ID"] = objdb.Decrypt(Request.QueryString["ReopenCase_ID"].ToString());
-                        FillCaseDetail();
+                        // FillCaseDetail();
                     }
                 }
 
@@ -59,57 +57,31 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
 
     }
 
-    //protected void FillOICDropdown()
-    //{
-    //    try
-    //    {
-    //        lblMsg.Text = "";
-    //        txtDesignation.Text = "";
-    //        txtDepartmentName.Text = "";
-    //        txtOICMobileNo.Text = "";
-    //        txtOICEmail.Text = "";
-    //        ds = objdb.ByProcedure("SpHREmployee", new string[] { "flag", "Office_ID" }, new string[] { "11", ddloffice.SelectedValue.ToString() }, "dataset");
-    //        ds = objdb.ByProcedure("SpHREmployee", new string[] { "flag" }, new string[] { "39" }, "dataset");
-    //        ddlOIC.DataSource = ds.Tables[0];
-    //        ddlOIC.DataTextField = "Emp_Name";
-    //        ddlOIC.DataValueField = "Emp_ID";
-    //        ddlOIC.DataBind();
-    //        ddlOIC.Items.Insert(0, new ListItem("Select", "0"));
-
-
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
-    //    }
-    //}
-    protected void FillAdvocateDropdown()
+    protected void BindCourtName()
     {
         try
         {
-            lblMsg.Text = "";
-            //txtAdvocateName.Text = "";
-            //txtAdvocateEmail.Text = "";
-            //txtAdvocateAddress.Text = "";
-            //txtAdvocateMobileNo.Text = "";
-            //ds = objdb.ByProcedure("SpLegalAdvocateRegistration", new string[] { "flag" }, new string[] { "7" }, "dataset");
-            //ddlAdvocate.DataSource = ds.Tables[0];
-            //ddlAdvocate.DataTextField = "Advocate_Name";
-            //ddlAdvocate.DataValueField = "Advocate_ID";
-            //ddlAdvocate.DataBind();
-            ddlAdvocate.Items.Insert(0, new ListItem("Select", "0"));
-
+            ddlCourtType.Items.Clear();
+            ds = objdb.ByProcedure("USP_Legal_Select_CourtType", new string[] { }, new string[] { }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCourtType.DataTextField = "CourtTypeName";
+                ddlCourtType.DataValueField = "CourtType_ID";
+                ddlCourtType.DataSource = ds;
+                ddlCourtType.DataBind();
+            }
+            ddlCourtType.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
+
     protected void FillDistrict()
     {
         try
         {
-            //ddlDistrictForRespondent.Items.Clear();
             ds = objdb.ByProcedure("USP_Select_District", new string[] { }, new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -118,49 +90,15 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                 ddlDistrict.DataValueField = "District_ID";
                 ddlDistrict.DataBind();
                 ddlDistrict.Items.Insert(0, new ListItem("Select", "0"));
-                //ddlDistrictForRespondent.DataValueField = "District_ID";
-                //ddlDistrictForRespondent.DataTextField = "District_Name";
-                //ddlDistrictForRespondent.DataSource = ds;
-                //ddlDistrictForRespondent.DataBind();
-                //ddlDistrictForRespondent.Items.Insert(0, new ListItem("Select", "0"));
             }
-            else
-            {
 
-            }
         }
         catch (Exception ex)
         {
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-    protected void ddlOIC_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
 
-            lblMsg.Text = "";
-            txtDepartmentName.Text = "";
-            txtOICMobileNo.Text = "";
-            txtOICEmail.Text = "";
-            txtDesignation.Text = "";
-            if (ddlOIC.SelectedIndex > 0)
-            {
-                ds = objdb.ByProcedure("SpLegalCaseRegistration", new string[] { "flag", "Emp_ID" }, new string[] { "10", ddlOIC.SelectedValue.ToString() }, "dataset");
-                txtDepartmentName.Text = ds.Tables[0].Rows[0]["Department_Name"].ToString();
-                txtDesignation.Text = ds.Tables[0].Rows[0]["Designation_Name"].ToString();
-                txtOICMobileNo.Text = ds.Tables[0].Rows[0]["Emp_MobileNo"].ToString();
-                txtOICEmail.Text = ds.Tables[0].Rows[0]["Emp_Email"].ToString();
-
-            }
-        }
-        catch (Exception ex)
-        {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
-        }
-
-
-    }
     protected void ddlAdvocate_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -274,10 +212,6 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "AdvocateDetailModal()", true);
                     lbladvocatemsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record Inserted Successfully");
                     FillGridAdvocateDetail();
-                    FillAdvocateDropdown();
-
-
-
                 }
                 else if (btnAdvocateSave.Text == "Update")
                 {
@@ -287,8 +221,6 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "AdvocateDetailModal()", true);
                     lbladvocatemsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record UpdatedSuccessfully");
                     FillGridAdvocateDetail();
-                    FillAdvocateDropdown();
-
                 }
             }
             else
@@ -391,10 +323,10 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             {
                 msg += "Enter Subject Of Case.\\n";
             }
-            if (ddlOIC.SelectedIndex == 0)
-            {
-                msg += "Select OIC.\\n";
-            }
+            //if (ddlOIC.SelectedIndex == 0)
+            //{
+            //    msg += "Select OIC.\\n";
+            //}
             if (ddlAdvocate.SelectedIndex == 0)
             {
                 msg += "Select Advocate.\\n";
@@ -463,88 +395,97 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                 if (btnSubmit.Text == "Save")
                 {
 
-                    ds = objdb.ByProcedure("SpLegalCaseRegistration",
-                                   new string[] {"flag"
-                                                ,"Office_ID"
-		                                        ,"Case_IsActive"
-											    , "Case_No"
-											    , "Case_OldRefNo"
-											    , "Case_CourtType"
-                                                , "District_ID"
-											    , "Case_Type"
-											    , "Case_Status"
-											    , "Case_Result"
-											    , "Case_DateOfReceipt"
-											    , "Case_DateOfFiling"
-											    , "Case_SubjectOfCase"
-											    , "Case_InterimOrder"
-											    , "Case_FinalOrder"
-											    , "Case_ClaimAmount"
-											    , "Case_DepartmentConcerned"
-											    , "Case_Description"
-											    , "OIC_ID"
-											    , "Advocate_ID"
-											    , "Case_PetitionerAppName"
-											    , "Case_PetitionerAppMobileNo"
-											    , "Case_PetitionerAppEmail"
-											    , "Case_PetitionerAppAddress"
-											    , "Case_PetitionerAdvName"
-											    , "Case_PetitionerAdvMobileNo"
-											    , "Case_PetitionerAdvEmail"
-											    , "Case_PetitionerAdvAddress"
-											    , "Case_UploadedDoc1"
-											    , "Case_UploadedDoc2"
-											    , "Case_UploadedDoc3"
-											    , "Case_UpdatedBy"},
-                                   new string[] { "0"
-                                                ,ddloffice.SelectedValue.ToString()
-		                                        ,"1"
-											    , txtCaseNo.Text
-											    , txtCaseOldRefNo.Text
-											    , ddlCourtType.SelectedItem.Text
-                                                , ddlDistrict.SelectedValue.ToString()
-											    , ddlCaseType.SelectedItem.Text
-											    , "Open"
-											    , "Open"
-											    , DateofReceipt
-                                                , DateofFiling
-											    , txtSubjectOfCase.Text
-											    , txtInterimOrder.Text
-											    , txtFinalOrder.Text
-											    , txtClaimAmount.Text
-											    , txtDepartmentConcerned.Text
-											    , txtCaseDescription.Text
-											    , ddlOIC.SelectedValue.ToString()
-											    , ddlAdvocate.SelectedValue.ToString()
-											    , txtPetitionerAppName.Text
-											    , txtPetitionerAppMobileNo.Text
-											    , txtPetitionerAppEmail.Text
-											    , txtPetitionerAppAddress.Text
-											    , txtPetitionerAdvName.Text
-											    , txtPetitionerAdvMobileNo.Text
-											    , txtPetitionerAdvEmail.Text
-											    , txtPetitionerAdvAddress.Text
-											    , Document1
-											    , Document2
-											    , Document3
-											    , ViewState["Emp_ID"].ToString() }, "dataset");
-                    if (ds.Tables[0].Rows[0]["Status"].ToString() == "true")
-                    {
-                        string Case_ID = ds.Tables[0].Rows[0]["Case_ID"].ToString();
-                        objdb.ByProcedure("SpLegalHearingDetail", new string[] { "flag", "Case_ID", "Hearing_IsActive", "Hearing_Date", "Hearing_UpdatedBy" }, new string[] { "0", Case_ID, "1", Hearing_Date, ViewState["Emp_ID"].ToString() }, "dataset");
-                        lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record Inserted Successfully");
-                        ClearText();
-                        if (Request.QueryString["ReopenCase_ID"] != null)
-                        {
-                            Response.Redirect("AddNewCase.aspx");
-                        }
+                    //ds = objdb.ByProcedure("SpLegalCaseRegistration",
+                    //               new string[] {"flag"
+                    //                            ,"Office_ID"
+                    //                            ,"Case_IsActive"
+                    //                            , "Case_No"
+                    //                            , "Case_OldRefNo"
+                    //                            , "Case_CourtType"
+                    //                            , "District_ID"
+                    //                            , "Case_Type"
+                    //                            , "Case_Status"
+                    //                            , "Case_Result"
+                    //                            , "Case_DateOfReceipt"
+                    //                            , "Case_DateOfFiling"
+                    //                            , "Case_SubjectOfCase"
+                    //                            , "Case_InterimOrder"
+                    //                            , "Case_FinalOrder"
+                    //                            , "Case_ClaimAmount"
+                    //                            , "Case_DepartmentConcerned"
+                    //                            , "Case_Description"
+                    //                            , "OIC_ID"
+                    //                            , "Advocate_ID"
+                    //                            , "Case_PetitionerAppName"
+                    //                            , "Case_PetitionerAppMobileNo"
+                    //                            , "Case_PetitionerAppEmail"
+                    //                            , "Case_PetitionerAppAddress"
+                    //                            , "Case_PetitionerAdvName"
+                    //                            , "Case_PetitionerAdvMobileNo"
+                    //                            , "Case_PetitionerAdvEmail"
+                    //                            , "Case_PetitionerAdvAddress"
+                    //                            , "Case_UploadedDoc1"
+                    //                            , "Case_UploadedDoc2"
+                    //                            , "Case_UploadedDoc3"
+                    //                            , "Case_UpdatedBy"},
+                    //               new string[] { "0"
+                    //                            ,ddloffice.SelectedValue.ToString()
+                    //                            ,"1"
+                    //                            , txtCaseNo.Text
+                    //                            , txtCaseOldRefNo.Text
+                    //                            , ddlCourtType.SelectedItem.Text
+                    //                            , ddlDistrict.SelectedValue.ToString()
+                    //                            , ddlCaseType.SelectedItem.Text
+                    //                            , "Open"
+                    //                            , "Open"
+                    //                            , DateofReceipt
+                    //                            , DateofFiling
+                    //                            , txtSubjectOfCase.Text
+                    //                            , txtInterimOrder.Text
+                    //                            , txtFinalOrder.Text
+                    //                            , txtClaimAmount.Text
+                    //                            , txtDepartmentConcerned.Text
+                    //                            , txtCaseDescription.Text
+                    //                            , ddlOIC.SelectedValue.ToString()
+                    //                            , ddlAdvocate.SelectedValue.ToString()
+                    //                            , txtPetitionerAppName.Text
+                    //                            , txtPetitionerAppMobileNo.Text
+                    //                            , txtPetitionerAppEmail.Text
+                    //                            , txtPetitionerAppAddress.Text
+                    //                            , txtPetitionerAdvName.Text
+                    //                            , txtPetitionerAdvMobileNo.Text
+                    //                            , txtPetitionerAdvEmail.Text
+                    //                            , txtPetitionerAdvAddress.Text
+                    //                            , Document1
+                    //                            , Document2
+                    //                            , Document3
+                    //                            , ViewState["Emp_ID"].ToString() }, "dataset");
+                    //if (ds.Tables[0].Rows[0]["Status"].ToString() == "true")
+                    //{
+                    //    string Case_ID = ds.Tables[0].Rows[0]["Case_ID"].ToString();
+                    //    objdb.ByProcedure("SpLegalHearingDetail", new string[] { "flag", "Case_ID", "Hearing_IsActive", "Hearing_Date", "Hearing_UpdatedBy" }, new string[] { "0", Case_ID, "1", Hearing_Date, ViewState["Emp_ID"].ToString() }, "dataset");
+                    //    lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record Inserted Successfully");
+                    //    ClearText();
+                    //    if (Request.QueryString["ReopenCase_ID"] != null)
+                    //    {
+                    //        Response.Redirect("AddNewCase.aspx");
+                    //    }
 
-                        //FillGrid();
-                    }
-                    else
-                    {
-                        lblMsg.Text = objdb.Alert("fa-ban", "alert-Danger", "Sorry!", "Record Not Save");
-                    }
+                    //    //FillGrid();
+                    //}
+                    //else
+                    //{
+                    //    lblMsg.Text = objdb.Alert("fa-ban", "alert-Danger", "Sorry!", "Record Not Save");
+                    //}
+
+                    ds = objdb.ByProcedure("USP_Legal_InsertLocalCourtCaseRegis", new string[] { "Office_ID", "Case_No", "Case_OldRefNo", "CourtType_Id", "Casetype_ID", "Distric_ID", "RelatedDepartment", "Case_DateOfReceipt",
+                        "Case_DateOfFiling", "Case_InterimOrder", "Case_FinalOrder", "Case_ClaimAmount", "HPCaseStatus", "Case_SubjectOfCase", "OIC_Name", "OIC_Designation", "OIC_Department", "OIC_EmailID", "OIC_MobileNo", 
+                        "AdvocateName", "AdvocateMobileNo", "AdvocateEmail_ID","AdvocateAddress", "PetitionerAPPName", "PetitionerAPPMobileNo", "PetitionerAPPEmail_ID", "PetitionerAPPAddress", "PetitionerAdvName",
+                        "PetitionerAdvMobileNo", "PetitionerAdvEmail_ID", "PetitionerAdvAddress", "Case_UploadedDoc1", "Case_UploadedDoc2", "Case_UploadedDoc3", "CreatedBy", "CreatedByIP" },
+                        new string[] { ViewState["Office_ID"].ToString(),txtCaseNo.Text.Trim(),txtCaseOldRefNo.Text.Trim(),ddlCourtType.SelectedValue,ddlCaseType.SelectedValue, ddlDistrict.SelectedValue, txtDepartmentConcerned.Text.Trim(),Convert.ToDateTime(txtDateOfReceipt.Text, cult).ToString("yyyy/MM/dd"),
+                        Convert.ToDateTime(txtDateOfFiling.Text, cult).ToString("yyyy/MM/dd"),txtInterimOrder.Text.Trim(),txtFinalOrder.Text.Trim(),txtClaimAmount.Text.Trim(),ddlHighprioritycase.SelectedItem.Text,txtCaseDescription.Text.Trim(),txtOICName.Text.Trim(),txtOICDepartmentName.Text.Trim(),txtOICEmail.Text.Trim(),txtOICMobileNo.Text.Trim(),
+                        txtAdvocate_Name.Text.Trim(),txtAdvocateMobileNo.Text.Trim(),txtAdvocateEmail.Text.Trim(),txtAdvocateAddress.Text.Trim(),txtPetitionerAppName.Text.Trim(),txtPetitionerAppMobileNo.Text.Trim(),txtPetitionerAppEmail.Text.Trim(),txtPetitionerAppAddress.Text.Trim(),txtPetitionerAdvName.Text.Trim(),
+                        txtPetitionerAdvMobileNo.Text.Trim(),txtPetitionerAdvEmail.Text.Trim(),txtPetitionerAdvAddress.Text.Trim(),Document1,Document2,Document3,ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress()}, "dataset");
                 }
                 else if (btnSubmit.Text == "Update")
                 {
@@ -626,7 +567,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
 											    , txtClaimAmount.Text
 											    , txtDepartmentConcerned.Text
 											    , txtCaseDescription.Text
-											    , ddlOIC.SelectedValue.ToString()
+											    //, ddlOIC.SelectedValue.ToString()
 											    , ddlAdvocate.SelectedValue.ToString()
 											    , txtPetitionerAppName.Text
 											    , txtPetitionerAppMobileNo.Text
@@ -644,16 +585,32 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     {
                         objdb.ByProcedure("SpLegalHearingDetail", new string[] { "flag", "Case_ID", "Hearing_Date", "Hearing_UpdatedBy" }, new string[] { "12", ViewState["Case_ID"].ToString(), Hearing_Date, ViewState["Emp_ID"].ToString() }, "dataset");
                     }
-                    FillCaseDetail();
+                    // FillCaseDetail();
                     lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record Updated Successfully");
 
 
                 }
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                    if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                    {
+                        lblMsg.Text = objdb.Alert("fa-check", "alert-danger", "Thanks!", ErrMsg);
+                    }
+                    else
+                    {
+                        lblMsg.Text = objdb.Alert("fa-check", "alert-warning", "Warning!", ErrMsg);
+                    }
+                }
+                else
+                {
+                    lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
+                }
             }
-            else
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "alert('" + msg + "');", true);
-            }
+            //else
+            //{
+            //    Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "alert('" + msg + "');", true);
+            //}
         }
         catch (Exception ex)
         {
@@ -688,8 +645,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         txtFinalOrder.Text = "";
         txtClaimAmount.Text = "";
         txtCaseDescription.Text = "";
-        ddlOIC.ClearSelection();
-        txtDepartmentName.Text = "";
+      //  ddlOIC.ClearSelection();
+        txtDepartment.Text = "";
         txtOICMobileNo.Text = "";
         txtOICEmail.Text = "";
         ddlAdvocate.ClearSelection();
@@ -710,211 +667,209 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         HyperLink2.Visible = false;
         HyperLink3.Visible = false;
     }
-    protected void FillCaseDetail()
-    {
-        try
-        {
+    //protected void FillCaseDetail()
+    //{
+    //    try
+    //    {
 
-            lblMsg.Text = "";
-            if (ViewState["Case_ID"] != null)
-            {
-                dsRecord = null;
-                dsRecord = objdb.ByProcedure("SpLegalCaseRegistration", new string[] { "flag", "Case_ID" }, new string[] { "7", ViewState["Case_ID"].ToString() }, "dataset");
-                if (dsRecord.Tables[0].Rows.Count > 0)
-                {
-                    ddloffice.ClearSelection();
-                    ddloffice.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Office_ID"].ToString()).Selected = true;
-                    txtCaseNo.Text = dsRecord.Tables[0].Rows[0]["Case_No"].ToString();
-                    txtCaseOldRefNo.Text = dsRecord.Tables[0].Rows[0]["Case_OldRefNo"].ToString();
-                    ddlCourtType.ClearSelection();
-                    ddlCourtType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_CourtType"].ToString()).Selected = true;
-                    ddlCaseType.ClearSelection();
-                    ddlCaseType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_Type"].ToString()).Selected = true;
-                    txtSubjectOfCase.Text = dsRecord.Tables[0].Rows[0]["Case_SubjectOfCase"].ToString();
-                    txtDepartmentConcerned.Text = dsRecord.Tables[0].Rows[0]["Case_DepartmentConcerned"].ToString();
-                    txtDateOfReceipt.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfReceipt"].ToString();
-                    txtDateOfFiling.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfFiling"].ToString();
-                    txtInterimOrder.Text = dsRecord.Tables[0].Rows[0]["Case_InterimOrder"].ToString();
-                    txtFinalOrder.Text = dsRecord.Tables[0].Rows[0]["Case_FinalOrder"].ToString();
-                    txtClaimAmount.Text = dsRecord.Tables[0].Rows[0]["Case_ClaimAmount"].ToString();
-                    txtCaseDescription.Text = dsRecord.Tables[0].Rows[0]["Case_Description"].ToString();
+    //        lblMsg.Text = "";
+    //        if (ViewState["Case_ID"] != null)
+    //        {
+    //            dsRecord = null;
+    //            dsRecord = objdb.ByProcedure("SpLegalCaseRegistration", new string[] { "flag", "Case_ID" }, new string[] { "7", ViewState["Case_ID"].ToString() }, "dataset");
+    //            if (dsRecord.Tables[0].Rows.Count > 0)
+    //            {
+    //                ddloffice.ClearSelection();
+    //                ddloffice.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Office_ID"].ToString()).Selected = true;
+    //                txtCaseNo.Text = dsRecord.Tables[0].Rows[0]["Case_No"].ToString();
+    //                txtCaseOldRefNo.Text = dsRecord.Tables[0].Rows[0]["Case_OldRefNo"].ToString();
+    //                ddlCourtType.ClearSelection();
+    //                ddlCourtType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_CourtType"].ToString()).Selected = true;
+    //                ddlCaseType.ClearSelection();
+    //                ddlCaseType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_Type"].ToString()).Selected = true;
+    //                txtSubjectOfCase.Text = dsRecord.Tables[0].Rows[0]["Case_SubjectOfCase"].ToString();
+    //                txtDepartmentConcerned.Text = dsRecord.Tables[0].Rows[0]["Case_DepartmentConcerned"].ToString();
+    //                txtDateOfReceipt.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfReceipt"].ToString();
+    //                txtDateOfFiling.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfFiling"].ToString();
+    //                txtInterimOrder.Text = dsRecord.Tables[0].Rows[0]["Case_InterimOrder"].ToString();
+    //                txtFinalOrder.Text = dsRecord.Tables[0].Rows[0]["Case_FinalOrder"].ToString();
+    //                txtClaimAmount.Text = dsRecord.Tables[0].Rows[0]["Case_ClaimAmount"].ToString();
+    //                txtCaseDescription.Text = dsRecord.Tables[0].Rows[0]["Case_Description"].ToString();
 
-                    txtPetitionerAppName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppName"].ToString();
-                    txtPetitionerAppMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppMobileNo"].ToString();
-                    txtPetitionerAppEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppEmail"].ToString();
-                    txtPetitionerAppAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppAddress"].ToString();
-                    txtPetitionerAdvName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvName"].ToString();
-                    txtPetitionerAdvMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvMobileNo"].ToString();
-                    txtPetitionerAdvEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvEmail"].ToString();
-                    txtPetitionerAdvAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvAddress"].ToString();
-                    ddlOIC.ClearSelection();
-                    // FillOICDropdown();
-                    ddlOIC.Items.FindByValue(dsRecord.Tables[0].Rows[0]["OIC_ID"].ToString()).Selected = true;
-                    ddlAdvocate.ClearSelection();
-                    FillAdvocateDropdown();
-                    ddlAdvocate.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Advocate_ID"].ToString()).Selected = true;
-                    txtDepartmentName.Text = dsRecord.Tables[0].Rows[0]["Emp_Name"].ToString();
-                    txtOICMobileNo.Text = dsRecord.Tables[0].Rows[0]["Emp_MobileNo"].ToString();
-                    txtOICEmail.Text = dsRecord.Tables[0].Rows[0]["Emp_Email"].ToString();
-                    txtDesignation.Text = dsRecord.Tables[0].Rows[0]["Designation_Name"].ToString();
-                    txtAdvocateName.Text = dsRecord.Tables[0].Rows[0]["Advocate_Name"].ToString();
-                    txtAdvocateMobileNo.Text = dsRecord.Tables[0].Rows[0]["Advocate_MobileNo"].ToString();
-                    txtAdvocateEmail.Text = dsRecord.Tables[0].Rows[0]["Advocate_Email"].ToString();
-                    txtAdvocateAddress.Text = dsRecord.Tables[0].Rows[0]["Advocate_Address"].ToString();
-                    if (dsRecord.Tables[0].Rows[0]["District_ID"].ToString() != "")
-                    {
-                        ddlDistrict.ClearSelection();
-                        ddlDistrict.Items.FindByValue(dsRecord.Tables[0].Rows[0]["District_ID"].ToString()).Selected = true;
-                    }
-                    ViewState["Case_UploadedDoc1"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc1"].ToString();
-                    ViewState["Case_UploadedDoc2"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc2"].ToString();
-                    ViewState["Case_UploadedDoc3"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc3"].ToString();
-                    txtHearingDate.Text = dsRecord.Tables[1].Rows[0]["Hearing_Date"].ToString();
-                    ViewState["Count"] = dsRecord.Tables[2].Rows[0]["Count"].ToString();
-                    if (ViewState["Case_UploadedDoc1"].ToString() != "")
-                    {
-                        HyperLink1.Visible = true;
-                        HyperLink1.NavigateUrl = ViewState["Case_UploadedDoc1"].ToString();
-                        HyperLink1.Text = "View";
-                    }
-                    else
-                    {
-                        HyperLink1.Visible = true;
-                        HyperLink1.Text = "NA";
+    //                txtPetitionerAppName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppName"].ToString();
+    //                txtPetitionerAppMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppMobileNo"].ToString();
+    //                txtPetitionerAppEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppEmail"].ToString();
+    //                txtPetitionerAppAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppAddress"].ToString();
+    //                txtPetitionerAdvName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvName"].ToString();
+    //                txtPetitionerAdvMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvMobileNo"].ToString();
+    //                txtPetitionerAdvEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvEmail"].ToString();
+    //                txtPetitionerAdvAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvAddress"].ToString();
+    //                ddlOIC.ClearSelection();
+    //                // FillOICDropdown();
+    //                ddlOIC.Items.FindByValue(dsRecord.Tables[0].Rows[0]["OIC_ID"].ToString()).Selected = true;
+    //                ddlAdvocate.ClearSelection();
+    //                ddlAdvocate.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Advocate_ID"].ToString()).Selected = true;
+    //                txtDepartmentName.Text = dsRecord.Tables[0].Rows[0]["Emp_Name"].ToString();
+    //                txtOICMobileNo.Text = dsRecord.Tables[0].Rows[0]["Emp_MobileNo"].ToString();
+    //                txtOICEmail.Text = dsRecord.Tables[0].Rows[0]["Emp_Email"].ToString();
+    //                txtDesignation.Text = dsRecord.Tables[0].Rows[0]["Designation_Name"].ToString();
+    //                txtAdvocateName.Text = dsRecord.Tables[0].Rows[0]["Advocate_Name"].ToString();
+    //                txtAdvocateMobileNo.Text = dsRecord.Tables[0].Rows[0]["Advocate_MobileNo"].ToString();
+    //                txtAdvocateEmail.Text = dsRecord.Tables[0].Rows[0]["Advocate_Email"].ToString();
+    //                txtAdvocateAddress.Text = dsRecord.Tables[0].Rows[0]["Advocate_Address"].ToString();
+    //                if (dsRecord.Tables[0].Rows[0]["District_ID"].ToString() != "")
+    //                {
+    //                    ddlDistrict.ClearSelection();
+    //                    ddlDistrict.Items.FindByValue(dsRecord.Tables[0].Rows[0]["District_ID"].ToString()).Selected = true;
+    //                }
+    //                ViewState["Case_UploadedDoc1"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc1"].ToString();
+    //                ViewState["Case_UploadedDoc2"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc2"].ToString();
+    //                ViewState["Case_UploadedDoc3"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc3"].ToString();
+    //                txtHearingDate.Text = dsRecord.Tables[1].Rows[0]["Hearing_Date"].ToString();
+    //                ViewState["Count"] = dsRecord.Tables[2].Rows[0]["Count"].ToString();
+    //                if (ViewState["Case_UploadedDoc1"].ToString() != "")
+    //                {
+    //                    HyperLink1.Visible = true;
+    //                    HyperLink1.NavigateUrl = ViewState["Case_UploadedDoc1"].ToString();
+    //                    HyperLink1.Text = "View";
+    //                }
+    //                else
+    //                {
+    //                    HyperLink1.Visible = true;
+    //                    HyperLink1.Text = "NA";
 
-                    }
-                    if (ViewState["Case_UploadedDoc2"].ToString() != "")
-                    {
-                        HyperLink2.Visible = true;
-                        HyperLink2.NavigateUrl = ViewState["Case_UploadedDoc2"].ToString();
-                        HyperLink2.Text = "View";
-                    }
-                    else
-                    {
-                        HyperLink2.Visible = true;
-                        HyperLink2.Text = "NA";
+    //                }
+    //                if (ViewState["Case_UploadedDoc2"].ToString() != "")
+    //                {
+    //                    HyperLink2.Visible = true;
+    //                    HyperLink2.NavigateUrl = ViewState["Case_UploadedDoc2"].ToString();
+    //                    HyperLink2.Text = "View";
+    //                }
+    //                else
+    //                {
+    //                    HyperLink2.Visible = true;
+    //                    HyperLink2.Text = "NA";
 
-                    }
+    //                }
 
-                    if (ViewState["Case_UploadedDoc3"].ToString() != "")
-                    {
-                        HyperLink3.Visible = true;
-                        HyperLink3.NavigateUrl = ViewState["Case_UploadedDoc3"].ToString();
-                        HyperLink3.Text = "View";
-                    }
-                    else
-                    {
-                        HyperLink3.Visible = true;
-                        HyperLink3.Text = "NA";
+    //                if (ViewState["Case_UploadedDoc3"].ToString() != "")
+    //                {
+    //                    HyperLink3.Visible = true;
+    //                    HyperLink3.NavigateUrl = ViewState["Case_UploadedDoc3"].ToString();
+    //                    HyperLink3.Text = "View";
+    //                }
+    //                else
+    //                {
+    //                    HyperLink3.Visible = true;
+    //                    HyperLink3.Text = "NA";
 
-                    }
-                    btnSubmit.Text = "Update";
-                    if (int.Parse(ViewState["Count"].ToString()) > 1)
-                    {
-                        txtHearingDate.Enabled = false;
-                    }
-                    else
-                    {
-                        txtHearingDate.Enabled = true;
-                    }
+    //                }
+    //                btnSubmit.Text = "Update";
+    //                if (int.Parse(ViewState["Count"].ToString()) > 1)
+    //                {
+    //                    txtHearingDate.Enabled = false;
+    //                }
+    //                else
+    //                {
+    //                    txtHearingDate.Enabled = true;
+    //                }
 
-                }
-            }
-            if (ViewState["ReopenCase_ID"] != null)
-            {
-                dsRecord = null;
-                dsRecord = objdb.ByProcedure("SpLegalCaseRegistration", new string[] { "flag", "Case_ID" }, new string[] { "7", ViewState["ReopenCase_ID"].ToString() }, "dataset");
-                if (dsRecord.Tables[0].Rows.Count > 0)
-                {
-                    ddloffice.ClearSelection();
-                    ddloffice.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Office_ID"].ToString()).Selected = true;
-                    txtCaseOldRefNo.Text = dsRecord.Tables[0].Rows[0]["Case_No"].ToString();
-                    ddlCourtType.ClearSelection();
-                    ddlCourtType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_CourtType"].ToString()).Selected = true;
-                    ddlCaseType.ClearSelection();
-                    ddlCaseType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_Type"].ToString()).Selected = true;
-                    txtSubjectOfCase.Text = dsRecord.Tables[0].Rows[0]["Case_SubjectOfCase"].ToString();
-                    txtDepartmentConcerned.Text = dsRecord.Tables[0].Rows[0]["Case_DepartmentConcerned"].ToString();
-                    txtDateOfReceipt.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfReceipt"].ToString();
-                    txtDateOfFiling.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfFiling"].ToString();
-                    txtInterimOrder.Text = dsRecord.Tables[0].Rows[0]["Case_InterimOrder"].ToString();
-                    txtFinalOrder.Text = dsRecord.Tables[0].Rows[0]["Case_FinalOrder"].ToString();
-                    txtClaimAmount.Text = dsRecord.Tables[0].Rows[0]["Case_ClaimAmount"].ToString();
-                    txtCaseDescription.Text = dsRecord.Tables[0].Rows[0]["Case_Description"].ToString();
+    //            }
+    //        }
+    //        if (ViewState["ReopenCase_ID"] != null)
+    //        {
+    //            dsRecord = null;
+    //            dsRecord = objdb.ByProcedure("SpLegalCaseRegistration", new string[] { "flag", "Case_ID" }, new string[] { "7", ViewState["ReopenCase_ID"].ToString() }, "dataset");
+    //            if (dsRecord.Tables[0].Rows.Count > 0)
+    //            {
+    //                ddloffice.ClearSelection();
+    //                ddloffice.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Office_ID"].ToString()).Selected = true;
+    //                txtCaseOldRefNo.Text = dsRecord.Tables[0].Rows[0]["Case_No"].ToString();
+    //                ddlCourtType.ClearSelection();
+    //                ddlCourtType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_CourtType"].ToString()).Selected = true;
+    //                ddlCaseType.ClearSelection();
+    //                ddlCaseType.Items.FindByText(dsRecord.Tables[0].Rows[0]["Case_Type"].ToString()).Selected = true;
+    //                txtSubjectOfCase.Text = dsRecord.Tables[0].Rows[0]["Case_SubjectOfCase"].ToString();
+    //                txtDepartmentConcerned.Text = dsRecord.Tables[0].Rows[0]["Case_DepartmentConcerned"].ToString();
+    //                txtDateOfReceipt.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfReceipt"].ToString();
+    //                txtDateOfFiling.Text = dsRecord.Tables[0].Rows[0]["Case_DateOfFiling"].ToString();
+    //                txtInterimOrder.Text = dsRecord.Tables[0].Rows[0]["Case_InterimOrder"].ToString();
+    //                txtFinalOrder.Text = dsRecord.Tables[0].Rows[0]["Case_FinalOrder"].ToString();
+    //                txtClaimAmount.Text = dsRecord.Tables[0].Rows[0]["Case_ClaimAmount"].ToString();
+    //                txtCaseDescription.Text = dsRecord.Tables[0].Rows[0]["Case_Description"].ToString();
 
-                    txtPetitionerAppName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppName"].ToString();
-                    txtPetitionerAppMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppMobileNo"].ToString();
-                    txtPetitionerAppEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppEmail"].ToString();
-                    txtPetitionerAppAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppAddress"].ToString();
-                    txtPetitionerAdvName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvName"].ToString();
-                    txtPetitionerAdvMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvMobileNo"].ToString();
-                    txtPetitionerAdvEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvEmail"].ToString();
-                    txtPetitionerAdvAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvAddress"].ToString();
-                    ddlOIC.ClearSelection();
-                    //  FillOICDropdown();
-                    ddlOIC.Items.FindByValue(dsRecord.Tables[0].Rows[0]["OIC_ID"].ToString()).Selected = true;
-                    ddlAdvocate.ClearSelection();
-                    FillAdvocateDropdown();
-                    ddlAdvocate.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Advocate_ID"].ToString()).Selected = true;
-                    txtDepartmentName.Text = dsRecord.Tables[0].Rows[0]["Emp_Name"].ToString();
-                    txtOICMobileNo.Text = dsRecord.Tables[0].Rows[0]["Emp_MobileNo"].ToString();
-                    txtOICEmail.Text = dsRecord.Tables[0].Rows[0]["Emp_Email"].ToString();
-                    txtDesignation.Text = dsRecord.Tables[0].Rows[0]["Designation_Name"].ToString();
-                    txtAdvocateName.Text = dsRecord.Tables[0].Rows[0]["Advocate_Name"].ToString();
-                    txtAdvocateMobileNo.Text = dsRecord.Tables[0].Rows[0]["Advocate_MobileNo"].ToString();
-                    txtAdvocateEmail.Text = dsRecord.Tables[0].Rows[0]["Advocate_Email"].ToString();
-                    txtAdvocateAddress.Text = dsRecord.Tables[0].Rows[0]["Advocate_Address"].ToString();
-                    ViewState["Case_UploadedDoc1"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc1"].ToString();
-                    ViewState["Case_UploadedDoc2"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc2"].ToString();
-                    ViewState["Case_UploadedDoc3"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc3"].ToString();
-                    if (ViewState["Case_UploadedDoc1"].ToString() != "")
-                    {
-                        HyperLink1.Visible = true;
-                        HyperLink1.Text = "View";
-                        HyperLink1.NavigateUrl = ViewState["Case_UploadedDoc1"].ToString();
-                    }
-                    else
-                    {
-                        HyperLink1.Visible = true;
-                        HyperLink1.Text = "NA";
+    //                txtPetitionerAppName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppName"].ToString();
+    //                txtPetitionerAppMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppMobileNo"].ToString();
+    //                txtPetitionerAppEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppEmail"].ToString();
+    //                txtPetitionerAppAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAppAddress"].ToString();
+    //                txtPetitionerAdvName.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvName"].ToString();
+    //                txtPetitionerAdvMobileNo.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvMobileNo"].ToString();
+    //                txtPetitionerAdvEmail.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvEmail"].ToString();
+    //                txtPetitionerAdvAddress.Text = dsRecord.Tables[0].Rows[0]["Case_PetitionerAdvAddress"].ToString();
+    //                ddlOIC.ClearSelection();
+    //                //  FillOICDropdown();
+    //                ddlOIC.Items.FindByValue(dsRecord.Tables[0].Rows[0]["OIC_ID"].ToString()).Selected = true;
+    //                ddlAdvocate.ClearSelection();
+    //                ddlAdvocate.Items.FindByValue(dsRecord.Tables[0].Rows[0]["Advocate_ID"].ToString()).Selected = true;
+    //                txtDepartmentName.Text = dsRecord.Tables[0].Rows[0]["Emp_Name"].ToString();
+    //                txtOICMobileNo.Text = dsRecord.Tables[0].Rows[0]["Emp_MobileNo"].ToString();
+    //                txtOICEmail.Text = dsRecord.Tables[0].Rows[0]["Emp_Email"].ToString();
+    //                txtDesignation.Text = dsRecord.Tables[0].Rows[0]["Designation_Name"].ToString();
+    //                txtAdvocateName.Text = dsRecord.Tables[0].Rows[0]["Advocate_Name"].ToString();
+    //                txtAdvocateMobileNo.Text = dsRecord.Tables[0].Rows[0]["Advocate_MobileNo"].ToString();
+    //                txtAdvocateEmail.Text = dsRecord.Tables[0].Rows[0]["Advocate_Email"].ToString();
+    //                txtAdvocateAddress.Text = dsRecord.Tables[0].Rows[0]["Advocate_Address"].ToString();
+    //                ViewState["Case_UploadedDoc1"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc1"].ToString();
+    //                ViewState["Case_UploadedDoc2"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc2"].ToString();
+    //                ViewState["Case_UploadedDoc3"] = dsRecord.Tables[0].Rows[0]["Case_UploadedDoc3"].ToString();
+    //                if (ViewState["Case_UploadedDoc1"].ToString() != "")
+    //                {
+    //                    HyperLink1.Visible = true;
+    //                    HyperLink1.Text = "View";
+    //                    HyperLink1.NavigateUrl = ViewState["Case_UploadedDoc1"].ToString();
+    //                }
+    //                else
+    //                {
+    //                    HyperLink1.Visible = true;
+    //                    HyperLink1.Text = "NA";
 
-                    }
-                    if (ViewState["Case_UploadedDoc2"].ToString() != "")
-                    {
-                        HyperLink2.Visible = true;
-                        HyperLink2.NavigateUrl = ViewState["Case_UploadedDoc2"].ToString();
-                        HyperLink2.Text = "View";
-                    }
-                    else
-                    {
-                        HyperLink2.Visible = true;
-                        HyperLink2.Text = "NA";
+    //                }
+    //                if (ViewState["Case_UploadedDoc2"].ToString() != "")
+    //                {
+    //                    HyperLink2.Visible = true;
+    //                    HyperLink2.NavigateUrl = ViewState["Case_UploadedDoc2"].ToString();
+    //                    HyperLink2.Text = "View";
+    //                }
+    //                else
+    //                {
+    //                    HyperLink2.Visible = true;
+    //                    HyperLink2.Text = "NA";
 
-                    }
+    //                }
 
-                    if (ViewState["Case_UploadedDoc3"].ToString() != "")
-                    {
-                        HyperLink3.Visible = true;
-                        HyperLink3.Text = "View";
-                        HyperLink3.NavigateUrl = ViewState["Case_UploadedDoc3"].ToString();
-                    }
-                    else
-                    {
-                        HyperLink3.Visible = true;
-                        HyperLink3.Text = "NA";
+    //                if (ViewState["Case_UploadedDoc3"].ToString() != "")
+    //                {
+    //                    HyperLink3.Visible = true;
+    //                    HyperLink3.Text = "View";
+    //                    HyperLink3.NavigateUrl = ViewState["Case_UploadedDoc3"].ToString();
+    //                }
+    //                else
+    //                {
+    //                    HyperLink3.Visible = true;
+    //                    HyperLink3.Text = "NA";
 
-                    }
+    //                }
 
-                }
-            }
+    //            }
+    //        }
 
 
-        }
-        catch (Exception ex)
-        {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
-        }
-    }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+    //    }
+    //}
 
     protected void ddloffice_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -938,7 +893,6 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             string Advocate_IsActive = "0";
             objdb.ByProcedure("SpLegalAdvocateRegistration", new string[] { "flag", "Advocate_ID", "Advocate_IsActive", "Advocate_UpdatedBy" }, new string[] { "5", Advocate_ID, Advocate_IsActive, ViewState["Emp_ID"].ToString() }, "dataset");
             lbladvocatemsg.Text = objdb.Alert("fa-check", "alert-success", "Thank You!", "Record Deleted Successfully");
-            FillAdvocateDropdown();
             FillGridAdvocateDetail();
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "AdvocateDetailModal()", true);
         }
