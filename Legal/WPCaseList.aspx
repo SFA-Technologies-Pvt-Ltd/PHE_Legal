@@ -181,7 +181,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="table table-bordered table-hover text-center" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="table table-bordered table-hover text-center" AllowPaging="true" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND" OnPageIndexChanging="GrdCaseDetails_PageIndexChanging">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.<br />सरल क्र.">
                                                     <ItemTemplate>

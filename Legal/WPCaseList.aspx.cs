@@ -72,4 +72,17 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+    protected void GrdCaseDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            GrdCaseDetails.PageIndex = e.NewPageIndex;
+            btnSearch_Click(sender,  e);
+            GrdCaseDetails.DataBind();
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
 }

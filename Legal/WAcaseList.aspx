@@ -181,7 +181,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="table table-bordered table-hover text-center" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="table table-bordered table-hover text-center" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND" AllowPaging="true" OnPageIndexChanging="GrdCaseDetails_PageIndexChanging">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.<br />सरल क्र.">
                                                     <ItemTemplate>
@@ -199,7 +199,7 @@
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Status<br />स्थिति">
+                                                <asp:TemplateField HeaderText="WP Case Status<br />डब्लू पी केस स्थिति">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("CaseStatus") %>'></asp:Label>
                                                     </ItemTemplate>

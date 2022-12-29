@@ -876,7 +876,7 @@
                                             ControlToValidate="txtAdvocateEmaild" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
 
-                                        <asp:TextBox ID="txtAdvocateEmaild" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="10"></asp:TextBox>
+                                        <asp:TextBox ID="txtAdvocateEmaild" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="50"></asp:TextBox>
                                     </div>
                                 </div>
                             </div>
