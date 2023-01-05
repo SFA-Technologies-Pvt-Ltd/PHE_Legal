@@ -31,7 +31,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     FillDistrict();
                     BindCourtName();
                     // ddlDistrict.Enabled = false;
-                    BindCaseType();
+                    BindCaseSubject();
                     if (Request.QueryString["Case_ID"] != null)
                     {
                         ViewState["Case_ID"] = objdb.Decrypt(Request.QueryString["Case_ID"].ToString());
@@ -99,20 +99,20 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         }
     }
 
-    protected void BindCaseType()
+    protected void BindCaseSubject()
     {
         try
         {
-            ddlCaseType.Items.Clear();
-            ds = objdb.ByDataSet("select Casetype_ID, Casetype_Name from  tbl_Legal_Casetype");
+            ddlCaseSubject.Items.Clear();
+            ds = objdb.ByDataSet("SELECT CaseSubjectName, CaseSubjectID FROM tbl_LegalMstCaseSubject");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddlCaseType.DataTextField = "Casetype_Name";
-                ddlCaseType.DataValueField = "Casetype_ID";
-                ddlCaseType.DataSource = ds;
-                ddlCaseType.DataBind();
+                ddlCaseSubject.DataTextField = "CaseSubjectName";
+                ddlCaseSubject.DataValueField = "CaseSubjectID";
+                ddlCaseSubject.DataSource = ds;
+                ddlCaseSubject.DataBind();
             }
-            ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
+            ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
@@ -134,9 +134,9 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             {
                 msg += "Select Court Type.\\n";
             }
-            if (ddlCaseType.SelectedIndex < 0)
+            if (ddlCaseSubject.SelectedIndex < 0)
             {
-                msg += "Select Case Category.\\n";
+                msg += "Select Case Subject.\\n";
             }
             if (ddlHighprioritycase.SelectedIndex < 0)
             {
@@ -317,14 +317,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     lblMsg.Text = "";
                     if (btnSubmit.Text == "Save")
                     {
-                        ds = objdb.ByProcedure("USP_Legal_InsertLocalCourtCaseRegis", new string[] { "Office_ID", "Case_No", "Case_OldRefNo", "CourtType_Id", "Casetype_ID", "Distric_ID", "Case_DateOfReceipt",
-                        "Case_DateOfFiling", "HPCaseStatus", "Case_SubjectOfCase", "OIC_Name", "OIC_EmailID", "OIC_MobileNo", 
-                        "AdvocateName", "AdvocateMobileNo", "AdvocateEmail_ID", "PetitionerAPPName", "PetitionerAPPMobileNo", "PetitionerAPPEmail_ID", "PetitionerAPPAddress", "PetitionerAdvName",
-                        "PetitionerAdvMobileNo", "PetitionerAdvEmail_ID", "PetitionerAdvAddress", "CreatedBy", "CreatedByIP","Case_UploadedDoc1", "Case_UploadedDoc2", "Case_UploadedDoc3" },
-                            new string[] { ViewState["Office_ID"].ToString(),txtCaseNo.Text.Trim(),txtCaseOldRefNo.Text.Trim(),ddlCourtType.SelectedValue,ddlCaseType.SelectedValue, ddlDistrict.SelectedValue,Convert.ToDateTime(txtDateOfReceipt.Text, cult).ToString("yyyy/MM/dd"),
-                        Convert.ToDateTime(txtDateOfLastHearing.Text, cult).ToString("yyyy/MM/dd"),ddlHighprioritycase.SelectedItem.Text,txtCaseDescription.Text.Trim(),txtOICName.Text.Trim(),txtOICEmail.Text.Trim(),txtOICMobileNo.Text.Trim(),
-                        txtAdvocateName.Text.Trim(),txtAdvocateMobileNo.Text.Trim(),txtAdvocateEmail.Text.Trim(),txtPetitionerAppName.Text.Trim(),txtPetitionerAppMobileNo.Text.Trim(),txtPetitionerAppEmail.Text.Trim(),txtPetitionerAppAddress.Text.Trim(),txtPetitionerAdvName.Text.Trim(),
-                        txtPetitionerAdvMobileNo.Text.Trim(),txtPetitionerAdvEmail.Text.Trim(),txtPetitionerAdvAddress.Text.Trim(),ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ViewState["FileUploadDOC1"].ToString(),ViewState["FileUploadDOC2"].ToString(),ViewState["FileUploadDOC3"].ToString()}, "dataset");
+                        ds = objdb.ByProcedure("USP_Legal_InsertLocalCourtCaseRegis", new string[] { "FilingNo", "Petitoner_Name", "CaseSubject", "CourtType_Id", "PetiAdvocateName", "PetiAdvocateMobile", "petiAdvocateEmail_ID", "CaseDetail", "CreatedBy", "CreatedByIP", "DeptAdvocateName", "DeptAdvocateMobileNo", "DeptAdvocateEmailId", "HighPrirtyCaseSts", "OldCaseNo" },
+                            new string[] { txtCaseNo.Text.Trim(), txtPetitionerAppName.Text.Trim(), ddlCaseSubject.SelectedValue, ddlCourtType.SelectedValue, txtPetitionerAdvName.Text.Trim(), txtPetitionerAdvMobileNo.Text.Trim(), txtPetitionerAdvEmail.Text.Trim(), txtCaseDescription.Text.Trim(), ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress(), txtDeptAdvocateName.Text.Trim(), txtDeptAdvocateMobileNo.Text.Trim(), txtDeptAdvocateEmail.Text.Trim(),ddlHighprioritycase.SelectedItem.Text, txtCaseOldRefNo.Text.Trim() }, "dataset");
                     }
                     //else if (btnSubmit.Text == "Update")
                     //{
@@ -363,6 +357,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                         if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                         {
                             lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks!", ErrMsg);
+                            ClearText();
                         }
                         else
                         {
@@ -401,16 +396,16 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         txtCaseNo.Text = "";
         txtCaseOldRefNo.Text = "";
         ddlCourtType.ClearSelection();
-        ddlCaseType.ClearSelection();
+        ddlCaseSubject.ClearSelection();
         txtDateOfReceipt.Text = "";
         txtDateOfLastHearing.Text = "";
         txtCaseDescription.Text = "";
         txtDepartment.Text = "";
         txtOICMobileNo.Text = "";
         txtOICEmail.Text = "";
-        txtAdvocateName.Text = "";
-        txtAdvocateMobileNo.Text = "";
-        txtAdvocateEmail.Text = "";
+        txtDeptAdvocateName.Text = "";
+        txtDeptAdvocateMobileNo.Text = "";
+        txtDeptAdvocateEmail.Text = "";
         txtPetitionerAppName.Text = "";
         txtPetitionerAppMobileNo.Text = "";
         txtPetitionerAppEmail.Text = "";
@@ -627,8 +622,6 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
     //        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
     //    }
     //}
-
-
     protected void btnAddresponder_Click(object sender, EventArgs e)
     {
         try

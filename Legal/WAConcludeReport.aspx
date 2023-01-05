@@ -65,7 +65,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="GrdConcludeReport" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" DataKeyNames="WACase_ID" OnPageIndexChanging="GrdConcludeReport_PageIndexChanging">
+                                        <asp:GridView ID="GrdConcludeReport" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" DataKeyNames="WACase_ID" OnPageIndexChanging="GrdConcludeReport_PageIndexChanging" EmptyDataText="NO RECORD FOUND">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
@@ -100,7 +100,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Case Subject">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCasesubject" runat="server" Text='<%# Eval("WACaseSubject") %>'></asp:Label>
+                                                        <asp:Label ID="lblCasesubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Case Status">

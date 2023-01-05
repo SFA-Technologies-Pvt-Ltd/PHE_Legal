@@ -174,9 +174,9 @@
                                             <label>
                                                 Case Subject<br />
                                                 प्रकरण का विषय<span style="color: red;">*</span></label>
-                                            <asp:DropDownList ID="ddlCaseType" runat="server" class="form-control select2">
+                                            <asp:DropDownList ID="ddlCaseSubject" runat="server" class="form-control select2">
                                             </asp:DropDownList>
-                                            <small><span id="valddlCaseType" class="text-danger"></span></small>
+                                            <small><span id="valddlCaseSubject" class="text-danger"></span></small>
                                         </div>
                                     </div>
                                 </div>
@@ -232,6 +232,18 @@
                                                 <asp:Button ID="btnAddresponder" runat="server" CssClass="btn btn-info btn-block" Text="Add Responder" OnClick="btnAddresponder_Click" />
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="Hearing_Date" runat="server">
+                                    <div class="form-group">
+                                        <label>Hearing Date (सुनवाई तिथि)</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <asp:TextBox ID="txtHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static" autocomplete="off" onchange="checkHearingDetail();"></asp:TextBox>
+                                        </div>
+                                        <small><span id="valtxtHearingDate" class="text-danger"></span></small>
                                     </div>
                                 </div>
                             </div>
@@ -296,7 +308,7 @@
                                                     <label>
                                                         Advocate Name<br />
                                                         वकील का नाम</label>
-                                                    <asp:TextBox ID="txtAdvocateName" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                                                    <asp:TextBox ID="txtDeptAdvocateName" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="70"></asp:TextBox>
                                                     <small><span id="valAdvocateName" class="text-danger"></span></small>
                                                 </div>
                                             </div>
@@ -305,7 +317,7 @@
                                                     <label>
                                                         Mobile No.<br />
                                                         मोबाइल नंबर</label>
-                                                    <asp:TextBox ID="txtAdvocateMobileNo" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="10"></asp:TextBox>
+                                                    <asp:TextBox ID="txtDeptAdvocateMobileNo" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="10"></asp:TextBox>
                                                     <small><span id="valAdvocateMobile" class="text-danger"></span></small>
                                                 </div>
                                             </div>
@@ -316,8 +328,8 @@
                                                     <label>
                                                         Email<br />
                                                         ईमेल</label>
-                                                    <asp:TextBox ID="txtAdvocateEmail" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="50"></asp:TextBox>
-                                                     <small><span id="valAdvocateEmailId" class="text-danger"></span></small>
+                                                    <asp:TextBox ID="txtDeptAdvocateEmail" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="50"></asp:TextBox>
+                                                    <small><span id="valAdvocateEmailId" class="text-danger"></span></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -421,38 +433,77 @@
                                         <legend>Document Upload</legend>
 
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-3" style="display: none;">
+                                                        <div class="form-group">
 
-                                                    <label>Document1</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink1" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
+                                                            <label>Document1</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink1" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
 
-                                                    <asp:FileUpload ID="FileUpload1" runat="server" CssClass="form-control" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-
-                                                    <label>Document2</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink2" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
-                                                    <asp:FileUpload ID="FileUpload2" runat="server" CssClass="form-control" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Document3</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink3" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
-                                                    <asp:FileUpload ID="FileUpload3" runat="server" CssClass="form-control" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3" id="Hearing_Date" runat="server">
-                                                <div class="form-group">
-                                                    <label>Hearing Date (सुनवाई तिथि)</label>
-                                                    <div class="input-group date">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-calendar"></i>
+                                                            <asp:FileUpload ID="FileUpload1" runat="server" CssClass="form-control" />
                                                         </div>
-                                                        <asp:TextBox ID="txtHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static" autocomplete="off" onchange="checkHearingDetail();"></asp:TextBox>
                                                     </div>
-                                                    <small><span id="valtxtHearingDate" class="text-danger"></span></small>
+                                                    <div class="col-md-3" style="display: none;">
+                                                        <div class="form-group">
+
+                                                            <label>Document2</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink2" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
+                                                            <asp:FileUpload ID="FileUpload2" runat="server" CssClass="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3" style="display: none;">
+                                                        <div class="form-group">
+                                                            <label>Document3</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink3" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
+                                                            <asp:FileUpload ID="FileUpload3" runat="server" CssClass="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Document Name</label>
+                                                            <asp:TextBox ID="txtDocName" runat="server" MaxLength="50" AutoComplete="off" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Documents</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink4" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
+                                                            <asp:FileUpload ID="FileUpload10" runat="server" CssClass="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <asp:Button ID="btnAddDoc" runat="server" Text="Add" CssClass="btn btn-primary btn-block" />
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <fieldset>
+                                                    <legend>View Doc</legend>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+
+                                                            <asp:GridView ID="GrdViewDoc" runat="server" CssClass="table table-bordered table-responsive" AutoGenerateColumns="false">
+                                                                <Columns>
+                                                                    <asp:TemplateField HeaderText="SNo.">
+                                                                        <ItemTemplate>
+                                                                            <asp:Label ID="lblSrnO" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                                        </ItemTemplate>
+                                                                    </asp:TemplateField>
+                                                                    <asp:TemplateField HeaderText="Document Name">
+                                                                        <ItemTemplate>
+                                                                            <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                        </ItemTemplate>
+                                                                    </asp:TemplateField>
+                                                                    <asp:TemplateField HeaderText="View">
+                                                                        <ItemTemplate>
+                                                                            <asp:HyperLink ID="lblDocName" runat="server" NavigateUrl='<%# "" +  Eval("") %>' Target="_blank" CssClass="label label-primary">View</asp:HyperLink>
+                                                                        </ItemTemplate>
+                                                                    </asp:TemplateField>
+                                                                </Columns>
+                                                            </asp:GridView>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -471,83 +522,7 @@
                                     <asp:Button ID="btnClear" CssClass="btn btn-block btn-default" runat="server" Text="Clear" OnClick="btnClear_Click" />
                                 </div>
                             </div>
-                            <div class="col-md-4"></div>
-                            <!--OIC Detail Modal-->
 
-                            <!--Advocate / CA Detail Modal-->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="modal fade" id="AdvocateDetailModal" role="dialog">
-                                        <div class="modal-dialog modal-lg">
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title">Advocate/CA Detail</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="box box-success">
-                                                                <div class="box-header">
-                                                                    <h3 class="box-title">Advocate / CA Detail</h3>
-                                                                    <asp:Label runat="server" ID="lbladvocatemsg" Text=""></asp:Label>
-                                                                </div>
-                                                                <div class="box-body">
-                                                                    <div id="Div1" runat="server">
-                                                                        <div class="row">
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Advocate / CA Name<span style="color: red;">*</span></label>
-                                                                                    <asp:TextBox ID="txtAdvocate_Name" runat="server" placeholder="Advocate / CA Name" CssClass="form-control" MaxLength="50" onkeypress="return validatename(event);"></asp:TextBox>
-                                                                                    <small><span id="valtxtAdvocate_Name" class="text-danger"></span></small>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Advocate / CA Mobile No.<span style="color: red;">*</span></label>
-                                                                                    <asp:TextBox ID="txtAdvocate_MobileNo" runat="server" placeholder="Advocate / CA Mobile No" ClientIDMode="Static" CssClass="form-control MobileNo2" MaxLength="10" onkeypress='javascript:tbx_fnNumeric(event, this);'></asp:TextBox>
-                                                                                    <small><span id="valtxtAdvocate_MobileNo" class="text-danger"></span></small>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Advocate / CA Email</label>
-                                                                                    <asp:TextBox ID="txtAdvocate_Email" runat="server" placeholder="Advocate / CA Email" CssClass="form-control" MaxLength="30"></asp:TextBox>
-                                                                                    <small><span id="valtxtAdvocate_Email" class="text-danger"></span></small>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>Advocate / CA Address</label>
-                                                                                    <asp:TextBox ID="txtAdvocate_Address" runat="server" placeholder="Advocate / CA Address" CssClass="form-control" MaxLength="200"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4"></div>
-
-
-                                                                            <div class="col-md-4"></div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="modal-footer">
-
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -684,7 +659,7 @@
             $("#valtxtCaseNo").html("");
             $("#valddlCourtType").html("");
             $("#valddlDistrict").html("");
-            $("#valddlCaseType").html("");
+            $("#valddlCaseSubject").html("");
             $("#valddloffice").html("");
             $("#valtxtDate").html("");
             $("#valtxtDateOfLastHearing").html("");
@@ -737,15 +712,15 @@
                 $("#valddlDistrict").html("Select District");
             }
             if (document.getElementById('<%=ddlHighprioritycase.ClientID%>').selectedIndex == 0) {
-                
+
                 msg = msg + "Select High Priority Case Type. \n";
                 $("#valddlHighprioritycase").html("Select High Priority Case Type");
             }
 
-            if (document.getElementById('<%=ddlCaseType.ClientID%>').selectedIndex == 0) {
-                
-                msg = msg + "Select Case Type. \n";
-                $("#valddlCaseType").html("Select Case Type");
+            if (document.getElementById('<%=ddlCaseSubject.ClientID%>').selectedIndex == 0) {
+
+                msg = msg + "Select Case Subject. \n";
+                $("#valddlCaseSubject").html("Select Case Subject");
             }
             if (document.getElementById('<%=txtDateOfReceipt.ClientID%>').value.trim() == "") {
                 msg = msg + "Select Date Of Receipt. \n";
@@ -770,28 +745,28 @@
                     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
                     if (reg.test(document.getElementById('<%=txtPetitionerAppEmail.ClientID%>').value) == false) {
-                    msg = msg + "Please Enter Valid Petitioner/Applicant Email Address. \n";
-                    $("#valtxtPetitionerAppEmail").html("Please Enter Valid Petitioner/Applicant Email Address");
+                        msg = msg + "Please Enter Valid Petitioner/Applicant Email Address. \n";
+                        $("#valtxtPetitionerAppEmail").html("Please Enter Valid Petitioner/Applicant Email Address");
+                    }
                 }
             }
-        }
-        if (document.getElementById('<%=txtPetitionerAdvMobileNo.ClientID%>').value.trim() != "") {
+            if (document.getElementById('<%=txtPetitionerAdvMobileNo.ClientID%>').value.trim() != "") {
                 if (document.getElementById('<%=txtPetitionerAdvMobileNo.ClientID%>').value.length != 10) {
-                msg += "Enter Correct Petitioner/Advocate  Mobile No. \n";
-                $("#valtxtPetitionerAdvMobileNo").html("Enter Correct Petitioner/Advocate  Mobile No ");
-            }
-        }
-        if (document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value.trim() != "") {
-                if (document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value.trim() != "") {
-                var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-])+\.([A-Za-z]{2,4})$/;
-
-                if (reg.test(document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value) == false) {
-                    msg = msg + "Please Enter  Valid Petitioner/Advocate Email  Address. \n";
-                    $("#valtxtPetitionerAdvEmail").html("Please Enter  Valid Petitioner/Advocate Email  Address ");
+                    msg += "Enter Correct Petitioner/Advocate  Mobile No. \n";
+                    $("#valtxtPetitionerAdvMobileNo").html("Enter Correct Petitioner/Advocate  Mobile No ");
                 }
             }
-        }
-        if (document.getElementById('<%=txtPetitionerAppName.ClientID%>').value.trim() == "") {
+            if (document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value.trim() != "") {
+                if (document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value.trim() != "") {
+                    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-])+\.([A-Za-z]{2,4})$/;
+
+                    if (reg.test(document.getElementById('<%=txtPetitionerAdvEmail.ClientID%>').value) == false) {
+                        msg = msg + "Please Enter  Valid Petitioner/Advocate Email  Address. \n";
+                        $("#valtxtPetitionerAdvEmail").html("Please Enter  Valid Petitioner/Advocate Email  Address ");
+                    }
+                }
+            }
+            if (document.getElementById('<%=txtPetitionerAppName.ClientID%>').value.trim() == "") {
                 msg = msg + "Enter Petitioner/Applicant Name. \n";
                 $("#valtxtPetitionerAppName").html("Enter Petitioner/Applicant Name ");
             }
@@ -842,31 +817,31 @@
             $("#valtxtAdvocate_Name").html("");
             $("#valtxtAdvocate_MobileNo").html("");
             $("#txtAdvocate_Email").html("");
-            if (document.getElementById('<%=txtAdvocate_Name.ClientID%>').value.trim() == "") {
+            if (document.getElementById('<%=txtDeptAdvocateName.ClientID%>').value.trim() == "") {
                 msg = msg + "Enter Advocate / CA Name. \n";
                 $("#valtxtAdvocate_Name").html("Enter Advocate / CA Name");
             }
-            if (document.getElementById('<%=txtAdvocate_MobileNo.ClientID%>').value.trim() == "") {
+            if (document.getElementById('<%=txtDeptAdvocateMobileNo.ClientID%>').value.trim() == "") {
                 msg += "Enter Advocate / CA Mobile No. \n";
                 $("#valtxtAdvocate_MobileNo").html("Enter Advocate / CA  Mobile No");
             }
-            else if (document.getElementById('<%=txtAdvocate_MobileNo.ClientID%>').value.length != 10) {
-            msg += "Enter  Correct Advocate / CA Mobile No. \n";
-            $("#valtxtAdvocate_MobileNo").html("Enter Correct Advocate / CA Mobile No");
-        }
-        if (document.getElementById('<%=txtAdvocate_Email.ClientID%>').value.trim() != "") {
+            else if (document.getElementById('<%=txtDeptAdvocateMobileNo.ClientID%>').value.length != 10) {
+                msg += "Enter  Correct Advocate / CA Mobile No. \n";
+                $("#valtxtAdvocate_MobileNo").html("Enter Correct Advocate / CA Mobile No");
+            }
+            if (document.getElementById('<%=txtDeptAdvocateEmail.ClientID%>').value.trim() != "") {
                 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-])+\.([A-Za-z]{2,4})$/;
 
-                if (reg.test(document.getElementById('<%=txtAdvocate_Email.ClientID%>').value) == false) {
-                msg = msg + "Please Enter Valid Email Address. \n";
-                $("#valtxtAdvocate_Email").html("Please Enter Valid Email Address");
+                if (reg.test(document.getElementById('<%=txtDeptAdvocateEmail.ClientID%>').value) == false) {
+                    msg = msg + "Please Enter Valid Email Address. \n";
+                    $("#valtxtAdvocate_Email").html("Please Enter Valid Email Address");
+                }
             }
-        }
 
-        if (msg != "") {
-            alert(msg);
-            return false;
-        }
+            if (msg != "") {
+                alert(msg);
+                return false;
+            }
            <%-- else {
                 if (document.getElementById('<%=btnAdvocateSave.ClientID%>').value.trim() == "Save") {
                     if (confirm("Do you really want to Save Details ?")) {

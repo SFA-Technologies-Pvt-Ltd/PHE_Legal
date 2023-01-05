@@ -179,12 +179,6 @@
                                             ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Select</asp:ListItem>
-                                            <asp:ListItem Value="1">WP Case</asp:ListItem>
-                                            <asp:ListItem Value="2">Contempt Case</asp:ListItem>
-                                            <asp:ListItem Value="3">WA Case</asp:ListItem>
-                                            <asp:ListItem Value="4">RP Case</asp:ListItem>
-                                            <asp:ListItem Value="4">SLP Case</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -229,6 +223,8 @@
                                                         <asp:Label ID="LabelRespondertype" runat="server" Text='<%# Eval("Respondertype") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCaseDetail" runat="server" Text='<%# Eval("CaseDetail") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("CaseType") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblRespondentName" runat="server" Text='<%# Eval("Respondent_Name") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Case No.">

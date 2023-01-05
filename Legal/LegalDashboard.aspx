@@ -186,37 +186,26 @@
                                                     <asp:TemplateField HeaderText="Case Subject">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
-                                                            <asp:Label ID="LabelOICName" runat="server" Text='<%# Eval("OICName") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelOICMObile" runat="server" Text='<%# Eval("OICMobileNo") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelOICEmail" runat="server" Text='<%# Eval("OICEmailID") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelNodalName" runat="server" Text='<%# Eval("NodalName") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelNodalMobile" runat="server" Text='<%# Eval("NodalMobileNo") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelNodalEmail" runat="server" Text='<%# Eval("NodalEmailID") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelAdvocateName" runat="server" Text='<%# Eval("AdvocateName") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelAdvocateMobile" runat="server" Text='<%# Eval("AdvocateMobileNo") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelAdvocateEmail" runat="server" Text='<%# Eval("AdvocateEmailID") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelHearingDate" runat="server" Text='<%# Eval("NextHearingDate") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="LabelRespondertype" runat="server" Text='<%# Eval("Respondertype") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="lblCaseDetail" runat="server" Text='<%# Eval("CaseDetail") %>' Visible="false"></asp:Label>
-                                                            <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("CaseType") %>' Visible="false"></asp:Label>
+                                                         
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Case No.">
                                                         <ItemTemplate>
-                                                            <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("CaseNo") %>'></asp:Label>
+                                                            <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("CaseNO") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Petitioner Name">
                                                         <ItemTemplate>
-                                                            <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitionerName") %>'></asp:Label>
+                                                            <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetionerName") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Court Name">
                                                         <ItemTemplate>
-                                                            <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtName") %>'></asp:Label>
+                                                            <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                    <asp:BoundField HeaderText="High Priority Case" DataField="CaseType" />
+                                                    <asp:BoundField HeaderText="High Priority Case" DataField="HighPrirtyCaseSts" />
+                                                    <asp:BoundField HeaderText="High Priority Case" DataField="Casetype_Name" />
                                                 </Columns>
                                             </asp:GridView>
                                         </div>
@@ -254,7 +243,7 @@
                          <div class="row Space">
                             <div class="col-md-12">
                                 <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
-                                <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL Case 2 No's</asp:LinkButton>
+                                <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL Case<span id="spnhighpriorityCase" runat="server" style="font-weight:bold;"></span></asp:LinkButton>
                             </div>
                         </div>
                         <div class="row">
@@ -265,127 +254,8 @@
                             <div class="col-md-12" style="margin-top: 10px;">
                                 <marquee direction="left"> <span id="spnHearing" runat="server" style="font-size:18px; color:red; font-weight:800;"></span></marquee>
                             </div>
-                        </div>
-                        <div id="CourtWiseDiv" runat="server" visible="false">
-                            <div class="row Space">
-                                <div class="col-md-12">
-                                    <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE (TOTAL CASE):</span>
-                                    <asp:Label ID="lblTotalCaseCourtwise" runat="server"></asp:Label>
-                                </div>
-                            </div>
-
-                            <div class="row Space">
-                                <div class="col-6 col-md-4">
-                                    <div class="boxshape" style="background-color: #cf57cf; border: 2px solid green;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid #cf57cf;">
-                                                <span>INDORE COURT<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox">
-                                            <asp:Label ID="lblIndoreCases" runat="server" CssClass=""></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnIndoreCases" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnIndoreCases_Click" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <div class="boxshape" style="background-color: red; border: 2px solid blue;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid #4444c5;">
-                                                <span>JABALPUR COURT<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox">
-                                            <asp:Label ID="lblJabalpur" runat="server" CssClass=""></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnJabalpur" runat="server" CssClass="Buttons" Text="View Detail" OnClick="btnJabalpur_Click" OnClientClick="SetTarget();" />
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <div class="boxshape" style="background-color: purple; border: 2px solid green;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid violet;">
-                                                <span>Gwalior COURT<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox">
-                                            <asp:Label ID="lblGwalior" runat="server"></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnGwalior" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnGwalior_Click" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="CasetypewiseDiv" runat="server" visible="false">
-                            <div class="row Space">
-                                <div class="col-md-12">
-                                    <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE TYPE :</span>
-                                </div>
-                            </div>
-
-                            <div class="row Space">
-                                <div class="col-6 col-md-4">
-                                    <div class="boxshape" style="background-color: #f9e70e; border: 2px solid magenta;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid #ef12c9;">
-                                                <span>WP<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox" style="margin: 0 3px 0px 0px;">
-                                            <asp:Label ID="lblWPCase" runat="server"></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnWPCase" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnWPCase_Click" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-6">
-                                    <div class="boxshape" style="background-color: #9d9d26; border: 2px solid red;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid red;">
-                                                <span>CONT<br />
-                                                    EMPT<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox" style="margin: 0 3px 0px 0px;">
-                                            <asp:Label ID="lblConTempt" runat="server"></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnContempt" runat="server" CssClass="Buttons" Text="View Detail" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <div class="boxshape" style="background-color: green; border: 2px solid red;">
-                                        <div class="circle">
-                                            <div class="insideBox" style="border: 2px solid red;">
-                                                <span>WA<br />
-                                                    CASES</span>
-                                            </div>
-                                        </div>
-                                        <div class="lableBox" style="margin: 0 3px 0px 0px;">
-                                            <asp:Label ID="lblWACase" runat="server"></asp:Label>
-                                        </div>
-                                        <div class="buttonDiv">
-                                            <asp:Button ID="btnWACase" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnWACase_Click" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        </div>                        
+                      
                         <div class="row Space">
                             <div class="col-md-6">
                                 <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE :</span>

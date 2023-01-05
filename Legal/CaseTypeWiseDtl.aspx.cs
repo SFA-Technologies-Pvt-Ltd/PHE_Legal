@@ -18,28 +18,7 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                DataTable dtcol = new DataTable();
-                dtcol.Columns.Add("ID", typeof(int));
-                dtcol.Columns.Add("Respondertype", typeof(string));
-                dtcol.Columns.Add("CaseType", typeof(string));
-                dtcol.Columns.Add("CaseSubject", typeof(string));
-                dtcol.Columns.Add("CaseNo", typeof(string));
-                dtcol.Columns.Add("CourtName", typeof(string));
-                dtcol.Columns.Add("PetitionerName", typeof(string));
-                dtcol.Columns.Add("NodalName", typeof(string));
-                dtcol.Columns.Add("NodalMobileNo", typeof(string));
-                dtcol.Columns.Add("NodalEmailID", typeof(string));
-                dtcol.Columns.Add("OICName", typeof(string));
-                dtcol.Columns.Add("OICMobileNo", typeof(string));
-                dtcol.Columns.Add("OICEmailID", typeof(string));
-                dtcol.Columns.Add("NextHearingDate", typeof(string));
-                dtcol.Columns.Add("AdvocateName", typeof(string));
-                dtcol.Columns.Add("AdvocateMobileNo", typeof(string));
-                dtcol.Columns.Add("AdvocateEmailID", typeof(string));
-                dtcol.Columns.Add("CaseDetail", typeof(string));
-                dtcol.Columns.Add("Status", typeof(string));
-
-                ViewState["dtCol"] = dtcol;
+                GetCaseType();
             }
         }
         else
@@ -47,34 +26,52 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
             Response.Redirect("/Login.aspx");
         }
     }
+    private void GetCaseType()
+    {
+        try
+        {
+            ds = new DataSet();
+            ds = obj.ByDataSet("select * from tbl_Legal_Casetype");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseType.DataSource = ds.Tables[0];
+                ddlCaseType.DataTextField = "Casetype_Name";
+                ddlCaseType.DataValueField = "Casetype_ID";
+                ddlCaseType.DataBind();
+                ddlCaseType.Items.Insert(0, "Select Case Type");
+            }
+            else
+            {
+                ddlCaseType.DataSource = null;
+                ddlCaseType.DataBind();
+                ddlCaseType.Items.Insert(0, "Select Case Subject");
+            }
+        }
+        catch (Exception)
+        {
+        }
+
+    }
+
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
+            ds = new DataSet();
             if (Page.IsValid)
             {
-                grdCaseTypedtl.DataSource = null;
-                grdCaseTypedtl.DataBind();
-
-                DataTable dt = (DataTable)ViewState["dtCol"];
-
-                if (dt.Columns.Count > 0)
+                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "10", ddlCaseType.SelectedItem.Value }, "dataset");
+                if (ds.Tables[0].Rows.Count > 0)
                 {
-                    string sdate = DateTime.Now.ToString("dd/MM/yyyy");
-                    string sd = sdate.Replace("-", "/");
-                    txtNextHearingDate.Text = sd;
-
-                    dt.Rows.Add("1", "ENC Case",ddlCaseType.SelectedItem.Text, "स्थानांतरण", "Ct001202", "Jabalpur High Court", "Mohan Lal Singh", "Gouri Shanker", "8952232325", "gourishanker46@gmail.com", "Srikant Parte", "7895641563", "Srikantp8955@gmail.com", DateTime.Now.AddDays(5).ToString("dd/MM/yyyy"), "Vishal Verma", "6589744512", "VermaVisl8745@gmail.com", "Case In Progress", "Pending");
-                    dt.Rows.Add("2", "PP Case", ddlCaseType.SelectedItem.Text, "नियूक्ति", "Ct001995", "Gwalior High Court", "Sharman Singh", "Narendra Rao", "6652232325", "narendra46@gmail.com", "Mohan Parte", "8895641563", "Mohantp8955@gmail.com", DateTime.Now.AddDays(7).ToString("dd/MM/yyyy"), "Vishal Verma", "6589744512", "VermaVisl8745@gmail.com", "Case In Progress", "Pending");
-                    dt.Rows.Add("3", "DO Case", ddlCaseType.SelectedItem.Text, "प्रतिनियुक्ति", "Ct001995", "Indore High Court", "Sharman Singh", "Narendra Rao", "6652232325", "narendra46@gmail.com", "Ajay Mishra", "8895641563", "Mohantp8955@gmail.com", "", "Vishal Verma", "6589744512", "VermaVisl8745@gmail.com", "Case In Progress", "Dispose");
-                    dt.Rows.Add("4", "RO Case", ddlCaseType.SelectedItem.Text, "वेतन वृद्धि", "Ct001995", "Indore High Court", "Sharman Singh", "Narendra Rao", "6652232325", "narendra46@gmail.com", "Ajay Mishra", "8895641563", "Mohantp8955@gmail.com", "", "Vishal Verma", "6589744512", "VermaVisl8745@gmail.com", "Case In Progress", "Dispose");
-                }
-                ds.Tables.Add(dt);
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    grdCaseTypedtl.DataSource = ds;
+                    //DataTable dt = (DataTable)ViewState["dtCol"];
+                    DataTable dt = ds.Tables[0];
+                    grdCaseTypedtl.DataSource = dt;
                     grdCaseTypedtl.DataBind();
-                    dt.Clear();
+                }
+                else
+                {
+                    grdCaseTypedtl.DataSource = null;
+                    grdCaseTypedtl.DataBind();
                 }
             }
         }
@@ -107,13 +104,14 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
             Label lblCourtName = (Label)row.FindControl("lblCourtName");
             Label lblCaseDetail = (Label)row.FindControl("lblCaseDetail");
             Label lblCasetype = (Label)row.FindControl("lblCasetype");
+            Label lblRespondentName = (Label)row.FindControl("lblRespondentName");
+            Label lblRespondentMobileNo = (Label)row.FindControl("lblRespondentMobileNo");
 
             txtCaseno.Text = lblCaseNO.Text;
             txtCourtName.Text = lblCourtName.Text;
             txtRespondertype.Text = lblRespondertype.Text;
-            txtRespondentName.Text = "Goutam Mishra";
-            txtRespondentMobileno.Text = "7894562563";
-            txtRespondentEmailID.Text = "goutam5689@gmail.com";
+            txtRespondentName.Text = lblRespondentName.Text;
+            txtRespondentMobileno.Text = lblRespondentMobileNo.Text;
             txtNodalName.Text = lblNodalName.Text;
             txtNodalMobile.Text = lblNodalMobile.Text;
             txtNodalEmailID.Text = lblNodalEmail.Text;

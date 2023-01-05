@@ -166,6 +166,16 @@
             color: white !important;
         }
     </style>
+    <style>
+        /* For Datables*/
+        .form-inline {
+            display:block;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+    </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -232,54 +242,10 @@
 
                         <!-- Sidebar Menu -->
                         <nav class="mt-2">
+                            <%-- <section class="sidebar" runat="server" id="Navigation">
+                            </section>--%>
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-
-                                <%--==============================================================================================--%>
-                                <%-- <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-list-ul"></i>
-                                        <p>
-                                            State
-               
-                                             <i class="fas fa-angle-left right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="State_Approval.aspx" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>State Approval</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="State_Approval_Report.aspx" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>State Report</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>--%>
-                                <%-- <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-list-ul text-light"></i>
-                                        <p class="text-light">
-                                            DashBoard
-               
-                                             <i class="fas fa-angle-left right"></i>
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../Legal/LegalDashboard.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon text-light"></i>
-                                                <p class="text-light">Legal Dashboard</p>
-                                            </a>
-                                        </li>
-                                        </ul>
-                                     </li>--%>
+                             
                                 <li class="nav-item">
                                     <a href="../Legal/LegalDashboard.aspx" class="nav-link">
                                         <i class="nav-icon fas fa-list-ul text-light"></i>
@@ -296,7 +262,7 @@
                                             <span style="color: #e5e5e5; font-size: 16px;">Masters</span>
 
                                             <i class="fas fa-angle-left right"></i>
-                                            <%--<span class="badge badge-info right">6</span>--%>
+                                           
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
@@ -316,18 +282,7 @@
                                                 </p>
                                             </a>
                                         </li>
-                                        <%-- <li class="nav-item">
-                                            <a href="AddNewCase.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon text-light"></i>
-                                                <p class="text-light">Case Registration</p>
-                                            </a>
-                                        </li>
-                                         <li class="nav-item">
-                                            <a href="HearingList_ForOperator.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon text-light"></i>
-                                                <p class="text-light">Case List</p>
-                                            </a>
-                                        </li>--%>
+                                       
                                         <li class="nav-item">
                                             <a href="../Legal/Upload_HighCourtCaseFile.aspx" class="nav-link custom_bg_color">
                                                 <i class="far fa-circle nav-icon "></i>
@@ -337,12 +292,7 @@
                                                 </p>
                                             </a>
                                         </li>
-                                        <%-- <li class="nav-item">
-                                            <a href="../Legal/HighCourt_CaseList.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon text-light"></i>
-                                                <p class="text-light">High Court Case List</p>
-                                            </a>
-                                        </li>--%>
+                                      
                                         <li class="nav-item">
                                             <a href="../Legal/WPCaseList.aspx" class="nav-link custom_bg_color">
                                                 <i class="far fa-circle nav-icon"></i>
@@ -370,7 +320,7 @@
                                             <span style="color: #e5e5e5; font-size: 16px;">Report</span>
 
                                             <i class="fas fa-angle-left right"></i>
-                                            <%--<span class="badge badge-info right">6</span>--%>
+                                            
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
@@ -409,41 +359,7 @@
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p class="">WA/RP Conclude Report</p>
                                             </a>
-                                        </li>
-                                        <%-- <li class="nav-item">
-                                            <a href="../../Prapatra/Prapatra1.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p class="">सांख्यकीय</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../Prapatra/Prapatra2.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon "></i>
-                                                <p class="">अवमानना प्रकरण</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../Prapatra/Prapatra3.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p class="">लंबित डब्ल्यू पी प्रकरण</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../../Prapatra/Prapatra4.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon "></i>
-                                                <p class="">पालन हेतु शेष प्रकरणों की जानकारी</p>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="../../Prapatra/Prapatra5.aspx" class="nav-link custom_bg_color">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p class="">अपील के प्रकरणों की जानकारी</p>
-                                            </a>
-                                        </li>--%>
-
-
-                                        <%--===================================================================================================--%>
+                                        </li>                                      
                                         <li class="nav-item link">
                                             <a href="../Legal/SubjectWiseCaseDtl.aspx" class="nav-link custom_bg_color">
                                                 <i class="far fa-circle nav-icon"></i>
@@ -465,7 +381,7 @@
                                         <li class="nav-item">
                                             <a href="../Legal/AdvocateWiseCaseRpt.aspx" class="nav-link custom_bg_color">
                                                 <i class="far fa-circle nav-icon "></i>
-                                                <p class="">Advocate Wise Case Detail</p>
+                                                <p class="">Justice Wise Case Detail</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -504,24 +420,7 @@
                                                 <p class="">All Case Type Detail</p>
                                             </a>
                                         </li>
-                                        <%--<li class="nav-item">
-                                    <a href="../../Prapatra/Prapatra5.aspx" class="nav-link custom_bg_color">
-                                        <i class="far fa-circle nav-icon text-light"></i>
-                                        <p class="text-light">All WP Case Detail</p>
-                                    </a>
-                                </li>
-                                 <li class="nav-item">
-                                    <a href="../../Prapatra/Prapatra5.aspx" class="nav-link custom_bg_color">
-                                        <i class="far fa-circle nav-icon text-light"></i>
-                                        <p class="text-light">All WA Case Detail</p>
-                                    </a>
-                                </li>
-                                 <li class="nav-item">
-                                    <a href="../../Prapatra/Prapatra5.aspx" class="nav-link custom_bg_color">
-                                        <i class="far fa-circle nav-icon text-light"></i>
-                                        <p class="text-light">All RP Case Detail</p>
-                                    </a>
-                                </li>--%>
+                                      
                                         <li class="nav-item">
                                             <a href="../Legal/LongPendingCaseRpt.aspx" class="nav-link custom_bg_color">
                                                 <i class="far fa-circle nav-icon"></i>

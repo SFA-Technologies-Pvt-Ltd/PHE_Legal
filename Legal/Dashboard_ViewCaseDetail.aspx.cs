@@ -132,4 +132,55 @@ public partial class Legal_Dashboard_ViewCaseDetail : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
+    protected void GrdOfficeAndRespndrbyDtl_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            if(e.CommandName == "ViewDtl")
+            {
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+                Label lbltbl = (Label)row.FindControl("lbltbl");
+                Label lblCaseID = (Label)row.FindControl("lblCaseID");
+                Label lblcasstype = (Label)row.FindControl("lblCaetypeID");
+                if(lblcasstype.Text == "1" || lblcasstype.Text == "2")
+                {
+                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID" }
+                   , new string[] {"1", e.CommandArgument.ToString() }, "dataset");
+                }
+                else if (lblcasstype.Text == "3" || lblcasstype.Text == "4" || lblcasstype.Text == "5")
+                {
+                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID" }
+                        , new string[] { "2", e.CommandArgument.ToString() }, "dataset");
+                }
+
+
+                txtCaseno.Text = ds.Tables[0].Rows[0]["CaseNo"].ToString();
+                txtCourtName.Text = ds.Tables[0].Rows[0]["CourtTypeName"].ToString();
+                //txtRespondertype.Text = ds.Tables[0].Rows[0]["RespondertypeName"].ToString();
+                //txtRespondentName.Text = ds.Tables[0].Rows[0][""].ToString();
+                //txtRespondentMobileno.Text = ds.Tables[0].Rows[0][""].ToString();
+                //txtRespondentEmailID.Text = ds.Tables[0].Rows[0][""].ToString();
+                txtNodalName.Text = ds.Tables[0].Rows[0]["NodalOfficer_Name"].ToString();
+                txtNodalMobile.Text = ds.Tables[0].Rows[0]["NodalOfficerMobileNo"].ToString();
+                txtNodalEmailID.Text = ds.Tables[0].Rows[0]["NodalOfficerEmailID"].ToString();
+                txtOICName.Text = ds.Tables[0].Rows[0]["petiAdvocateName"].ToString();
+                txtOICMObile.Text = ds.Tables[0].Rows[0]["petiAdvocateMobile"].ToString();
+                txtOICEmail.Text = ds.Tables[0].Rows[0]["PetiAdvocateEmailID"].ToString();
+                txtAdvocatename.Text = ds.Tables[0].Rows[0]["DeptAdvocateName"].ToString();
+                txtAdvocatemobile.Text = ds.Tables[0].Rows[0]["DeptAdvocateMobileNO"].ToString();
+                txtAdvocateEmailID.Text = ds.Tables[0].Rows[0]["DeptAdvocateEmailId"].ToString();
+               // txtNextHearingDate.Text = ds.Tables[0].Rows[0][""].ToString();
+                txtPetitionerName.Text = ds.Tables[0].Rows[0]["Petitoner_Name"].ToString();
+                txtCasesubject.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();
+                txtCaseDtl.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();
+                txtCasetype.Text = ds.Tables[0].Rows[0]["Casetype_Name"].ToString();
+
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
 }

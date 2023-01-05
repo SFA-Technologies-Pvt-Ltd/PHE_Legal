@@ -192,20 +192,17 @@
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
                                           <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                             ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="rbWPCOnt" Display="Dynamic" runat="server">
+                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:RadioButtonList ID="rbWPCOnt" runat="server" RepeatDirection="Horizontal" CssClass="form-control">
-                                            <asp:ListItem Value="1">&nbsp;WP/Contempt &nbsp;&nbsp;&nbsp;</asp:ListItem>
-                                            <asp:ListItem Value="2">&nbsp;WA/RP</asp:ListItem>
-                                        </asp:RadioButtonList>
+                                      <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3" style="margin-top: 3%;">
+                                <div class="col-md-3" style="padding: 3.5% 0 0 0">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="Save" Text="Search" OnClick="btnSearch_Click" />
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <a href="LongPendingCaseRpt.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
@@ -241,6 +238,8 @@
                                                         <asp:Label ID="LabelRespondertype" runat="server" Text='<%# Eval("Respondertype") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCaseDetail" runat="server" Text='<%# Eval("CaseDetail") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("CaseType") %>' Visible="false"></asp:Label>
+                                                         <asp:Label ID="lblRespondentName" runat="server" Text='<%# Eval("Respondent_Name") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Case No.">
