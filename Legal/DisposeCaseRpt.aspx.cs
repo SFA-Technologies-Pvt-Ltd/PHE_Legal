@@ -31,20 +31,20 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
         try
         {
             ds = new DataSet();
-            ds = obj.ByDataSet("select * from tbl_LegalCaseDisposeType where CaseDisposeType_Id = 2");
+            ds = obj.ByDataSet("select * from tbl_LegalCaseDisposeType ");
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlDisposetype.DataSource = ds.Tables[0];
                 ddlDisposetype.DataTextField = "CaseDisposeType";
                 ddlDisposetype.DataValueField = "CaseDisposeType_Id";
                 ddlDisposetype.DataBind();
-                ddlDisposetype.Items.Insert(0, "Select");
+                ddlDisposetype.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlDisposetype.DataSource = null;
                 ddlDisposetype.DataBind();
-                ddlDisposetype.Items.Insert(0, "Select");
+                ddlDisposetype.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)
@@ -64,13 +64,13 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
                 ddlCaseType.DataTextField = "Casetype_Name";
                 ddlCaseType.DataValueField = "Casetype_ID";
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Type");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseType.DataSource = null;
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Subject");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)

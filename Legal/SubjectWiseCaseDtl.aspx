@@ -3,14 +3,14 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <%--<asp:ValidationSummary ID="vds" runat="server" ValidationGroup="Save" ShowMessageBox="true" ShowSummary="false" EnableClientScript="true" ClientIDMode="Static" DisplayMode="BulletList" Enabled="true" />--%>
+ <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
                 <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
                     <div class="modal-header" style="background-color: #D9D9D9;">
-                        <span class="modal-title" style="float: left" id="myModalLabel">Responder Details</span>
+                        <span class="modal-title" style="float: left" id="myModalLabel">Case Details</span>
                         <button type="button" class="close" data-dismiss="modal">
                             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                         </button>
@@ -173,12 +173,12 @@
                         <fieldset>
                             <legend>Search</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Case Subject</label><span style="color: red;"><b> *</b></span>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
-                                            ErrorMessage="Select Case Subject"
-                                            ControlToValidate="ddlCaseSubject" runat="server" InitialValue="0">
+                                        <label>Case Subject</label><span style="color: red;"><b> *</b></span>                                       
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
+                                            ErrorMessage="Select Case Subject" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control">
                                         </asp:DropDownList>
@@ -187,16 +187,19 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
-                                            ErrorMessage="Select Case type" ControlToValidate="ddlCaseType" runat="server" InitialValue="0">
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                            ErrorMessage="Select Case type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
+
+                                        
                                         <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3 p-4">
+                                <div class="col-md-3" style="margin:3% 0 0 0;">
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click" ValidationGroup="Save" />
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="Save" Text="Search" OnClick="btnSearch_Click"  />
                                         </div>
                                         <div class="col-md-5">
                                             <asp:Button ID="btnClear" Text="Clear" runat="server" class="btn btn-default btn-block" OnClick="btnClear_Click" />

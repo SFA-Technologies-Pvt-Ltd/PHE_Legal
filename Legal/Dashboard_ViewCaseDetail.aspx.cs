@@ -104,7 +104,7 @@ public partial class Legal_Dashboard_ViewCaseDetail : System.Web.UI.Page
                     GrdCaseDetail.DataBind();
                 }
             } // When Responder Wise And Office Wise Dtl Would You fetch.
-            else if (Request.QueryString["Casetype"].ToString() == "PP Case" || Request.QueryString["Casetype"].ToString() == "ENC Case" || Request.QueryString["Casetype"].ToString() == "RO Case" || Request.QueryString["Casetype"].ToString() == "DO Case" || Request.QueryString["Casetype"].ToString() == "Jal Nigam Case" || Request.QueryString["Casetype"].ToString() == "Testing Lab Case")
+            else if (Request.QueryString["Casetype"].ToString() == "MP Govt Case" || Request.QueryString["Casetype"].ToString() == "ENC Case" || Request.QueryString["Casetype"].ToString() == "Zone Case" || Request.QueryString["Casetype"].ToString() == "Cirlce Case" || Request.QueryString["Casetype"].ToString() == "Jal Nigam Case" || Request.QueryString["Casetype"].ToString() == "DO Case")
             {
                 GrdOfficeAndRespndrbyDtl.DataSource = null;
                 GrdOfficeAndRespndrbyDtl.DataBind();
@@ -144,22 +144,22 @@ public partial class Legal_Dashboard_ViewCaseDetail : System.Web.UI.Page
                 Label lblcasstype = (Label)row.FindControl("lblCaetypeID");
                 if(lblcasstype.Text == "1" || lblcasstype.Text == "2")
                 {
-                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID" }
-                   , new string[] {"1", e.CommandArgument.ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID", "Case_ID" }
+                   , new string[] { "1", lblcasstype.Text, e.CommandArgument.ToString() }, "dataset");
                 }
                 else if (lblcasstype.Text == "3" || lblcasstype.Text == "4" || lblcasstype.Text == "5")
                 {
-                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID" }
-                        , new string[] { "2", e.CommandArgument.ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_ViewAllDtl_RespondeWise", new string[] { "flag", "Casetype_ID", "Case_ID" }
+                        , new string[] { "2", lblcasstype.Text, e.CommandArgument.ToString() }, "dataset");
                 }
 
 
                 txtCaseno.Text = ds.Tables[0].Rows[0]["CaseNo"].ToString();
                 txtCourtName.Text = ds.Tables[0].Rows[0]["CourtTypeName"].ToString();
-                //txtRespondertype.Text = ds.Tables[0].Rows[0]["RespondertypeName"].ToString();
-                //txtRespondentName.Text = ds.Tables[0].Rows[0][""].ToString();
-                //txtRespondentMobileno.Text = ds.Tables[0].Rows[0][""].ToString();
-                //txtRespondentEmailID.Text = ds.Tables[0].Rows[0][""].ToString();
+                txtRespondertype.Text = ds.Tables[0].Rows[0]["RespondertypeName"].ToString();
+                txtRespondentName.Text = ds.Tables[0].Rows[0]["ResponderName"].ToString();
+                txtRespondentMobileno.Text = ds.Tables[0].Rows[0]["RespondentNo"].ToString();
+                txtRespondentEmailID.Text = ds.Tables[0].Rows[0]["responderEmail"].ToString();
                 txtNodalName.Text = ds.Tables[0].Rows[0]["NodalOfficer_Name"].ToString();
                 txtNodalMobile.Text = ds.Tables[0].Rows[0]["NodalOfficerMobileNo"].ToString();
                 txtNodalEmailID.Text = ds.Tables[0].Rows[0]["NodalOfficerEmailID"].ToString();
@@ -169,7 +169,7 @@ public partial class Legal_Dashboard_ViewCaseDetail : System.Web.UI.Page
                 txtAdvocatename.Text = ds.Tables[0].Rows[0]["DeptAdvocateName"].ToString();
                 txtAdvocatemobile.Text = ds.Tables[0].Rows[0]["DeptAdvocateMobileNO"].ToString();
                 txtAdvocateEmailID.Text = ds.Tables[0].Rows[0]["DeptAdvocateEmailId"].ToString();
-               // txtNextHearingDate.Text = ds.Tables[0].Rows[0][""].ToString();
+                txtNextHearingDate.Text = ds.Tables[0].Rows[0]["NextHearingDate"].ToString();
                 txtPetitionerName.Text = ds.Tables[0].Rows[0]["Petitoner_Name"].ToString();
                 txtCasesubject.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();
                 txtCaseDtl.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();

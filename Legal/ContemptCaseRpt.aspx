@@ -1,21 +1,32 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="TodayHearingDtl.aspx.cs" Inherits="Legal_TodayHearingDtl" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="~/Legal/ContemptCaseRpt.aspx.cs" Inherits="Legal_ContemptCaseRpt" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style>
+        label {
+            font-size: 15px;
+        }
+    </style>
+    <script type="text/javascript">
+        function myModal() {
+            $("#myModal").modal('show');
+        }
+    </script>
+
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
-       <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+    <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
                 <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
                     <div class="modal-header" style="background-color: #D9D9D9;">
-                        <span class="modal-title" style="float: left" id="myModalLabel">View Case Detail</span>
+                        <span class="modal-title" style="float: left" id="myModalLabel">Responder Details</span>
                         <button type="button" class="close" data-dismiss="modal">
                             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                   <div class="modal-body">
+                    <div class="modal-body">
                         <fieldset>
                             <legend>Case Detail</legend>
                             <div class="row">
@@ -49,12 +60,12 @@
                                         <asp:TextBox ID="txtCourtName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
-                                 <div class="col-md-4">
+                               <%-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Next Hearing Date</label>
                                         <asp:TextBox ID="txtNextHearingDate" runat="server" CssClass="form-control" AutoComplete="off" ReadOnly="true"></asp:TextBox>
                                     </div>
-                                </div>
+                                </div>--%>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Case Type</label>
@@ -123,7 +134,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <%--  <div class="col-md-4">
+                              <%--  <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Justice Name</label>
                                         <asp:TextBox ID="txtAdvocatename" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
@@ -159,48 +170,53 @@
             </div>
         </div>
     </div>
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        Today Hearing Detail
+                        Subject Wise Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
                             <legend>Search</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-sm">
                                     <div class="form-group">
-                                        <label>Hearing Date</label><span style="color: red;"><b> *</b></span>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
-                                            ErrorMessage="Enter Hearing Date" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="txtHearingdt" Display="Dynamic" runat="server">
-                                        </asp:RequiredFieldValidator>
-                                         <asp:TextBox ID="txtHearingdt" runat="server" CssClass="form-control disableFuturedate" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" AutoComplete="off"></asp:TextBox>
+                                        <label>
+                                            From Date<span style="color: red;"><b> *</b></span>
+                                            <asp:RequiredFieldValidator ID="Rfvdate" ValidationGroup="Save"
+                                                ErrorMessage="Enter From Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="txtDate" Display="Dynamic" runat="server">
+                                            </asp:RequiredFieldValidator><br />
+                                            प्रारंभिक दिनांक</label>
+                                        <asp:TextBox ID="txtDate" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                 <div class="col-md-3 col-sm">
                                     <div class="form-group">
-                                        <label>Case Type</label><span style="color: red;"><b> *</b></span>
-                                       <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
-                                            ErrorMessage="Select Case Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
-                                        </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
+                                        <label>
+                                            End Date<span style="color: red;"><b> *</b></span>
+                                            <asp:RequiredFieldValidator ID="RefvEndate" ValidationGroup="Save"
+                                                ErrorMessage="Enter End Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="txtEndDate" Display="Dynamic" runat="server">
+                                            </asp:RequiredFieldValidator><br />
+                                            अंतिम दिनांक</label>
+                                        <asp:TextBox ID="txtEndDate" runat="server" data-date-end-date="0d" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3" style="margin-top: 3%;">
+                                <div class="col-md-3" style="margin:5% 0 0 0">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click"  ValidationGroup="Save"/>
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click" ValidationGroup="Save" />
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="TodayHearingDtl.aspx" class="btn btn-default btn-block">Clear</a>
+                                            <asp:Button ID="btnClear" Text="Clear" runat="server" class="btn btn-default btn-block" OnClick="btnClear_Click" />
+                                            <%-- <a href="SubjectWiseCaseDtl.aspx" class="btn btn-default btn-block">Clear</a>--%>
                                         </div>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </fieldset>
@@ -209,7 +225,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdTodayHearingdtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdTodayHearingdtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
@@ -228,7 +244,7 @@
                                                         <asp:Label ID="LabelAdvocateName" runat="server" Text='<%# Eval("DeptAdvocateName") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="LabelAdvocateMobile" runat="server" Text='<%# Eval("DeptAdvocateMobileNO") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="LabelAdvocateEmail" runat="server" Text='<%# Eval("DeptAdvocateEmailId") %>' Visible="false"></asp:Label>
-                                                         <asp:Label ID="LabelHearingDate" runat="server" Text='<%# Eval("NextHearingDate") %>' Visible="false"></asp:Label>
+                                                       <%-- <asp:Label ID="LabelHearingDate" runat="server" Text='<%# Eval("NextHearingDate") %>' Visible="false"></asp:Label>--%>
                                                         <asp:Label ID="LabelRespondertype" runat="server" Text='<%# Eval("RespondertypeName") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCaseDetail" runat="server" Text='<%# Eval("CaseDetail") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("Casetype_Name") %>' Visible="false"></asp:Label>
@@ -268,6 +284,7 @@
         </section>
     </div>
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" Runat="Server">
+<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">
+         <script src="../Main_plugins/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 </asp:Content>
 

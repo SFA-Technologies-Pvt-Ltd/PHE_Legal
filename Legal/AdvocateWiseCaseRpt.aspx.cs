@@ -37,7 +37,7 @@ public partial class Legal_AdvocateWiseCaseRpt : System.Web.UI.Page
                 ddlAdvocate.DataTextField = "petiAdvocateName";
             //    ddlAdvocate.DataValueField = "Case_ID";
                 ddlAdvocate.DataBind();
-                ddlAdvocate.Items.Insert(0, "Select Advocate Name");
+                ddlAdvocate.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
@@ -63,13 +63,13 @@ public partial class Legal_AdvocateWiseCaseRpt : System.Web.UI.Page
                 ddlCaseType.DataTextField = "Casetype_Name";
                 ddlCaseType.DataValueField = "Casetype_ID";
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Type");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseType.DataSource = null;
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Subject");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)

@@ -38,13 +38,13 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
                 ddlCaseType.DataTextField = "Casetype_Name";
                 ddlCaseType.DataValueField = "Casetype_ID";
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Type");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseType.DataSource = null;
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Subject");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)
@@ -60,7 +60,14 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
             ds = new DataSet();
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "10", ddlCaseType.SelectedItem.Value }, "dataset");
+                if (ddlCaseType.SelectedItem.Value == "1" || ddlCaseType.SelectedItem.Value == "2")
+                {
+                    ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "10", ddlCaseType.SelectedItem.Value }, "dataset");
+                }
+                else if (ddlCaseType.SelectedItem.Value == "3" || ddlCaseType.SelectedItem.Value == "4" || ddlCaseType.SelectedItem.Value == "5")
+                {
+                    ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "13", ddlCaseType.SelectedItem.Value }, "dataset");
+                }
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     //DataTable dt = (DataTable)ViewState["dtCol"];
@@ -118,10 +125,10 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
             txtOICName.Text = lblOICName.Text;
             txtOICMObile.Text = lblOICMObile.Text;
             txtOICEmail.Text = lblOICEmail.Text;
-            txtAdvocatename.Text = lblAdvocateName.Text;
-            txtAdvocatemobile.Text = lblAdvocateMobile.Text;
-            txtAdvocateEmailID.Text = lblAdvocateEmail.Text;
-            txtNextHearingDate.Text = lblHearingDate.Text;
+            //txtAdvocatename.Text = lblAdvocateName.Text;
+            //txtAdvocatemobile.Text = lblAdvocateMobile.Text;
+            //txtAdvocateEmailID.Text = lblAdvocateEmail.Text;
+            // txtNextHearingDate.Text = lblHearingDate.Text;
             txtPetitionerName.Text = lblPetitionerName.Text;
             txtCasesubject.Text = lblCaseSubject.Text;
             txtCaseDtl.Text = lblCaseDetail.Text;

@@ -604,7 +604,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
-                                            Case Dispose</label><span style="color: red;"><b> *</b></span><br />
+                                            Case Disposal</label><span style="color: red;"><b> *</b></span><br />
                                         <asp:RadioButtonList ID="rdCaseDispose" runat="server" CssClass="rbl form-control" RepeatDirection="Horizontal" AutoPostBack="true" OnSelectedIndexChanged="rdCaseDispose_SelectedIndexChanged">
                                             <asp:ListItem Value="1">Yes</asp:ListItem>
                                             <asp:ListItem Value="2">No</asp:ListItem>
@@ -614,11 +614,11 @@
                                 <div class="col-md-3" id="caseDisposeYes" runat="server" visible="false">
                                     <div class="form-group">
                                         <label>
-                                            Dispose Type
+                                            Disposal Type
                                         </label>
                                         <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RfvDisposeType" ValidationGroup="CaseDispose"
-                                            ErrorMessage="Select Case Dispose Type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ErrorMessage="Select Case Disposal Type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlDisponsType" Display="Dynamic" InitialValue="0" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlDisponsType" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlDisponsType_SelectedIndexChanged">
@@ -640,10 +640,10 @@
                                 </div>
                                 <div class="col-md-3" id="OrderBy1" runat="server" visible="false">
                                     <div class="form-group">
-                                        <label>Case Dispose Date</label>
+                                        <label>Case Disposal Date</label>
                                         <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RfvCaseDisposeDate" ValidationGroup="CaseDispose"
-                                            ErrorMessage="Enter Case Dispose Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ErrorMessage="Enter Case Disposal Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtCaseDisposeDate" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtCaseDisposeDate" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
@@ -656,7 +656,7 @@
                                         </label>
                                         <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ValidationGroup="CaseDispose"
-                                            ErrorMessage="Enter Case Dispose Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ErrorMessage="Enter Case Disposal Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtOrderimpletimeline" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <%-- <asp:TextBox ID="txtOrderimpletimeline" runat="server" CssClass="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd/MM/yyyy" placeholder="DD/MM/YYYY">
@@ -691,7 +691,7 @@
                                 <div class="col-md-3" id="HearingDtl_CaseDispose" runat="server" visible="false" style="padding-top: 3%;">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <asp:Button ID="btnCaseDispose" runat="server" CssClass="btn btn-primary" Text="Case Dispose" OnClick="btnCaseDispose_Click" ValidationGroup="CaseDispose" />
+                                            <asp:Button ID="btnCaseDispose" runat="server" CssClass="btn btn-primary" Text="Case Disposal" OnClick="btnCaseDispose_Click" ValidationGroup="CaseDispose" />
                                         </div>
                                     </div>
 
@@ -703,7 +703,7 @@
 
                         <%-- Start Here Case Dispose Detail --%>
                         <fieldset id="Fieldset_CaseDispose" runat="server">
-                            <legend>Case Dispose</legend>
+                            <legend>Case Disposal</legend>
                             <div class="row">
                                 <div class="col-md-12">
                                     <asp:GridView ID="GrdCaseDispose" runat="server" BorderWidth="2px" CssClass="table text-center" AutoGenerateColumns="false">
@@ -713,10 +713,10 @@
                                                     <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:BoundField HeaderText="Case Dispose Status" DataField="CaseDisposeStatus" />
-                                            <asp:BoundField HeaderText="Case Dispose Type" DataField="CaseDisposeType" />
+                                            <asp:BoundField HeaderText="Case Disposal Status" DataField="CaseDisposeStatus" />
+                                            <asp:BoundField HeaderText="Case Disposal Type" DataField="CaseDisposeType" />
                                             <asp:BoundField HeaderText=" Order Implement Timeline (in Days)" DataField="CaseDsiposeOrderNo" />
-                                            <asp:BoundField HeaderText="Case Dispose Date" DataField="CaseDisposeDate" />
+                                            <asp:BoundField HeaderText="Case Disposal Date" DataField="CaseDisposeDate" />
                                             <asp:TemplateField HeaderText="Order Document">
                                                 <ItemTemplate>
                                                     <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" NavigateUrl='<%# "WACaseDispose/" + Eval("CaseDisposeOrderDoc") %>' CssClass="btn-sm label label-primary">View</asp:HyperLink>
@@ -751,7 +751,7 @@
                                         <asp:DropDownList ID="ddlCasetype" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="form-group">
                                         <label>Petitioner Name</label>
                                         <span style="color: red;"><b>*</b></span>
@@ -764,6 +764,18 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Court Type</label>
+                                        <span style="color: red;"><b>*</b></span>
+                                        <asp:RequiredFieldValidator ID="refvddlCourttype" ValidationGroup="CaseDtl"
+                                            ErrorMessage="Select Court Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCourtType" InitialValue="0" Display="Dynamic" runat="server">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:DropDownList ID="ddlCourtType" runat="server" CssClass="form-control">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Office Type</label>
@@ -799,8 +811,10 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtWaCaseNo" runat="server" CssClass="form-control" onkeypress="return NumberOnly();" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
+                                </div>                               
+                            </div>
+                            <div class="row">
+                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
                                             Case Year
@@ -812,9 +826,7 @@
                                         <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Nodal Officer Name</label>
                                        <%-- <span style="color: red;"><b>*</b></span>
@@ -825,7 +837,7 @@
                                         <asp:TextBox ID="txtNOdalOfficerName" runat="server" onkeypress="return chcode();" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Nodal Officer Mobile No.</label>
                                        <%-- <span style="color: red;"><b>*</b></span>
@@ -839,7 +851,7 @@
                                         <asp:TextBox ID="txtNodalOfficerMobileNo" runat="server" onkeypress="return NumberOnly();" CssClass="form-control" AutoComplete="off" MaxLength="10"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Nodal Officer Email-ID</label><span style="color: red;"><b>*</b></span>
                                         <asp:TextBox ID="txtNodalOfficerEmail" runat="server"  AutoComplete="off" MaxLength="50" CssClass="form-control"></asp:TextBox>
@@ -927,7 +939,7 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Case Subject</label><span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="CaseDtl"
@@ -935,12 +947,12 @@
                                             ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Select</asp:ListItem>
+                                           <%-- <asp:ListItem Value="0">Select</asp:ListItem>
                                             <asp:ListItem Value="1">स्थानांतरण</asp:ListItem>
                                             <asp:ListItem Value="2">नियूक्ति</asp:ListItem>
                                             <asp:ListItem Value="3">प्रतिनियुक्ति</asp:ListItem>
                                             <asp:ListItem Value="4">पदोन्नति</asp:ListItem>
-                                            <asp:ListItem Value="5">वेतन बृद्धि</asp:ListItem>
+                                            <asp:ListItem Value="5">वेतन बृद्धि</asp:ListItem>--%>
                                         </asp:DropDownList>
                                     </div>
                                 </div>

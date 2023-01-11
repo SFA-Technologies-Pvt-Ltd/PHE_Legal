@@ -32,6 +32,7 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                 HearingDatacolumn(); // Create Hearing Datatable Column.
                 BindRespondertype();
                 BindCasetype();
+                BindCaseSubject();
             }
         }
         else
@@ -45,6 +46,28 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
     {
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
     }
+
+    protected void BindCaseSubject()
+    {
+        try
+        {
+            ddlCaseSubject.Items.Clear();
+            ds = obj.ByDataSet("SELECT CaseSubject, CaseSubjectID FROM tbl_LegalMstCaseSubject");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseSubject.DataTextField = "CaseSubject";
+                ddlCaseSubject.DataValueField = "CaseSubjectID";
+                ddlCaseSubject.DataSource = ds;
+                ddlCaseSubject.DataBind();
+            }
+            ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+
     protected void BindRespondertype()
     {
         try

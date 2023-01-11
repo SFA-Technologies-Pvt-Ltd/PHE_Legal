@@ -21,7 +21,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             {
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
-                // BindDesignation();
+               
             }
         }
         else
@@ -65,6 +65,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         {
             lblMsg.Text = "";
             GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
+
             string ID = e.CommandArgument.ToString();
             Response.Redirect("../Legal/EditWPCases.aspx?ID=" + Server.UrlEncode(ID));
         }

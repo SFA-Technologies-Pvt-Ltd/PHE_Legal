@@ -190,7 +190,7 @@
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                             ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server">
+                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
@@ -256,7 +256,7 @@
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Case Status">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCaseStatus" runat="server" Text='<%# Eval("CaseStatus") %>'></asp:Label>
+                                                        <asp:Label ID="lblCaseStatus" runat="server" Text='<%# Eval("CaseStatus") %>' Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Dispose" ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Action">

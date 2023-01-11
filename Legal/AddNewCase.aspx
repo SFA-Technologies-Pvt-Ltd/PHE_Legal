@@ -5,6 +5,11 @@
         label {
             font-size: 15px;
         }
+
+        .pt-4
+        {
+            padding-top:2rem!important;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
@@ -26,17 +31,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Respondent Type</label>
-                                        <asp:DropDownList ID="ddlEditRespondertype" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Select</asp:ListItem>
-                                            <asp:ListItem Value="1">Consumer Court</asp:ListItem>
-                                            <asp:ListItem Value="2">Labour Court</asp:ListItem>
-                                            <asp:ListItem Value="3">District Court</asp:ListItem>
-                                            <asp:ListItem Value="4">High Court - Jabalpur</asp:ListItem>
-                                            <asp:ListItem Value="5">High Court - Indore</asp:ListItem>
-                                            <asp:ListItem Value="6">High Court - Gwalior</asp:ListItem>
-                                            <asp:ListItem Value="7">Supreme Court</asp:ListItem>
-                                            <asp:ListItem Value="8">Industrial Court</asp:ListItem>
-                                            <asp:ListItem Value="9">Labour Office</asp:ListItem>
+                                        <asp:DropDownList ID="ddlRespondertype" runat="server" CssClass="form-control">                                         
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -44,12 +39,7 @@
                                     <div class="form-group">
                                         <label>Office Name</label>
                                         <%--<asp:DropDownList ID="ddlDistrictForRespondent" runat="server" CssClass="form-control"></asp:DropDownList>--%>
-                                        <asp:DropDownList ID="ddlOfficeName" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Select</asp:ListItem>
-                                            <asp:ListItem Value="1">PS Office</asp:ListItem>
-                                            <asp:ListItem Value="2">Head Office</asp:ListItem>
-                                            <asp:ListItem Value="3">ENC Office</asp:ListItem>
-                                            <asp:ListItem Value="4">CE Office</asp:ListItem>
+                                        <asp:DropDownList ID="ddlOfficetypeName" runat="server" CssClass="form-control">                                        
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -143,6 +133,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                   <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Case Type<br />प्रकरण का प्रकार</label><span style="color: red;"><b>*</b></span>
+                                        <asp:DropDownList ID="ddlCasetype" runat="server" CssClass="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <div class="form-group">
@@ -155,17 +151,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>
-                                            Location<br />
-                                            स्थान</label>
-                                        <asp:DropDownList ID="ddlDistrict" runat="server" class="form-control">
-                                        </asp:DropDownList>
-                                        <small><span id="valddlDistrict" class="text-danger"></span></small>
-                                    </div>
-
-                                </div>
+                               
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
@@ -185,11 +171,9 @@
                                         <div class="form-group">
                                             <label>
                                                 Date of Case<br />
-                                                प्रकरण की दिनांक</label>
+                                                प्रकरण की तिथि</label>
                                             <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
+                                               
                                                 <asp:TextBox ID="txtDateOfReceipt" date-provide="datepicker" runat="server" AutoComplete="off" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static"></asp:TextBox>
                                             </div>
                                             <small><span id="valtxtDateOfReceipt" class="text-danger"></span></small>
@@ -200,17 +184,39 @@
                                     <div class="form-group">
                                         <label>
                                             Last Hearing Date<br />
-                                            पिछली सुनवाई की तारीख</label>
+                                            पिछली सुनवाई की तिथि</label>
                                         <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
+                                            
                                             <asp:TextBox ID="txtDateOfLastHearing" runat="server" date-provide="datepicker" AutoComplete="off" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static"></asp:TextBox>
                                         </div>
                                         <small><span id="valtxtDate" class="text-danger"></span></small>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="Hearing_Date" runat="server">
+                                    <div class="form-group">
+                                        <label>Next Hearing Date<br />(अगली सुनवाई की तिथि)</label>
+                                        <div class="input-group date">
+                                          
+                                            <asp:TextBox ID="txtHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static" autocomplete="off" onchange="checkHearingDetail();"></asp:TextBox>
+                                        </div>
+                                        <small><span id="valtxtHearingDate" class="text-danger"></span></small>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <div class="row">
+                             <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>
+                                            Location<br />
+                                            स्थान</label>
+                                        <asp:DropDownList ID="ddlDistrict" runat="server" class="form-control">
+                                        </asp:DropDownList>
+                                        <small><span id="valddlDistrict" class="text-danger"></span></small>
+                                    </div>
+
+                                </div>
+                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
                                             High Priority Case<br />
@@ -223,9 +229,7 @@
                                         <small><span id="valddlHighprioritycase" class="text-danger"></span></small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3 pt-5">
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-8">
@@ -234,18 +238,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3" id="Hearing_Date" runat="server">
-                                    <div class="form-group">
-                                        <label>Hearing Date (सुनवाई तिथि)</label>
-                                        <div class="input-group date">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <asp:TextBox ID="txtHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static" autocomplete="off" onchange="checkHearingDetail();"></asp:TextBox>
-                                        </div>
-                                        <small><span id="valtxtHearingDate" class="text-danger"></span></small>
-                                    </div>
-                                </div>
+                                
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -253,7 +246,7 @@
                                         <label>
                                             Subject Detail/
                                             प्रकरण की जानकारी<span style="color: red;">*</span></label>
-                                        <asp:TextBox ID="txtCaseDescription" Rows="4" runat="server" placeholder="Subject Of Case" class="form-control" TextMode="MultiLine"></asp:TextBox>
+                                        <asp:TextBox ID="txtCaseDescription" Rows="4" runat="server"  class="form-control" TextMode="MultiLine"></asp:TextBox>
                                         <small><span id="valtxtCaseDescription" class="text-danger"></span></small>
                                     </div>
                                 </div>
@@ -301,7 +294,7 @@
                             <div class="col-md-6">
                                 <div class="box-body">
                                     <fieldset>
-                                        <legend>Appointment of Advocate / CA Details</legend>
+                                        <legend>Appointment of Advocate</legend>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -470,7 +463,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <asp:Button ID="btnAddDoc" runat="server" Text="Add" CssClass="btn btn-primary btn-block" />
+                                                            <asp:Button ID="btnAddDoc" runat="server" Text="Add" CssClass="btn btn-primary btn-block" OnClick="btnAddDoc_Click"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -491,12 +484,12 @@
                                                                     </asp:TemplateField>
                                                                     <asp:TemplateField HeaderText="Document Name">
                                                                         <ItemTemplate>
-                                                                            <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                            <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("DocName") %>'></asp:Label>
                                                                         </ItemTemplate>
                                                                     </asp:TemplateField>
                                                                     <asp:TemplateField HeaderText="View">
                                                                         <ItemTemplate>
-                                                                            <asp:HyperLink ID="lblDocName" runat="server" NavigateUrl='<%# "" +  Eval("") %>' Target="_blank" CssClass="label label-primary">View</asp:HyperLink>
+                                                                            <asp:HyperLink ID="lblDocName" runat="server" NavigateUrl='<%# "../AddNewCaseDoc" +  Eval("Document") %>' Target="_blank" CssClass="label label-primary">View</asp:HyperLink>
                                                                         </ItemTemplate>
                                                                     </asp:TemplateField>
                                                                 </Columns>

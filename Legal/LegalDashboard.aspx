@@ -258,7 +258,9 @@
                       
                         <div class="row Space">
                             <div class="col-md-6">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE :</span>
+                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE :
+                                      <asp:Label ID="lblCaseCount" runat="server" CssClass="Heading" />
+                                                                                                      </span>
                             </div>
                             <div class="col-md-6">
                                 <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE WISE :(TOTAL CASE : <span id="CasetypeCountno" runat="server" class="Heading"></span> No's)</span>
@@ -297,7 +299,7 @@
                                 <div class="boxshape" style="background-color: #1fa6ad; border: 2px solid #cd7a32;">
                                     <div class="circle">
                                         <div class="insideBox" style="border: 2px solid #7DF9FF;">
-                                            <span>PP<br />
+                                            <span>MP<br />GOVT<br />
                                                 CASES</span>
 
                                         </div>
@@ -330,7 +332,7 @@
                                 <div class="boxshape" style="background-color: #e74c4c; border: 2px solid black;">
                                     <div class="circle">
                                         <div class="insideBox" style="border: 2px solid #810101;">
-                                            <span style="text-align: center; line-height: normal;">RO<br />
+                                            <span style="text-align: center; line-height: normal;">ZONE<br />
                                                 CASES</span>
                                         </div>
                                     </div>
@@ -350,7 +352,7 @@
                                 <div class="boxshape" style="background-color: #FA2B17; border: 2px solid #cd7a32;">
                                     <div class="circle">
                                         <div class="insideBox" style="border: 2px solid #FA2B17;">
-                                            <span>DO<br />
+                                            <span>CIRCLE<br />
                                                 CASES</span>
                                         </div>
                                     </div>
@@ -359,6 +361,22 @@
                                     </div>
                                     <div class="buttonDiv">
                                         <asp:Button ID="btnDEOCases" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnDEOCases_Click" />
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-6 col-md-4">
+                                <div class="boxshape" style="background-color: yellow; border: 2px solid black;">
+                                    <div class="circle" style="">
+                                        <div class="insideBox" style="border: 2px solid yellow;">
+                                            <span>DO<br />
+                                                CASES</span>
+                                        </div>
+                                    </div>
+                                    <div class="lableBox">
+                                        <asp:Label ID="lblTBCCases" runat="server">22</asp:Label>
+                                    </div>
+                                    <div class="buttonDiv">
+                                        <asp:Button ID="btnTBCCases" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnTBCCases_Click" />
                                     </div>
                                 </div>
                             </div>
@@ -378,22 +396,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-4">
-                                <div class="boxshape" style="background-color: yellow; border: 2px solid black;">
-                                    <div class="circle" style="">
-                                        <div class="insideBox" style="border: 2px solid yellow;">
-                                            <span>TESTING<br />LAB<br />
-                                                CASES</span>
-                                        </div>
-                                    </div>
-                                    <div class="lableBox">
-                                        <asp:Label ID="lblTBCCases" runat="server">22</asp:Label>
-                                    </div>
-                                    <div class="buttonDiv">
-                                        <asp:Button ID="btnTBCCases" runat="server" CssClass="Buttons" Text="View Detail" OnClientClick="SetTarget();" OnClick="btnTBCCases_Click" />
-                                    </div>
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

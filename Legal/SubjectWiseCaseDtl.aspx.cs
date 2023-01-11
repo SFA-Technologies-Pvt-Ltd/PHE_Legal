@@ -59,13 +59,13 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
                 ddlCaseSubject.DataTextField = "CaseSubject";
                 ddlCaseSubject.DataValueField = "CaseSubjectID";
                 ddlCaseSubject.DataBind();
-                ddlCaseSubject.Items.Insert(0, "Select Case Subject");
+                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseSubject.DataSource = null;
                 ddlCaseSubject.DataBind();
-                ddlCaseSubject.Items.Insert(0, "Select Case Subject");
+                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)
@@ -85,13 +85,13 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
                 ddlCaseType.DataTextField = "Casetype_Name";
                 ddlCaseType.DataValueField = "Casetype_ID";
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Type");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseType.DataSource = null;
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Subject");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)
@@ -107,7 +107,8 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
             ds = new DataSet();
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag","Casetype_ID", "CaseSubjectID" }, new string[] {"1", ddlCaseType.SelectedItem.Value, ddlCaseSubject.SelectedItem.Value }, "dataset");
+                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag","Casetype_ID", "CaseSubjectID" }, 
+                    new string[] {"1", ddlCaseType.SelectedItem.Value, ddlCaseSubject.SelectedItem.Value }, "dataset");
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     //DataTable dt = (DataTable)ViewState["dtCol"];

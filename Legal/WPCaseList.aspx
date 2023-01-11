@@ -64,8 +64,9 @@
             color: white;
             border-radius: unset;
             box-shadow: 2px 2px 2px #808080;
-            margin-left: 6px;
+            /*margin-left: 6px;*/
             border: none;
+            margin: 0px 10px -3px 4px; /*For using 'Show'*/
         }
 
         a.btn.btn-default.buttons-pdf.buttons-html5 {
@@ -164,18 +165,23 @@
                                     <div class="table-responsive">
                                         <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="datatable table table-bordered text-center" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND">
                                             <Columns>
-                                                <asp:TemplateField HeaderText="S.No.<br />सरल क्र.">
+                                                <asp:TemplateField HeaderText="S.No.<br />स. क्र.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                         <asp:Label ID="lblCaseID" runat="server" Text='<%# Eval("Case_ID") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.<br />मुक़दमा क्र.">
+                                                <asp:TemplateField HeaderText="Case No.<br />प्रकरण क्र.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseNo" runat="server" Text='<%# Eval("CaseNo") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Petitioner Name<br />आवेदक का नाम">
+                                                <asp:TemplateField HeaderText="Case Subject<br />प्रकरण का विषय">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Petitioner Name<br />याचिकाकर्ता का नाम">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
                                                     </ItemTemplate>

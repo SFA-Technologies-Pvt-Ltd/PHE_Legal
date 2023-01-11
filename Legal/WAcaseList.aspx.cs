@@ -46,6 +46,8 @@ public partial class Legal_WAcaseList : System.Web.UI.Page
                 {
                     GrdCaseDetails.DataSource = ds;
                     GrdCaseDetails.DataBind();
+                    GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    GrdCaseDetails.UseAccessibleHeader = true;
                 }
                 else
                 {
@@ -73,17 +75,5 @@ public partial class Legal_WAcaseList : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    protected void GrdCaseDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
-    {
-        try
-        {
-            GrdCaseDetails.PageIndex = e.NewPageIndex;
-            btnSearch_Click(sender, e);
-            GrdCaseDetails.DataBind();
-        }
-        catch (Exception ex)
-        {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
-        }
-    }
+   
 }

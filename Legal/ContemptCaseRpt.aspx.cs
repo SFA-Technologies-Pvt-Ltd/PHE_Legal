@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
 
-public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
+public partial class Legal_ContemptCaseRpt : System.Web.UI.Page
 {
     APIProcedure obj = new APIProcedure();
-    DataSet ds = new DataSet();
+    CultureInfo cult = new CultureInfo("gu-IN");
+    DataSet ds = null;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -17,7 +19,11 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                GetCaseType();
+                if (!IsPostBack)
+                {
+                    ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
+                    ViewState["Office_Id"] = Session["Office_Id"].ToString();
+                }
             }
         }
         else
@@ -25,32 +31,8 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
             Response.Redirect("/Login.aspx");
         }
     }
-    private void GetCaseType()
-    {
-        try
-        {
-            ds = new DataSet();
-            ds = obj.ByDataSet("select * from tbl_Legal_Casetype");
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                ddlCaseType.DataSource = ds.Tables[0];
-                ddlCaseType.DataTextField = "Casetype_Name";
-                ddlCaseType.DataValueField = "Casetype_ID";
-                ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
-            }
-            else
-            {
-                ddlCaseType.DataSource = null;
-                ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
-            }
-        }
-        catch (Exception)
-        {
-        }
 
-    }
+
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
@@ -59,15 +41,8 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
             ds = new DataSet();
             if (Page.IsValid)
             {
-
-                string num = "";
-                if (ddlFromMonth.SelectedItem.Value == "1")
-                    num = "-1";
-                if (ddlFromMonth.SelectedItem.Value == "2")
-                    num = "-3";
-                if (ddlFromMonth.SelectedItem.Value == "3")
-                    num = "-6";
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "lastMonthCase" }, new string[] { "11", ddlCaseType.SelectedItem.Value,num }, "dataset");
+                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Fromdate", "Enddate" }
+                    , new string[] { "12", Convert.ToDateTime(txtDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     //DataTable dt = (DataTable)ViewState["dtCol"];
@@ -135,5 +110,12 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
             txtCasetype.Text = lblCasetype.Text;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
         }
+    }
+
+
+
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/legal/subjectwisecasedtl.aspx");
     }
 }

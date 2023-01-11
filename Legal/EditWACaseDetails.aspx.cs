@@ -35,6 +35,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                     HearingDatacolumn(); // Create Hearing Datatable Column.
                     BindRespondertype();
                     BindCasetype();
+                    BindCaseSubject();
                 }
             }
             else
@@ -270,13 +271,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         lblWACaseStatus.Text = ds.Tables[2].Rows[0]["CaseStatus"].ToString();
                         lblWACaseStatus.ForeColor = System.Drawing.Color.Green;
                     }
-                    GrdCaseDoc.DataSource = ds.Tables[2]; // Documnets Bind.
-                    GrdCaseDoc.DataBind();
 
-                    GrdHearingDtl.DataSource = ds.Tables[2]; // Hearing Dtl Bind.
-                    GrdHearingDtl.DataBind();
-
-                    // Case Dipose Dtl
                     if (ds.Tables[3].Rows[0]["CaseDisposeStatus"].ToString() != "")
                     {
                         Fieldset_CaseDispose.Visible = true;
@@ -284,6 +279,14 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         GrdCaseDispose.DataBind();
                     }
                     else { Fieldset_CaseDispose.Visible = false; }
+
+                    GrdHearingDtl.DataSource = ds.Tables[4]; // Hearing Dtl Bind.
+                    GrdHearingDtl.DataBind();
+
+                    GrdCaseDoc.DataSource = ds.Tables[5]; // Documnets Bind.
+                    GrdCaseDoc.DataBind();
+                    // Case Dipose Dtl
+                    
                 }
             }
             else
@@ -418,9 +421,11 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         
                     }
 
-                    if (ds.Tables[0].Rows[0]["WACaseSubject"].ToString() != "")
+                    if (ds.Tables[0].Rows[0]["WACaseSubjectID"].ToString() != "")
                     {
-                        txtCaseSubject.Text = ds.Tables[0].Rows[0]["WACaseSubject"].ToString();
+                        //txtCaseSubject.Text = ds.Tables[0].Rows[0]["WACaseSubject"].ToString();
+                        ddlCaseSubject.ClearSelection();
+                        ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0]["WACaseSubjectID"].ToString()).Selected = true;
 
                     }
                     if (ds.Tables[0].Rows[0]["WANodalOfficer_Name"].ToString() != "")
@@ -791,6 +796,28 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+
+    protected void BindCaseSubject()
+    {
+        try
+        {
+            ddlCaseSubject.Items.Clear();
+            ds = obj.ByDataSet("SELECT CaseSubject, CaseSubjectID FROM tbl_LegalMstCaseSubject");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseSubject.DataTextField = "CaseSubject";
+                ddlCaseSubject.DataValueField = "CaseSubjectID";
+                ddlCaseSubject.DataSource = ds;
+                ddlCaseSubject.DataBind();
+            }
+            ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+
     //protected void ddlOfficeType_SelectedIndexChanged(object sender, EventArgs e)
     //{
     //    try

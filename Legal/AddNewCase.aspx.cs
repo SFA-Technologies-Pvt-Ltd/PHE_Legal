@@ -30,8 +30,11 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     ViewState["Office_ID"] = Session["Office_ID"];
                     FillDistrict();
                     BindCourtName();
-                    // ddlDistrict.Enabled = false;
+                    BindRespondertype();
+                    BindOfficeType();
+                    FillCasetype();
                     BindCaseSubject();
+                    DtColumn();
                     if (Request.QueryString["Case_ID"] != null)
                     {
                         ViewState["Case_ID"] = objdb.Decrypt(Request.QueryString["Case_ID"].ToString());
@@ -56,7 +59,41 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         }
 
     }
-
+    #region Fill Respondent
+    protected void BindRespondertype()
+    {
+        try
+        {
+            ddlRespondertype.Items.Clear();
+            ds = objdb.ByProcedure("USP_Get_ResponderType", new string[] { }, new string[] { }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlRespondertype.DataTextField = "RespondertypeName";
+                ddlRespondertype.DataValueField = "Respondertype_ID";
+                ddlRespondertype.DataSource = ds;
+                ddlRespondertype.DataBind();
+            }
+            ddlRespondertype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    #endregion
+    # region Datatable
+    protected void DtColumn()
+    {
+        DataTable dtcol = new DataTable();
+        if (dtcol.Columns.Count == 0)
+        {
+            dtcol.Columns.Add("DocName", typeof(string));
+            dtcol.Columns.Add("Document", typeof(string));
+        }
+        ViewState["dtcol"] = dtcol;
+    }
+    #endregion
+    #region Fill CourtName
     protected void BindCourtName()
     {
         try
@@ -77,7 +114,23 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-
+    #endregion
+    #region Fill OfficeType
+    protected void BindOfficeType()
+    {
+        ddlOfficetypeName.Items.Clear();
+        ds = objdb.ByProcedure("USP_Select_Officetype", new string[] { }, new string[] { }, "dataset");
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            ddlOfficetypeName.DataTextField = "OfficeType_Name";
+            ddlOfficetypeName.DataValueField = "OfficeType_Id";
+            ddlOfficetypeName.DataSource = ds;
+            ddlOfficetypeName.DataBind();
+        }
+        ddlOfficetypeName.Items.Insert(0, new ListItem("Select", "0"));
+    }
+    #endregion
+    #region Fill District as Loaction
     protected void FillDistrict()
     {
         try
@@ -98,16 +151,17 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-
+    #endregion
+    #region Fill CaseStatus
     protected void BindCaseSubject()
     {
         try
         {
             ddlCaseSubject.Items.Clear();
-            ds = objdb.ByDataSet("SELECT CaseSubjectName, CaseSubjectID FROM tbl_LegalMstCaseSubject");
+            ds = objdb.ByDataSet("SELECT CaseSubject, CaseSubjectID FROM tbl_LegalMstCaseSubject");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddlCaseSubject.DataTextField = "CaseSubjectName";
+                ddlCaseSubject.DataTextField = "CaseSubject";
                 ddlCaseSubject.DataValueField = "CaseSubjectID";
                 ddlCaseSubject.DataSource = ds;
                 ddlCaseSubject.DataBind();
@@ -119,7 +173,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-
+    #endregion
+    #region SubmitButton
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
@@ -205,7 +260,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     strTimeStamp = strTimeStamp.Replace(":", "-");
                     string strName = Path.GetFileNameWithoutExtension(strFileName);
                     strFileName = strName + "NewCase-" + strTimeStamp + strExtension;
-                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseCourtDoc/"), strFileName);
+                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseDoc/"), strFileName);
                     FileUpload1.SaveAs(path);
 
                     ViewState["FileUploadDOC1"] = strFileName;
@@ -238,7 +293,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     strTimeStamp = strTimeStamp.Replace(":", "-");
                     string strName = Path.GetFileNameWithoutExtension(strFileName);
                     strFileName = strName + "NewCase-" + strTimeStamp + strExtension;
-                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseCourtDoc/"), strFileName);
+                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseDoc/"), strFileName);
                     FileUpload2.SaveAs(path);
 
                     ViewState["FileUploadDOC2"] = strFileName;
@@ -270,7 +325,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     strTimeStamp = strTimeStamp.Replace(":", "-");
                     string strName = Path.GetFileNameWithoutExtension(strFileName);
                     strFileName = strName + "NewCase-" + strTimeStamp + strExtension;
-                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseCourtDoc/"), strFileName);
+                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseDoc/"), strFileName);
                     FileUpload3.SaveAs(path);
 
                     ViewState["FileUploadDOC3"] = strFileName;
@@ -318,7 +373,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     if (btnSubmit.Text == "Save")
                     {
                         ds = objdb.ByProcedure("USP_Legal_InsertLocalCourtCaseRegis", new string[] { "FilingNo", "Petitoner_Name", "CaseSubject", "CourtType_Id", "PetiAdvocateName", "PetiAdvocateMobile", "petiAdvocateEmail_ID", "CaseDetail", "CreatedBy", "CreatedByIP", "DeptAdvocateName", "DeptAdvocateMobileNo", "DeptAdvocateEmailId", "HighPrirtyCaseSts", "OldCaseNo" },
-                            new string[] { txtCaseNo.Text.Trim(), txtPetitionerAppName.Text.Trim(), ddlCaseSubject.SelectedValue, ddlCourtType.SelectedValue, txtPetitionerAdvName.Text.Trim(), txtPetitionerAdvMobileNo.Text.Trim(), txtPetitionerAdvEmail.Text.Trim(), txtCaseDescription.Text.Trim(), ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress(), txtDeptAdvocateName.Text.Trim(), txtDeptAdvocateMobileNo.Text.Trim(), txtDeptAdvocateEmail.Text.Trim(),ddlHighprioritycase.SelectedItem.Text, txtCaseOldRefNo.Text.Trim() }, "dataset");
+                            new string[] { txtCaseNo.Text.Trim(), txtPetitionerAppName.Text.Trim(), ddlCaseSubject.SelectedValue, ddlCourtType.SelectedValue, txtPetitionerAdvName.Text.Trim(), txtPetitionerAdvMobileNo.Text.Trim(), txtPetitionerAdvEmail.Text.Trim(), txtCaseDescription.Text.Trim(), ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress(), txtDeptAdvocateName.Text.Trim(), txtDeptAdvocateMobileNo.Text.Trim(), txtDeptAdvocateEmail.Text.Trim(), ddlHighprioritycase.SelectedItem.Text, txtCaseOldRefNo.Text.Trim() }, "dataset");
                     }
                     //else if (btnSubmit.Text == "Update")
                     //{
@@ -385,12 +440,15 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-    
+    #endregion
+    #region ClearButton
     protected void btnClear_Click(object sender, EventArgs e)
     {
         ClearText();
 
     }
+    #endregion
+    #region ClearAllControl
     protected void ClearText()
     {
         txtCaseNo.Text = "";
@@ -419,6 +477,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         HyperLink2.Visible = false;
         HyperLink3.Visible = false;
     }
+    #endregion
+    #region FillGrid
     //protected void FillCaseDetail()
     //{
     //    try
@@ -622,6 +682,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
     //        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
     //    }
     //}
+    #endregion
+    #region AddResponder
     protected void btnAddresponder_Click(object sender, EventArgs e)
     {
         try
@@ -633,5 +695,98 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
+    #endregion
+    #region CaseType
+    protected void FillCasetype()
+    {
+        try
+        {
+            ddlCasetype.Items.Clear();
+            ds = objdb.ByDataSet("select Casetype_ID, Casetype_Name from  tbl_Legal_Casetype");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCasetype.DataTextField = "Casetype_Name";
+                ddlCasetype.DataValueField = "Casetype_ID";
+                ddlCasetype.DataSource = ds;
+                ddlCasetype.DataBind();
+            }
+            ddlCasetype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    #endregion
+    #region AddDoc
+    protected void btnAddDoc_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+
+            ViewState["AddNewCaseDoc"] = "";
+            int DocFailedCntExt = 0;
+            int DocFailedCntSize = 0;
+            string strFileName = "";
+            string strExtension = "";
+            string strTimeStamp = "";
+            if (FileUpload1.HasFile)     // CHECK IF ANY FILE HAS BEEN SELECTED.
+            {
+
+                string fileExt = System.IO.Path.GetExtension(FileUpload1.FileName).Substring(1);
+                string[] supportedTypes = { "PDF", "pdf" };
+                if (!supportedTypes.Contains(fileExt))
+                {
+                    DocFailedCntExt += 1;
+                }
+                else if (FileUpload1.PostedFile.ContentLength > 204800) // 200 KB = 1024 * 200
+                {
+                    DocFailedCntSize += 1;
+                }
+                else
+                {
+
+                    strFileName = FileUpload1.FileName.ToString();
+                    strExtension = Path.GetExtension(strFileName);
+                    strTimeStamp = DateTime.Now.ToString();
+                    strTimeStamp = strTimeStamp.Replace("/", "-");
+                    strTimeStamp = strTimeStamp.Replace(" ", "-");
+                    strTimeStamp = strTimeStamp.Replace(":", "-");
+                    string strName = Path.GetFileNameWithoutExtension(strFileName);
+                    strFileName = strName + "NewCase-" + strTimeStamp + strExtension;
+                    string path = Path.Combine(Server.MapPath("../Legal/AddNewCaseDoc/"), strFileName);
+                    FileUpload1.SaveAs(path);
+
+                    ViewState["AddNewCaseDoc"] = strFileName;
+                    path = "";
+                    strFileName = "";
+                    strName = "";
+                }
+            }
+            string errormsg = "";
+            if (DocFailedCntExt > 0) { errormsg += "Only upload Document in( PDF) Formate.\\n"; }
+            if (DocFailedCntSize > 0) { errormsg += "Uploaded Document size should be less than 200 KB \\n"; }
+
+            if (errormsg == "")
+            {
+                DataTable dt = ViewState["dtcol"] as DataTable;
+                if (dt.Columns.Count > 0)
+                {
+                    dt.Rows.Add(txtDocName.Text.Trim(), ViewState["AddNewCaseDoc"].ToString());
+                    ds.Tables.Add(dt);
+                }
+            }
+            else
+            {
+                ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    #endregion
 }
 

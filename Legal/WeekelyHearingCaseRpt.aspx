@@ -165,7 +165,7 @@
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        Subject Wise Case Detail
+                        Weekely Hearing Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -181,7 +181,7 @@
                                         <asp:DropDownList ID="ddlWeek" runat="server" CssClass="form-control">
                                             <asp:ListItem Value="0">Select</asp:ListItem>
                                             <asp:ListItem Value="1">Current Week</asp:ListItem>
-                                            <%--<asp:ListItem Value="2">Comming Week</asp:ListItem>--%>
+                                            <asp:ListItem Value="2">Comming Week</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
                                             ErrorMessage="Select Case Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server">
+                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                      <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>

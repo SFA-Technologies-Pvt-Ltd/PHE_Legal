@@ -37,13 +37,13 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
                 ddlRespondentType.DataTextField = "RespondertypeName";
                 ddlRespondentType.DataValueField = "Respondertype_ID";
                 ddlRespondentType.DataBind();
-                ddlRespondentType.Items.Insert(0, "Select Respondent Type");
+                ddlRespondentType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlRespondentType.DataSource = null;
                 ddlRespondentType.DataBind();
-                ddlRespondentType.Items.Insert(0, "Select Respondent Type");
+                ddlRespondentType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)
@@ -63,13 +63,13 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
                 ddlCaseType.DataTextField = "Casetype_Name";
                 ddlCaseType.DataValueField = "Casetype_ID";
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Type");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
             else
             {
                 ddlCaseType.DataSource = null;
                 ddlCaseType.DataBind();
-                ddlCaseType.Items.Insert(0, "Select Case Subject");
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
         catch (Exception)

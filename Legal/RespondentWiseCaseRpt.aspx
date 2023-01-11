@@ -194,7 +194,7 @@
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                             ErrorMessage="Select Case Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server">
+                                            ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                         <%--<asp:RadioButtonList ID="rbWPCOnt" runat="server" RepeatDirection="Horizontal" CssClass="form-control"  Style="padding: 0.3rem;">
