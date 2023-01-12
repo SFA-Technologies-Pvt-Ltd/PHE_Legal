@@ -15,7 +15,7 @@
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                  <div class="modal-body">
+                    <div class="modal-body">
                         <fieldset>
                             <legend>Case Detail</legend>
                             <div class="row">
@@ -111,13 +111,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Mobile No.</label>
+                                        <label>Advocate Name</label>
                                         <asp:TextBox ID="txtOICMObile" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Email-ID</label>
+                                        <label>Advocate Mobile No.</label>
                                         <asp:TextBox ID="txtOICEmail" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                                             ControlToValidate="ddlRespondentType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlRespondentType" runat="server" CssClass="form-control">
-                                           <%-- <asp:ListItem Value="0">Select</asp:ListItem>
+                                            <%-- <asp:ListItem Value="0">Select</asp:ListItem>
                                             <asp:ListItem Value="1">PP Case</asp:ListItem>
                                             <asp:ListItem Value="2">ENC Case</asp:ListItem>
                                             <asp:ListItem Value="3">RO Case</asp:ListItem>
@@ -208,11 +208,11 @@
                                         <div class="col-md-5">
                                             <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="Save" Text="Search" OnClick="btnSearch_Click" />
                                         </div>
-                                         <div class="col-md-5">
-                                             <a href="RespondentWiseCaseRpt.aspx" class="btn btn-default btn-block">Clear</a>
+                                        <div class="col-md-5">
+                                            <a href="RespondentWiseCaseRpt.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </fieldset>
@@ -221,14 +221,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID">
+                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" OnPageIndexChanging="grdSubjectWiseCasedtl_PageIndexChanging" AllowPaging="true" PageSize="10">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                               <asp:TemplateField HeaderText="Case Subject">
+                                                <asp:TemplateField HeaderText="Case No.">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Case Subject">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
                                                         <asp:Label ID="LabelOICName" runat="server" Text='<%# Eval("petiAdvocateName") %>' Visible="false"></asp:Label>
@@ -248,11 +253,7 @@
                                                         <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>

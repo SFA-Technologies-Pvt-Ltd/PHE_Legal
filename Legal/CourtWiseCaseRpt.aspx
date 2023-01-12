@@ -14,7 +14,7 @@
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                   <div class="modal-body">
+                    <div class="modal-body">
                         <fieldset>
                             <legend>Case Detail</legend>
                             <div class="row">
@@ -110,13 +110,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Mobile No.</label>
+                                        <label>Advocate Name</label>
                                         <asp:TextBox ID="txtOICMObile" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Email-ID</label>
+                                        <label>Advocate Mobile No.</label>
                                         <asp:TextBox ID="txtOICEmail" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
@@ -217,14 +217,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND" AllowPaging="true" PageSize="10" OnPageIndexChanging="grdSubjectWiseCasedtl_PageIndexChanging">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Case Subject">
+                                                <asp:TemplateField HeaderText="Case No.">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Case Subject">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
                                                         <asp:Label ID="LabelOICName" runat="server" Text='<%# Eval("petiAdvocateName") %>' Visible="false"></asp:Label>
@@ -244,11 +249,7 @@
                                                         <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>

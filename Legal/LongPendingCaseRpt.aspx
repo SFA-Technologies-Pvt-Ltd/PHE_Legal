@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="LongPendingCaseRpt.aspx.cs" Inherits="Legal_LongPendingCaseRpt" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -14,7 +14,7 @@
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                        <div class="modal-body">
+                    <div class="modal-body">
                         <fieldset>
                             <legend>Case Detail</legend>
                             <div class="row">
@@ -110,13 +110,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Mobile No.</label>
+                                        <label>Advocate Name</label>
                                         <asp:TextBox ID="txtOICMObile" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Email-ID</label>
+                                        <label>Advocate Mobile No.</label>
                                         <asp:TextBox ID="txtOICEmail" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
@@ -174,8 +174,8 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Month</label><span style="color: red;"><b> *</b></span>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
-                                            ErrorMessage="Select From Month." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                            ErrorMessage="Select Month." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlFromMonth" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlFromMonth" runat="server" CssClass="form-control">
@@ -189,11 +189,11 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
-                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                             ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
-                                      <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3" style="padding: 3.5% 0 0 0">
@@ -205,7 +205,7 @@
                                             <a href="LongPendingCaseRpt.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </fieldset>
@@ -214,14 +214,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" EmptyDataText="NO RECORD FOUND" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID">
+                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" EmptyDataText="NO RECORD FOUND" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" OnPageIndexChanging="grdSubjectWiseCasedtl_PageIndexChanging" AllowPaging="true" PageSize="10">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                               <asp:TemplateField HeaderText="Case Subject">
+                                                <asp:TemplateField HeaderText="Case No.">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Case Subject">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
                                                         <asp:Label ID="LabelOICName" runat="server" Text='<%# Eval("petiAdvocateName") %>' Visible="false"></asp:Label>
@@ -241,11 +246,7 @@
                                                         <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
@@ -256,7 +257,7 @@
                                                         <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                               
+
                                                 <asp:TemplateField HeaderText="Action">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnView" runat="server" CssClass="btn btn-primary" CommandName="ViewDtl" CommandArgument='<%# Eval("Case_ID") %>' ToolTip="View"><i class="fa fa-eye"></i></asp:LinkButton>
@@ -274,6 +275,6 @@
         </section>
     </div>
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" Runat="Server">
+<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">
 </asp:Content>
 

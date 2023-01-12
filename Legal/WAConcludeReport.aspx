@@ -21,7 +21,7 @@
 
                     <div class="card-body">
                         <fieldset>
-                            <legend>Search WP Case</legend>
+                            <legend>Search</legend>
 
                             <div class="row">
                                 <div class="col-md-3">
@@ -93,7 +93,7 @@
                                                         <asp:Label ID="lblOfficeName" runat="server" Text='<%# Eval("OfficeName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Dispoce Date">
+                                                <asp:TemplateField HeaderText="Case Disposal Date">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblDisposedate" runat="server" Text='<%# Eval("CaseDisposeDate") %>'></asp:Label>
                                                     </ItemTemplate>

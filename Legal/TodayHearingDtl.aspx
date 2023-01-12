@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="TodayHearingDtl.aspx.cs" Inherits="Legal_TodayHearingDtl" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="body" Runat="Server">
-       <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+    <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
@@ -15,7 +15,7 @@
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                   <div class="modal-body">
+                    <div class="modal-body">
                         <fieldset>
                             <legend>Case Detail</legend>
                             <div class="row">
@@ -49,7 +49,7 @@
                                         <asp:TextBox ID="txtCourtName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
-                                 <div class="col-md-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Next Hearing Date</label>
                                         <asp:TextBox ID="txtNextHearingDate" runat="server" CssClass="form-control" AutoComplete="off" ReadOnly="true"></asp:TextBox>
@@ -111,13 +111,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Mobile No.</label>
+                                        <label>Advocate Name</label>
                                         <asp:TextBox ID="txtOICMObile" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Email-ID</label>
+                                        <label>Advocate Mobile No.</label>
                                         <asp:TextBox ID="txtOICEmail" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
@@ -174,17 +174,17 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Hearing Date</label><span style="color: red;"><b> *</b></span>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
                                             ErrorMessage="Enter Hearing Date" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtHearingdt" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                         <asp:TextBox ID="txtHearingdt" runat="server" CssClass="form-control disableFuturedate" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtHearingdt" runat="server" CssClass="form-control disableFuturedate" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Type</label><span style="color: red;"><b> *</b></span>
-                                       <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
                                             ErrorMessage="Select Case Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
@@ -194,13 +194,13 @@
                                 <div class="col-md-3" style="margin-top: 3%;">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click"  ValidationGroup="Save"/>
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click" ValidationGroup="Save" />
                                         </div>
                                         <div class="col-md-6">
                                             <a href="TodayHearingDtl.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </fieldset>
@@ -209,11 +209,16 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdTodayHearingdtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdTodayHearingdtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="grdTodayHearingdtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdTodayHearingdtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND" AllowPaging="true" PageSize="10" OnPageIndexChanging="grdTodayHearingdtl_PageIndexChanging">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Case No.">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Case Subject">
@@ -228,7 +233,7 @@
                                                         <asp:Label ID="LabelAdvocateName" runat="server" Text='<%# Eval("DeptAdvocateName") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="LabelAdvocateMobile" runat="server" Text='<%# Eval("DeptAdvocateMobileNO") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="LabelAdvocateEmail" runat="server" Text='<%# Eval("DeptAdvocateEmailId") %>' Visible="false"></asp:Label>
-                                                         <asp:Label ID="LabelHearingDate" runat="server" Text='<%# Eval("NextHearingDate") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="LabelHearingDate" runat="server" Text='<%# Eval("NextHearingDate") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="LabelRespondertype" runat="server" Text='<%# Eval("RespondertypeName") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCaseDetail" runat="server" Text='<%# Eval("CaseDetail") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblCasetype" runat="server" Text='<%# Eval("Casetype_Name") %>' Visible="false"></asp:Label>
@@ -236,11 +241,7 @@
                                                         <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
@@ -268,6 +269,6 @@
         </section>
     </div>
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" Runat="Server">
+<asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">
 </asp:Content>
 

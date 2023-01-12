@@ -32,29 +32,39 @@ public partial class Legal_ContemptCaseRpt : System.Web.UI.Page
         }
     }
 
+    protected void BindGrid()
+    {
+        try
+        {
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Fromdate", "Enddate" }
+                    , new string[] { "12", Convert.ToDateTime(txtDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
 
+                grdSubjectWiseCasedtl.DataSource = ds;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+            else
+            {
+                grdSubjectWiseCasedtl.DataSource = null;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            ds = new DataSet();
+
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Fromdate", "Enddate" }
-                    , new string[] { "12", Convert.ToDateTime(txtDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdSubjectWiseCasedtl.DataSource = dt;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
-                else
-                {
-                    grdSubjectWiseCasedtl.DataSource = null;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -112,10 +122,22 @@ public partial class Legal_ContemptCaseRpt : System.Web.UI.Page
         }
     }
 
-
-
     protected void btnClear_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/legal/subjectwisecasedtl.aspx");
+    }
+    protected void grdSubjectWiseCasedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdSubjectWiseCasedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 }

@@ -110,13 +110,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Mobile No.</label>
+                                        <label>Advocate Name</label>
                                         <asp:TextBox ID="txtOICMObile" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Justice Email-ID</label>
+                                        <label>Advocate Mobile No.</label>
                                         <asp:TextBox ID="txtOICEmail" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
@@ -165,7 +165,7 @@
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        Dispose Case Detail
+                        Disposal Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -173,13 +173,13 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Case Dispose Type</label><span style="color: red;"><b> *</b></span>
+                                        <label>Case Disposal Type</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
                                             ErrorMessage="Select Case Dispose type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlDisposetype" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlDisposetype" runat="server" CssClass="form-control">
-                                           <%-- <asp:ListItem Value="0">Select</asp:ListItem>
+                                            <%-- <asp:ListItem Value="0">Select</asp:ListItem>
                                             <asp:ListItem Value="1">Normal</asp:ListItem>
                                             <asp:ListItem Value="2">By Order</asp:ListItem>--%>
                                         </asp:DropDownList>
@@ -195,7 +195,7 @@
                                         <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                                 <div class="col-md-3" style="padding: 3.5% 0 0 0">
+                                <div class="col-md-3" style="padding: 3.5% 0 0 0">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" ValidationGroup="Save" OnClick="btnSearch_Click" />
@@ -212,14 +212,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="grdSubjectWiseCasedtl" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID" EmptyDataText="NO RECORD FOUND" OnPageIndexChanging="grdSubjectWiseCasedtl_PageIndexChanging" AllowPaging="true" PageSize="10">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                  <asp:TemplateField HeaderText="Case Subject">
+                                                <asp:TemplateField HeaderText="Case No.">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Case Subject">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
                                                         <asp:Label ID="LabelOICName" runat="server" Text='<%# Eval("petiAdvocateName") %>' Visible="false"></asp:Label>
@@ -239,11 +244,7 @@
                                                         <asp:Label ID="lblRespondentMobileNo" runat="server" Text='<%# Eval("RespondentNo") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("FilingNo") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
@@ -254,7 +255,7 @@
                                                         <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Case Status">
+                                                <asp:TemplateField HeaderText="Case Status">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseStatus" runat="server" Text='<%# Eval("CaseStatus") %>' Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Dispose" ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>
                                                     </ItemTemplate>

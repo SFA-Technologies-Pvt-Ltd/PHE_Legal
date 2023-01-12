@@ -78,6 +78,28 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
         }
 
     }
+    protected void BindGrid()
+    {
+        try
+        {
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseDisposeType_Id" }, new string[] { "9", ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value }, "dataset");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    grdSubjectWiseCasedtl.DataSource = ds;
+                    grdSubjectWiseCasedtl.DataBind();
+                }
+                else
+                {
+                    grdSubjectWiseCasedtl.DataSource = null;
+                    grdSubjectWiseCasedtl.DataBind();
+                }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+    }
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
@@ -86,19 +108,7 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
             ds = new DataSet();
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseDisposeType_Id" }, new string[] { "9", ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value }, "dataset");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdSubjectWiseCasedtl.DataSource = dt;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
-                else
-                {
-                    grdSubjectWiseCasedtl.DataSource = null;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -153,6 +163,20 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
             txtCaseDtl.Text = lblCaseDetail.Text;
             txtCasetype.Text = lblCasetype.Text;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+        }
+    }
+    protected void grdSubjectWiseCasedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdSubjectWiseCasedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception )
+        {
+            
+            throw;
         }
     }
 }

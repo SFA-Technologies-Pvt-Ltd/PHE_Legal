@@ -99,21 +99,15 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
         }
 
     }
-
-    protected void btnSearch_Click(object sender, EventArgs e)
+    protected void BindGrid()
     {
         try
         {
-            ds = new DataSet();
-            if (Page.IsValid)
-            {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag","Casetype_ID", "CaseSubjectID" }, 
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag","Casetype_ID", "CaseSubjectID" }, 
                     new string[] {"1", ddlCaseType.SelectedItem.Value, ddlCaseSubject.SelectedItem.Value }, "dataset");
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdSubjectWiseCasedtl.DataSource = dt;
+                    grdSubjectWiseCasedtl.DataSource = ds;
                     grdSubjectWiseCasedtl.DataBind();
                 }
                 else
@@ -121,6 +115,20 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
                     grdSubjectWiseCasedtl.DataSource = null;
                     grdSubjectWiseCasedtl.DataBind();
                 }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {          
+            if (Page.IsValid)
+            {
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -183,5 +191,18 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
     protected void btnClear_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/legal/subjectwisecasedtl.aspx");
+    }
+    protected void grdSubjectWiseCasedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdSubjectWiseCasedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }

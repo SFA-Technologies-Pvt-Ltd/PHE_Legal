@@ -36,6 +36,18 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label>Case Subject</label><span style="color: red;"><b> *</b></span>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ValidationGroup="Save"
+                                                    ErrorMessage="Select Case Subject" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server" InitialValue="0">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control">
+                                                </asp:DropDownList>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
                                                 <label>Case Type<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="a"
@@ -46,6 +58,8 @@
                                                 <asp:TextBox runat="server" CssClass="form-control" ID="txtCasetype" placeholder="Enter Case Type" autocomplete="off"></asp:TextBox>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Petitioner Name<span style="color: red;"> *</span></label>
@@ -70,8 +84,6 @@
                                                 <asp:TextBox runat="server" CssClass="form-control" ID="txtrespondentName" onkeypress="javascript:tbx_fnAlphaOnly(event, this);" placeholder="Enter Party Name" autocomplete="off" MaxLength="50"></asp:TextBox>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Related Office<span style="color: red;"> *</span></label>
@@ -84,6 +96,8 @@
                                                 <asp:TextBox runat="server" CssClass="form-control Number" ID="txtRelatedOffice" placeholder="Enter Related Office" autocomplete="off"></asp:TextBox>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Decision Date<span style="color: red;"> *</span></label>
@@ -154,10 +168,11 @@
                                                             <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                     <asp:BoundField DataField="CaseNo" HeaderText="Case No." HeaderStyle-HorizontalAlign="Center" />
-                                                     <asp:BoundField DataField="CaseType" HeaderText="Case Type" HeaderStyle-HorizontalAlign="Center" />
+                                                    <asp:BoundField DataField="CaseNo" HeaderText="Case No." HeaderStyle-HorizontalAlign="Center" />
+                                                     <asp:BoundField DataField="CaseSubject" HeaderText="Case Subject" HeaderStyle-HorizontalAlign="Center" />
+                                                    <asp:BoundField DataField="CaseType" HeaderText="Case Type" HeaderStyle-HorizontalAlign="Center" />
                                                     <asp:BoundField DataField="PartyName" HeaderText="Petitioner Name" HeaderStyle-HorizontalAlign="Center" />
-                                                   <asp:BoundField DataField="RespondentName" HeaderText="Respondent Name" HeaderStyle-HorizontalAlign="Center" />                                                 
+                                                    <asp:BoundField DataField="RespondentName" HeaderText="Respondent Name" HeaderStyle-HorizontalAlign="Center" />
                                                     <asp:BoundField DataField="RelatedOffice" HeaderText="Related Office" HeaderStyle-HorizontalAlign="Center" />
                                                     <%--<asp:BoundField DataField="DecisionDate" HeaderText="Decision Date" HeaderStyle-HorizontalAlign="Center" DataFormatString="{0:dd/MM/yyyy}" />--%>
                                                     <asp:TemplateField HeaderText="Decision Date">

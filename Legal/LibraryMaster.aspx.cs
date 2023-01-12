@@ -22,8 +22,7 @@ public partial class Legal_LibraryMaster : System.Web.UI.Page
                 if (!IsPostBack)
                 {
                     BindGridLibrary();
-
-                    // FillGrid();
+                    GetCaseSubject();
                     lblMsg.Text = "";
                     lblRecord.Text = "";
 
@@ -59,7 +58,31 @@ public partial class Legal_LibraryMaster : System.Web.UI.Page
             throw ex;
         }
     }
+    private void GetCaseSubject()
+    {
+        try
+        {
+            ds = objdb.ByDataSet("select CaseSubjectID,CaseSubject from tbl_LegalMstCaseSubject");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseSubject.DataSource = ds.Tables[0];
+                ddlCaseSubject.DataTextField = "CaseSubject";
+                ddlCaseSubject.DataValueField = "CaseSubjectID";
+                ddlCaseSubject.DataBind();
+                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            else
+            {
+                ddlCaseSubject.DataSource = null;
+                ddlCaseSubject.DataBind();
+                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+            }
+        }
+        catch (Exception)
+        {
+        }
 
+    }
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -74,8 +97,8 @@ public partial class Legal_LibraryMaster : System.Web.UI.Page
             }
             if (FU1.HasFile)
             {
-                ds = objdb.ByProcedure("Sp_librarydetail", new string[] { "flag", "CaseType", "PartyName", "CaseNo", "RelatedOffice", "DecisionDate", "Case_Year", "PDFViewLink", "RespondentName" }, new string[] {
-                        "1",txtCasetype.Text,txtPartyName.Text,txtCaseNo.Text,txtRelatedOffice.Text, Convert.ToDateTime(txtDecisionDate.Text, cult).ToString("yyyy/MM/dd"),txtCaseYear.Text,"../PDF_Files/"+fileName, txtrespondentName.Text.Trim()}, "dataset");
+                ds = objdb.ByProcedure("Sp_librarydetail", new string[] { "flag", "CaseType", "PartyName", "CaseNo", "RelatedOffice", "DecisionDate", "Case_Year", "PDFViewLink", "RespondentName", "CaseSubjectId" }, new string[] {
+                        "1",txtCasetype.Text,txtPartyName.Text,txtCaseNo.Text,txtRelatedOffice.Text, Convert.ToDateTime(txtDecisionDate.Text, cult).ToString("yyyy/MM/dd"),txtCaseYear.Text,"../PDF_Files/"+fileName, txtrespondentName.Text.Trim(),ddlCaseSubject.SelectedItem.Value}, "dataset");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
@@ -102,4 +125,6 @@ public partial class Legal_LibraryMaster : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Thanks !", ex.Message.ToString());
         }
     }
+
+   
 }

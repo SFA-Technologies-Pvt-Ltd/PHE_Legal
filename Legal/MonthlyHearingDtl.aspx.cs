@@ -50,8 +50,32 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         catch (Exception)
         {
         }
-
     }
+
+    protected void BindGrid()
+    {
+        try
+        {
+            ds = new DataSet();
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "C_Year", "C_Month" }, new string[] { "6", ddlCaseType.SelectedItem.Value, ddlYear.SelectedItem.Text, ddlMonth.SelectedValue }, "dataset");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataTable dt = ds.Tables[0];
+                grdMonthlyHearingdtl.DataSource = dt;
+                grdMonthlyHearingdtl.DataBind();
+            }
+            else
+            {
+                grdMonthlyHearingdtl.DataSource = null;
+                grdMonthlyHearingdtl.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
@@ -59,18 +83,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             ds = new DataSet();
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "C_Year","C_Month" }, new string[] { "6", ddlCaseType.SelectedItem.Value,ddlYear.SelectedItem.Text, ddlMonth.SelectedValue }, "dataset");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataTable dt = ds.Tables[0];
-                    grdMonthlyHearingdtl.DataSource = dt;
-                    grdMonthlyHearingdtl.DataBind();
-                }
-                else
-                {
-                    grdMonthlyHearingdtl.DataSource = null;
-                    grdMonthlyHearingdtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -125,6 +138,19 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             txtCaseDtl.Text = lblCaseDetail.Text;
             txtCasetype.Text = lblCasetype.Text;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+        }
+    }
+    protected void grdMonthlyHearingdtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdMonthlyHearingdtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 }

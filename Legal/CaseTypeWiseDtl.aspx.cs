@@ -53,33 +53,45 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
 
     }
 
+    protected void BindGrid()
+    {
+        try
+        {
+            if (ddlCaseType.SelectedItem.Value == "1" || ddlCaseType.SelectedItem.Value == "2")
+            {
+                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "10", ddlCaseType.SelectedItem.Value }, "dataset");
+            }
+            else if (ddlCaseType.SelectedItem.Value == "3" || ddlCaseType.SelectedItem.Value == "4" || ddlCaseType.SelectedItem.Value == "5")
+            {
+                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "13", ddlCaseType.SelectedItem.Value }, "dataset");
+            }
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                grdCaseTypedtl.DataSource = ds;
+                grdCaseTypedtl.DataBind();
+            }
+            else
+            {
+                grdCaseTypedtl.DataSource = null;
+                grdCaseTypedtl.DataBind();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            ds = new DataSet();
+
             if (Page.IsValid)
             {
-                if (ddlCaseType.SelectedItem.Value == "1" || ddlCaseType.SelectedItem.Value == "2")
-                {
-                    ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "10", ddlCaseType.SelectedItem.Value }, "dataset");
-                }
-                else if (ddlCaseType.SelectedItem.Value == "3" || ddlCaseType.SelectedItem.Value == "4" || ddlCaseType.SelectedItem.Value == "5")
-                {
-                    ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID" }, new string[] { "13", ddlCaseType.SelectedItem.Value }, "dataset");
-                }
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdCaseTypedtl.DataSource = dt;
-                    grdCaseTypedtl.DataBind();
-                }
-                else
-                {
-                    grdCaseTypedtl.DataSource = null;
-                    grdCaseTypedtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -136,23 +148,19 @@ public partial class Legal_CaseTypeWiseDtl : System.Web.UI.Page
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
         }
     }
-    //protected void grdCaseTypedtl_RowDataBound(object sender, GridViewRowEventArgs e)
-    //{
-    //    if (e.Row.RowType == DataControlRowType.DataRow)
-    //    {
-    //        for (int i = 0; i < grdCaseTypedtl.Rows.Count; i++)
-    //        {
-    //            string vr;
-    //            vr = grdCaseTypedtl.Rows[i].Cells[5].Text;
-    //            if (e.Row.Cells[1].Text == "Pending")
-    //            {
-    //                e.Row.Cells[1].ForeColor = System.Drawing.Color.Red;
-    //            }
-    //            if (e.Row.Cells[1].Text == "Dispose")
-    //            {
-    //                e.Row.Cells[1].ForeColor = System.Drawing.Color.Green;
-    //            }
-    //        }
-    //    }
-    //}
+
+    protected void grdCaseTypedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdCaseTypedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
 }

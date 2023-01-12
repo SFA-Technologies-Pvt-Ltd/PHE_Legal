@@ -46,8 +46,9 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
                 ddlRespondentType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
 
     }
@@ -72,31 +73,40 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
                 ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
+    }
+    protected void BindGrid()
+    {
+        try
+        {
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "Respondertype_ID" }, new string[] { "3", ddlCaseType.SelectedItem.Value, ddlRespondentType.SelectedItem.Value }, "dataset");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
 
+                grdSubjectWiseCasedtl.DataSource = ds;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+            else
+            {
+                grdSubjectWiseCasedtl.DataSource = null;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
     }
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            ds = new DataSet();
             if (Page.IsValid)
             {
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] {"flag" ,"Casetype_ID", "Respondertype_ID" }, new string[] {"3", ddlCaseType.SelectedItem.Value, ddlRespondentType.SelectedItem.Value }, "dataset");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdSubjectWiseCasedtl.DataSource = dt;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
-                else
-                {
-                    grdSubjectWiseCasedtl.DataSource = null;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -151,6 +161,19 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
             txtCaseDtl.Text = lblCaseDetail.Text;
             txtCasetype.Text = lblCasetype.Text;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+        }
+    }
+    protected void grdSubjectWiseCasedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdSubjectWiseCasedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 }

@@ -52,34 +52,43 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
 
     }
 
+    protected void BindGrid()
+    {
+        try
+        {
+            string num = "";
+            if (ddlFromMonth.SelectedItem.Value == "1")
+                num = "-1";
+            if (ddlFromMonth.SelectedItem.Value == "2")
+                num = "-3";
+            if (ddlFromMonth.SelectedItem.Value == "3")
+                num = "-6";
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "lastMonthCase" }, new string[] { "11", ddlCaseType.SelectedItem.Value, num }, "dataset");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                grdSubjectWiseCasedtl.DataSource = ds;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+            else
+            {
+                grdSubjectWiseCasedtl.DataSource = null;
+                grdSubjectWiseCasedtl.DataBind();
+            }
+        }
+        catch (Exception)
+        {
+
+        }
+    }
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            ds = new DataSet();
+
             if (Page.IsValid)
             {
-
-                string num = "";
-                if (ddlFromMonth.SelectedItem.Value == "1")
-                    num = "-1";
-                if (ddlFromMonth.SelectedItem.Value == "2")
-                    num = "-3";
-                if (ddlFromMonth.SelectedItem.Value == "3")
-                    num = "-6";
-                ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "lastMonthCase" }, new string[] { "11", ddlCaseType.SelectedItem.Value,num }, "dataset");
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    //DataTable dt = (DataTable)ViewState["dtCol"];
-                    DataTable dt = ds.Tables[0];
-                    grdSubjectWiseCasedtl.DataSource = dt;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
-                else
-                {
-                    grdSubjectWiseCasedtl.DataSource = null;
-                    grdSubjectWiseCasedtl.DataBind();
-                }
+                BindGrid();
             }
         }
         catch (Exception ex)
@@ -134,6 +143,20 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
             txtCaseDtl.Text = lblCaseDetail.Text;
             txtCasetype.Text = lblCasetype.Text;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+        }
+    }
+    protected void grdSubjectWiseCasedtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            grdSubjectWiseCasedtl.PageIndex = e.NewPageIndex;
+            BindGrid();
+        }
+        catch (Exception)
+        {
+
+            throw;
         }
     }
 }
