@@ -114,7 +114,7 @@
                                 <div class="col-md-3 pt-4">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" ValidationGroup="Save" OnClick="btnSave_Click" />
+                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" ValidationGroup="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();"/>
                                         </div>
                                         <div class="col-md-6">
                                             <a href="ImplementationAuthorityMst.aspx" class="btn btn-default btn-block">Clear</a>

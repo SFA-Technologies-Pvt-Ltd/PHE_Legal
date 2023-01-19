@@ -89,34 +89,7 @@ public partial class Legal_CaseSubjectMaster : System.Web.UI.Page
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Thanks !", ex.Message.ToString());
         }
     }
-    protected void chkActice_CheckedChanged(object sender, EventArgs e)
-    {
-        try
-        {
-
-            HiddenField hdnCaseSubjectID = (HiddenField)((CheckBox)sender).Parent.FindControl("hdnCaseSubjectID");
-
-            ds = objdb.ByProcedure("Sp_CaseSubject", new string[] { "flag", "CaseSubjectID" }, new string[] { "3", hdnCaseSubjectID.Value }, "dataset");
-
-
-
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-                if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
-                {
-                    lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Thanks !", ex.Message.ToString());
-        }
-    }
-
-
+    
     protected void grdCaseSubject_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
         grdCaseSubject.PageIndex = e.NewPageIndex;
