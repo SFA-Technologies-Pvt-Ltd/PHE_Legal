@@ -32,7 +32,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
     {
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
     }
-    #region Fill Users
+
     protected void BindUserDetails()
     {
         try
@@ -56,8 +56,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    #endregion
-    #region Fill Office type
+
     protected void BIndOfficeType()
     {
         try
@@ -78,8 +77,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    #endregion
-    #region Save Button Event
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -128,7 +126,6 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    #endregion
     protected void ddlofficetype_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -154,19 +151,6 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
             ddlUsertype.Items.Insert(0, new ListItem("Select", "0"));
             ddlOfficeName.Items.Insert(0, new ListItem("Select", "0"));
 
-        }
-        catch (Exception ex)
-        {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
-        }
-    }
-    protected void grdUserDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
-    {
-        try
-        {
-            lblMsg.Text = "";
-            grdUserDetails.PageIndex = e.NewPageIndex;
-            BindUserDetails();
         }
         catch (Exception ex)
         {

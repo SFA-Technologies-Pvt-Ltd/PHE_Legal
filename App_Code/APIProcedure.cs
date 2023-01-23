@@ -21,6 +21,7 @@ public abstract class AbstApiDBApi
     public abstract bool isNumber(string s);
     public abstract bool isDecimal(string s);
     public abstract void ByText(string Query);
+    public abstract void ByTextQuery(string Query); 
     public abstract void ByText(string Query, SqlConnection Con, SqlTransaction Tran);
     public abstract DataSet ByDataSet(string Query);
     public abstract void ResizeImage(Image ImageId, int ResizeWidth, int ResizeHeight);
@@ -698,6 +699,26 @@ public class APIProcedure : AbstApiDBApi
         }
         finally { cmd.Dispose(); }
     }
+    public override void ByTextQuery(string Query)
+    {
+        try
+        {
+            using (SqlConnection cn = new SqlConnection(getconnection))
+            {
+                cn.Open();
+                cmd = new SqlCommand(Query,cn);
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandTimeout = 3600;
+                cmd.ExecuteNonQuery();
+                cn.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            WriteLog(" Error Msg :" + ex.Message + "\n" + "Event Info :" + ex.StackTrace);
+        }
+        finally { cmd.Dispose(); }
+    }
     public override DataSet ByDataSet(string Query)
     {
         try
@@ -908,7 +929,7 @@ public class APIProcedure : AbstApiDBApi
                 cmd.CommandType = CommandType.StoredProcedure;
                 for (int i = 0; i < Parameter.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue("@" + Parameter[i].ToString(), Values[i].ToString());
+                    cmd.Parameters.AddWithValue("@" + Parameter[i].ToString(), Convert.ToString(Values[i]));
                 }
                 cmd.CommandTimeout = 3600;
                 using (SqlDataAdapter adp = new SqlDataAdapter(cmd))

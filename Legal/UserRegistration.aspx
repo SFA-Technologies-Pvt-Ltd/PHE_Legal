@@ -107,7 +107,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdUserDetails" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND" OnPageIndexChanging="grdUserDetails_PageIndexChanging" AllowPaging="true">
+                                        <asp:GridView ID="grdUserDetails" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="false">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.<br />सरल क्र.">
                                                     <ItemTemplate>

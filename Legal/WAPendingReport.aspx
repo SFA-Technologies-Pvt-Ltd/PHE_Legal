@@ -69,7 +69,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="GrdWAPendingReport" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" DataKeyNames="WACase_ID" OnRowCommand="GrdWAPendingReport_RowCommand">
+                                        <asp:GridView ID="GrdWAPendingReport" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false" DataKeyNames="WACase_ID" OnRowCommand="GrdWAPendingReport_RowCommand" EmptyDataText="NO RECORD FOUND">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.">
                                                     <ItemTemplate>

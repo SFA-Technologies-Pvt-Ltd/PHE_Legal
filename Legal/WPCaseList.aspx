@@ -64,9 +64,8 @@
             color: white;
             border-radius: unset;
             box-shadow: 2px 2px 2px #808080;
-            /*margin-left: 6px;*/
+            margin-left: 6px;
             border: none;
-            margin: 0px 10px -3px 4px; /*For using 'Show'*/
         }
 
         a.btn.btn-default.buttons-pdf.buttons-html5 {

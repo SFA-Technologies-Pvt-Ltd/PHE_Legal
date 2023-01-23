@@ -166,7 +166,7 @@
             color: white !important;
         }
     </style>
-    <style>/* Thise Style For Datatable On Full Page.*/
+	 <style>/* Thise Style For Datatable On Full Page.*/
         .form-inline {
             display: block;
             -ms-flex-flow: row wrap;
@@ -250,7 +250,7 @@
                         <nav class="mt-2">
                             <section class="sidebar" runat="server" id="Navigation">
                             </section>
-                            <%-- <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                           <%-- <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <li class="nav-item">
                                     <a href="../legal/legaldashboard.aspx" class="nav-link">
                                         <i class="nav-icon fas fa-list-ul text-light"></i>
@@ -541,10 +541,10 @@
                     <!-- /.sidebar -->
                 </aside>
 
-
+               
                 <asp:ContentPlaceHolder ID="body" runat="server">
                 </asp:ContentPlaceHolder>
-
+                
                 <!-- /.content-wrapper -->
                 <%--<footer class="main-footer" style="background-color: #f5f5f5; text-align: center">
                     <strong>Design & Developed by <a href="#">Sfa Technologies</a></strong>
