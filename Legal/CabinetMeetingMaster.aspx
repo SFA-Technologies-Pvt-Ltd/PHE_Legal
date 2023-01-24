@@ -113,7 +113,7 @@
                                             <asp:GridView runat="server" DataKeyNames="CabinetId" ID="gridview" CssClass="table table-bordered table-striped" AutoGenerateColumns="False" OnPageIndexChanging="gridview_PageIndexChanging" AllowPaging="true" PageSize="10" OnRowCommand="gridview_RowCommand">
                                                 <PagerStyle HorizontalAlign="Left" CssClass="GridPager" />
                                                 <Columns>
-                                                    <asp:TemplateField HeaderText=" S.No." HeaderStyle-Width="0%">
+                                                    <asp:TemplateField HeaderText=" S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:Label runat="server" ID="lblSno" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                             <asp:Label ID="lblCabinetId" runat="server" Visible="false" Text='<%#Eval("CabinetId").ToString() %>'></asp:Label>
@@ -135,9 +135,9 @@
                                                             <asp:Label ID="lblFileUpload" runat="server" Text='<%# Eval("CabinetDocument") %>' Visible="false"></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Action" ShowHeader="False" HeaderStyle-ForeColor="White" HeaderStyle-Width="0%">
+                                                    <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" HeaderStyle-Width="5%">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="btnView" runat="server" CssClass="btn btn-primary" CommandName="ViewDtl" CommandArgument='<%# Eval("CabinetId") %>' ToolTip="View"><i class="fa fa-eye"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="btnView" runat="server" CssClass="" CommandName="ViewDtl" CommandArgument='<%# Eval("CabinetId") %>' ToolTip="View"><i class="fa fa-edit"></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>

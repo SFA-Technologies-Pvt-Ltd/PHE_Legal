@@ -151,7 +151,7 @@
                                     <div class="table-responsive">
                                         <asp:GridView ID="GrdImpleAuthority" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="GrdImpleAuthority_PageIndexChanging" OnRowCommand="GrdImpleAuthority_RowCommand" PageSize="10" DataKeyNames="IAuthority_ID">
                                             <Columns>
-                                                <asp:TemplateField HeaderText="S.No.">
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblSrNo" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                         <asp:Label ID="lblID" runat="server" Text='<%# Eval("IAuthority_ID") %>' Visible="false"></asp:Label>
@@ -196,9 +196,9 @@
                                                         <asp:Label ID="lblImpleAuthorityLocation_ID" runat="server" Text='<%# Eval("District_Id") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Action">
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandArgument='<%# Eval("IAuthority_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="btn btn-primary"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandArgument='<%# Eval("IAuthority_ID") %>' CommandName="EditDetails" ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>

@@ -74,7 +74,7 @@
                                             <div class="table-responsive">
                                                 <asp:GridView ID="GrdCaseDipose" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" DataKeyNames="CaseDisposeType_Id" OnRowCommand="GrdCaseDipose_RowCommand" OnPageIndexChanging="GrdCaseDipose_PageIndexChanging">
                                                     <Columns>
-                                                        <asp:TemplateField HeaderText="S.No.">
+                                                        <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                             </ItemTemplate>
@@ -84,9 +84,9 @@
                                                                 <asp:Label ID="lblDisposetype" runat="server" Text='<%# Eval("CaseDisposeType") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Action">
+                                                        <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("CaseDisposeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="btn btn-primary"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("CaseDisposeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>

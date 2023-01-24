@@ -127,7 +127,7 @@
                                                 <RowStyle HorizontalAlign="Center" />
                                                 <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />
                                                 <Columns>
-                                                    <asp:TemplateField HeaderText="S.No.">
+                                                    <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                             <asp:HiddenField ID="hdnCaseSubjectID" runat="server" Value='<%#Eval("CaseSubjectID") %>' />
@@ -148,9 +148,9 @@
                                                             <asp:Label ID="lblCaseSubjectDetail" runat="server" Text='<%# Eval("CaseSubjectDetail") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Update">
+                                                    <asp:TemplateField HeaderText="Update" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("CaseSubjectID") %>' ToolTip="Edit" CssClass="btn btn-info"><i class="fa fa-eye"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("CaseSubjectID") %>' ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>

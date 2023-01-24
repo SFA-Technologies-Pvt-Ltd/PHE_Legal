@@ -102,7 +102,7 @@
                                     <div class="table-responsive">
                                         <asp:GridView ID="GrdDesignation" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdDesignation_PageIndexChanging" OnRowCommand="GrdDesignation_RowCommand" DataKeyNames="Designation_Id">
                                             <Columns>
-                                                <asp:TemplateField HeaderText="S.No.">
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblsrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                         <asp:Label ID="lblID" runat="server" Text='<%# Eval("Designation_Id") %>' Visible="false"></asp:Label>
@@ -125,9 +125,9 @@
                                                         <asp:Label ID="lblDesignationName" runat="server" Text='<%# Eval("Designation_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Action">
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Designation_Id") %>' ToolTip="Edit" CssClass="btn btn-primary"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Designation_Id") %>' ToolTip="Edit" ><i class="fa fa-edit"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
