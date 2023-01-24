@@ -101,6 +101,8 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
+                        FillGrid();
+                        btnSave.Text = "Save";
                         ddlzone.ClearSelection();
                         ddlCircleName.ClearSelection();
                         txtDivisionName.Text = "";
@@ -117,12 +119,8 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 {
                     lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Warning !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
                 }
-                FillGrid();
-                btnSave.Text = "Save";
-                ddlzone.ClearSelection();
-                ddlCircleName.ClearSelection();
-                txtDivisionName.Text = "";
-                txtDivisionCode.Text = "";
+               
+               
             }
         }
         catch (Exception ex)
@@ -176,6 +174,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
     {
         try
         {
+            lblMsg.Text = "";
             ddlCircleName.Items.Clear();
             ds = obj.ByProcedure("USP_SelectCircleMaster", new string[] { "flag", "Zone_ID" }
                     , new string[] { "2", ddlzone.SelectedValue }, "dataset");

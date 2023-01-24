@@ -93,13 +93,30 @@
                                                         ErrorMessage="Enter OIC Name" Text="<i class='fa fa-exclamation-circle' title='Enter OIC Name'></i>"
                                                         ControlToValidate="txtoicnme" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
+                                                    <asp:RegularExpressionValidator ID="rexOfficetypeName" runat="server" ErrorMessage="Only Characters Allow" SetFocusOnError="true"
+                                                        Text="<i class='fa fa-exclamation-circle' title='Mobile No. is Not Valid'></i>" ValidationGroup="Save"
+                                                        ValidationExpression="^[a-zA-Z ]*$" ControlToValidate="txtoicnme" Font-Bold="true" ForeColor="Red"></asp:RegularExpressionValidator>
                                                 </span>
-                                                <asp:TextBox runat="server" ID="txtoicnme" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" placeholder="Enter OIC Name" MaxLength="80" AutoComplete="off"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txtoicnme" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" placeholder="Enter OIC Name" MaxLength="80" AutoComplete="off"></asp:TextBox>
 
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Designation Name<span style="color: red;"> *</span></label>
+                                                <span class="pull-right">
+                                                    <asp:RequiredFieldValidator ID="rfvDesignation" ValidationGroup="Save"
+                                                        ErrorMessage="Select Designation" Text="<i class='fa fa-exclamation-circle' title='Required'></i>"
+                                                        ControlToValidate="ddlDesignation" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                </span>
+                                                <asp:DropDownList runat="server" ID="ddlDesignation" CssClass="form-control"></asp:DropDownList>
+
+                                            </div>
+                                        </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Mobile No<span style="color: red;"> *</span></label>
@@ -114,6 +131,21 @@
                                                         ValidationGroup="save"></asp:RegularExpressionValidator>
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtmobileno" CssClass="form-control" onkeypress="return NumberOnly();" MaxLength="10" placeholder="Enter Mobile No" AutoComplete="off"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Email-ID<span style="color: red;"> *</span></label>
+                                                <span class="pull-right">
+                                                    <asp:RequiredFieldValidator ID="RfvEmailId" ValidationGroup="Save"
+                                                        ErrorMessage="Enter Email-ID" Text="<i class='fa fa-exclamation-circle' title='Enter Mobile No'></i>"
+                                                        ControlToValidate="txtEmailID" ForeColor="Red" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:RegularExpressionValidator ID="revEmailid" ValidationGroup="Save" runat="server" Display="Dynamic" ControlToValidate="txtEmailID"
+                                                        ErrorMessage="Invalid Email Address" SetFocusOnError="true"
+                                                        ForeColor="Red" ValidationExpression="^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"></asp:RegularExpressionValidator>
+                                                </span>
+                                                <asp:TextBox runat="server" ID="txtEmailID" CssClass="form-control" MaxLength="50" placeholder="Enter Email-ID" AutoComplete="off"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-3 pt-3">
@@ -164,14 +196,26 @@
                                                                 <asp:Label ID="lblDivisionID" runat="server" Text='<%# Eval("Division_ID") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="OIC Name">
+                                                          <asp:TemplateField HeaderText="OIC Name">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblOICName" runat="server" Text='<%# Eval("OICName") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Designation Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblDesignationName" runat="server" Text='<%# Eval("Designation_Name") %>'></asp:Label>
+                                                                <asp:Label ID="lblDesignationId" runat="server" Text='<%# Eval("Designation_ID") %>' Visible="false"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                      
                                                         <asp:TemplateField HeaderText="Mobile No">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblMobileNo" runat="server" Text='<%# Eval("OICMobileNo") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Email-ID">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblEmailID" runat="server" Text='<%# Eval("OICEmailID") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action">
@@ -214,6 +258,14 @@
                 return false
             else if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
                 return true
+        }
+
+        function lettersOnly() { // Only English Letter Allow.
+            var charCode = event.keyCode;
+            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
+                return true;
+            else
+                return false;
         }
     </script>
     <script>

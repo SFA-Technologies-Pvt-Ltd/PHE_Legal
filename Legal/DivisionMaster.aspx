@@ -82,7 +82,7 @@
                                                         ControlToValidate="txtDivisionName" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
                                                 </span>
-                                                <asp:TextBox ID="txtDivisionName" runat="server" CssClass="form-control" MaxLength="80" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" AutoComplete="off" placeholder="Enter Division Name"></asp:TextBox>
+                                                <asp:TextBox ID="txtDivisionName" runat="server" CssClass="form-control" MaxLength="80" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" AutoComplete="off" placeholder="Enter Division Name"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -188,6 +188,13 @@
                 return false
             else if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
                 return true
+        }
+        function lettersOnly() { // Only English Letter Allow.
+            var charCode = event.keyCode;
+            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
+                return true;
+            else
+                return false;
         }
     </script>
     <script>

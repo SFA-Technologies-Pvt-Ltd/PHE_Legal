@@ -23,6 +23,7 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillGrid();
                 FillZone();
+                FillDesignation();
             }
         }
         else
@@ -88,13 +89,13 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "OICMobileNo", "Office_ID", "CreatedBy", "CreatedByIP" }
-                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_InsertOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "Office_ID", "CreatedBy", "CreatedByIP" }
+                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue, txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["OICID"].ToString() != "" && ViewState["OICID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "OICMobileNo", "Office_ID", "LastupdatedBy", "LastupdatedByIP", "OICMaster_ID" }
-                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OICID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_UpdateOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "OICEmailID", "Office_ID", "LastupdatedBy", "LastupdatedByIP", "OICMaster_ID" }
+                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue,txtoicnme.Text.Trim(), txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OICID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -104,6 +105,8 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                         ddlzone.ClearSelection();
                         ddlcircle.ClearSelection();
                         ddldivision.ClearSelection();
+                        ddlDesignation.ClearSelection();
+                        txtEmailID.Text = "";
                         txtoicnme.Text = "";
                         txtmobileno.Text = "";
                         ViewState["OICID"] = "";
@@ -126,6 +129,28 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 txtoicnme.Text = "";
                 txtmobileno.Text = "";
             }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+    #endregion
+    #region Fill Designation
+    protected void FillDesignation()
+    {
+        try
+        {
+            ddlDesignation.Items.Clear();
+            ds = obj.ByDataSet("select Designation_Id, Designation_Name from tblDesignationMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlDesignation.DataValueField = "Designation_Id";
+                ddlDesignation.DataTextField = "Designation_Name";
+                ddlDesignation.DataSource = ds;
+                ddlDesignation.DataBind();
+            }
+            ddlDesignation.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
@@ -160,24 +185,30 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 Label lblDivisionID = (Label)row.FindControl("lblDivisionID");
                 Label lblOICName = (Label)row.FindControl("lblOICName");
                 Label lblMobileNo = (Label)row.FindControl("lblMobileNo");
+                Label lblDesignationId = (Label)row.FindControl("lblDesignationId");
+                Label lblEmailID = (Label)row.FindControl("lblEmailID");
 
+                ViewState["OICID"] = e.CommandArgument;
+                btnSave.Text = "Update";
+                txtoicnme.Text = lblOICName.Text;
+                txtEmailID.Text = lblEmailID.Text;
+                txtmobileno.Text = lblMobileNo.Text;
                 ddlzone.ClearSelection();
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
                 ddlzone_SelectedIndexChanged(sender, e);
                 ddlcircle.ClearSelection();
                 ddlcircle.Items.FindByValue(lblCircleID.Text).Selected = true;
-                ddlcircle_SelectedIndexChanged( sender,  e);
+                ddlcircle_SelectedIndexChanged(sender, e);
                 ddldivision.ClearSelection();
                 ddldivision.Items.FindByValue(lblDivisionID.Text).Selected = true;
-                txtoicnme.Text = lblOICName.Text;
-                txtmobileno.Text = lblMobileNo.Text;
-                ViewState["OICID"] = e.CommandArgument;
-                btnSave.Text = "Update";
+                ddlDesignation.ClearSelection();
+                ddlDesignation.Items.FindByValue(lblDesignationId.Text).Selected = true;
+                
             }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+          //  lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     protected void ddlzone_SelectedIndexChanged(object sender, EventArgs e)

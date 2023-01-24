@@ -38,7 +38,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         {
 
             ds = obj.ByProcedure("USP_SelectCircleMaster", new string[] { "flag" }
-                    , new string[] {"1" }, "dataset");
+                    , new string[] { "1" }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 GrdZoneCircle.DataSource = ds;
@@ -105,6 +105,8 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                         ddlzone.ClearSelection();
                         txtCircleName.Text = "";
                         txtCircleCode.Text = "";
+                        FillGrid();
+                        btnSave.Text = "Save";
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
@@ -116,11 +118,6 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 {
                     lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Warning !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
                 }
-                FillGrid();
-                btnSave.Text = "Save";
-                ddlzone.ClearSelection();
-                txtCircleName.Text = "";
-                txtCircleCode.Text = "";
             }
         }
         catch (Exception ex)
