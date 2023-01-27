@@ -89,6 +89,28 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
+
+                    //declare 
+                    //@CircleCode varchar(20) = NUll,
+                    //@Zone_ID int = 1,
+                    //@newCode varchar(20) = null,
+                    //@newddd varchar(10) = null
+
+                    //        IF Exists(select MAX(Zone_ID) from tblCircleMaster where Zone_ID = @Zone_ID)
+                    //        Begin
+                    //        select @newddd =  count(Zone_ID) from tblCircleMaster where Zone_ID = @Zone_ID GROUP by Zone_ID
+                    //        Set @newCode = (@newddd)
+
+                    //                set @CircleCode = right('00' + cast(@newCode + 1 as varchar),2) 
+
+                    //                select @CircleCode
+                    //        end
+                    //        else
+                    //        begin
+                    //                set @CircleCode = '01'
+
+                    //                select @CircleCode
+                    //        end
                     ds = obj.ByProcedure("USP_Insert_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "CreatedBy", "CreatedByIP", "Office_Id" }
                     , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), txtCircleCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
                 }
