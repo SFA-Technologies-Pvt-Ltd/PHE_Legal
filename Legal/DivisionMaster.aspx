@@ -85,21 +85,21 @@
                                                 <asp:TextBox ID="txtDivisionName" runat="server" CssClass="form-control" MaxLength="80" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" AutoComplete="off" placeholder="Enter Division Name"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3" style="display:none;">
                                             <div class="form-group">
                                                 <label>Division Code<span style="color: red;"><b> *</b></span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
+                                                   <%-- <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
                                                         ErrorMessage="Enter Division Code" Text="<i class='fa fa-exclamation-circle' title='Required'></i>"
                                                         ControlToValidate="txtDivisionCode" ForeColor="Red" Display="Dynamic" runat="server">
-                                                    </asp:RequiredFieldValidator>
+                                                    </asp:RequiredFieldValidator>--%>
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtDivisionCode" CssClass="form-control" MaxLength="8" onkeypress="return NumberOnly();" AutoComplete="off" placeholder="Enter Division Code"></asp:TextBox>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
+                                  <%--  </div>
+                                    <div class="row">--%>
+                                        <div class="col-md-3 pt-3">
                                             <div class="row">
                                                 <div class="col-md-6" style="margin-top: 1rem;">
                                                     <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />

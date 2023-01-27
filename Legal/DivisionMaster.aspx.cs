@@ -88,13 +88,19 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
-                    , new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
+                    //, new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+
+                    ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
+                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["DivisionID"].ToString() != "" && ViewState["DivisionID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
-                    , new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
+                    //, new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
+
+                    ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
+                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {

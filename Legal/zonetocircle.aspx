@@ -73,14 +73,14 @@
                                                 <asp:TextBox ID="txtCircleName" runat="server" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" AutoComplete="off" placeholder="Enter Circle Name" MaxLength="80"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3" style="display:none;">
                                             <div class="form-group">
                                                 <label>Circle Code<span style="color: red;"><b> *</b></span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
+                                                   <%-- <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
                                                         ErrorMessage="Enter Cirlce Code" Text="<i class='fa fa-exclamation-circle' title='Required'></i>"
                                                         ControlToValidate="txtCircleCode" ForeColor="Red" Display="Dynamic" runat="server">
-                                                    </asp:RequiredFieldValidator>
+                                                    </asp:RequiredFieldValidator>--%>
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtCircleCode" CssClass="form-control" MaxLength="8" onkeypress="return NumberOnly();" AutoComplete="off" placeholder="Enter Circle Code"></asp:TextBox>
                                             </div>
