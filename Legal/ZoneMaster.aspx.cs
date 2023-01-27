@@ -33,7 +33,7 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_SelectZoneMaster", new string[] { }
+            ds = obj.ByProcedure("USP_Select_ZoneMaster", new string[] { }
                     , new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -61,12 +61,12 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertZoneMaster", new string[] { "ZoneName", "ZoneCode", "CreatedBy", "CreatedByIP", "Office_Id" }
+                    ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "CreatedBy", "CreatedByIP", "Office_Id" }
                     , new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["ZoneID"].ToString() != "" && ViewState["ZoneID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateZoneMaster", new string[] { "ZoneName", "ZoneCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
+                    ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
                     , new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)

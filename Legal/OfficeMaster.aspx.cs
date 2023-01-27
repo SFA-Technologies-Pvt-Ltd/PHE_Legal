@@ -33,7 +33,7 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
 
     protected void FillGrid()
     {
-        ds = obj.ByProcedure("USP_SelectOfficeMaster", new string[] { }, new string[] { }, "dataset");
+        ds = obj.ByProcedure("USP_Select_OfficeMaster", new string[] { }, new string[] { }, "dataset");
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             GrdOfficeMaster.DataSource = ds;
@@ -51,7 +51,7 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
         try
         {
             ddlOfficeType.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_Officetype", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name from tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlOfficeType.DataTextField = "OfficeType_Name";
@@ -75,12 +75,12 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertOfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "CreatedBy", "CreatedByIP" }
+                    ds = obj.ByProcedure("USP_Insert_OfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "CreatedBy", "CreatedByIP" }
                         , new string[] { ddlOfficeType.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["OfficeID"].ToString() != "" && ViewState["OfficeID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateOfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "LastupdatedBy", "LastupdatedByIP", "Office_Id" }
+                    ds = obj.ByProcedure("USP_Update_OfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "LastupdatedBy", "LastupdatedByIP", "Office_Id" }
                         , new string[] { ddlOfficeType.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OfficeID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)

@@ -35,7 +35,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_SelectOfficetypeMaster", new string[] { }
+            ds = obj.ByProcedure("USP_Select_OfficetypeMaster", new string[] { }
                     , new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

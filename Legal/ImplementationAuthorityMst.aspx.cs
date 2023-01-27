@@ -82,7 +82,7 @@ public partial class Legal_ImplementationAuthorityMst : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_Legal_SelectIAuthorityMst", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByProcedure("USP_Select_ImplementAuthorityMst", new string[] { }, new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 GrdImpleAuthority.DataSource = ds;
@@ -106,7 +106,7 @@ public partial class Legal_ImplementationAuthorityMst : System.Web.UI.Page
         try
         {
             ddlOfficetype.ClearSelection();
-            ds = obj.ByProcedure("USP_SelectOfficetypeMaster", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlOfficetype.DataValueField = "OfficeType_Id";
@@ -131,12 +131,12 @@ public partial class Legal_ImplementationAuthorityMst : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_LegalInsert_IAuthMst", new string[] { "Officetype_Id", "Office_Id", "IAuthority_Name", "IAuthority_MobileNo", "IAuthority_EmailID", "UserType_Id", "District_Id", "CreatedBy", "CreatedByIP" }
-                        , new string[] {ddlOfficetype.SelectedValue,ddlOfficeName.SelectedValue, txtAuthorityName.Text.Trim(), txtMobileNo.Text.Trim(), txtEmailID.Text.Trim(), ddlDesignation.SelectedValue, ddlLocation.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_ImplementionAuthMst", new string[] { "OfficeType_Id", "Office_Id", "IAuthority_Name", "IAuthority_MobileNo", "IAuthority_EmailID", "UserType_Id", "District_Id", "CreatedBy", "CreatedByIP" }
+                        , new string[] { ddlOfficetype.SelectedValue, ddlOfficeName.SelectedValue, txtAuthorityName.Text.Trim(), txtMobileNo.Text.Trim(), txtEmailID.Text.Trim(), ddlDesignation.SelectedValue, ddlLocation.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["AuthorityID"].ToString() != "" && ViewState["AuthorityID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_Legal_UpdateIAuthorityMst", new string[] {"Officetype_Id", "Office_Id", "IAuthority_Name", "IAuthority_MobileNo", "IAuthority_EmailID", "UserType_Id", "District_Id", "LastUpdatedby", "LastUpdatedByIP", "IAuthority_ID" }
+                    ds = obj.ByProcedure("USP_Update_ImplementAuthorityMst", new string[] { "OfficeType_Id", "Office_Id", "IAuthority_Name", "IAuthority_MobileNo", "IAuthority_EmailID", "UserType_Id", "District_Id", "LastUpdatedby", "LastUpdatedByIP", "IAuthority_ID" }
                         , new string[] { ddlOfficetype.SelectedValue, ddlOfficeName.SelectedValue, txtAuthorityName.Text.Trim(), txtMobileNo.Text.Trim(), txtEmailID.Text.Trim(), ddlDesignation.SelectedValue, ddlLocation.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["AuthorityID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -216,7 +216,7 @@ public partial class Legal_ImplementationAuthorityMst : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-           
+
         }
     }
     protected void ddlOfficetype_SelectedIndexChanged(object sender, EventArgs e)
@@ -226,7 +226,7 @@ public partial class Legal_ImplementationAuthorityMst : System.Web.UI.Page
             lblMsg.Text = "";
             ddlOfficeName.Items.Clear();
             ds = obj.ByProcedure("USP_legal_select_OfficeName", new string[] { "OfficeType_Id" }
-                , new string[] { ddlOfficetype.SelectedValue}, "dataset");
+                , new string[] { ddlOfficetype.SelectedValue }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlOfficeName.DataValueField = "Office_Id";

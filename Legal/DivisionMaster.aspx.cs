@@ -60,7 +60,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_SelectDivisionMaster", new string[] { }
+            ds = obj.ByProcedure("USP_Select_DivisionMaster", new string[] { }
                    , new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -88,12 +88,12 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertDivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
+                    ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
                     , new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["DivisionID"].ToString() != "" && ViewState["DivisionID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpateDivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
+                    ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
                     , new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -176,7 +176,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         {
             lblMsg.Text = "";
             ddlCircleName.Items.Clear();
-            ds = obj.ByProcedure("USP_SelectCircleMaster", new string[] { "flag", "Zone_ID" }
+            ds = obj.ByProcedure("USP_Select_CircleMaster", new string[] { "flag", "Zone_ID" }
                     , new string[] { "2", ddlzone.SelectedValue }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

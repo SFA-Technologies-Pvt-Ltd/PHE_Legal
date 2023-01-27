@@ -58,7 +58,7 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
         try
         {
             ddlOfficetypename.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_Officetype", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlOfficetypename.DataTextField = "OfficeType_Name";

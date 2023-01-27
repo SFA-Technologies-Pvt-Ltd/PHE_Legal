@@ -54,11 +54,11 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         try
         {
             ddldesignation.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_DesignationMaster", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByDataSet("select Designation_Id,Designation_Name from tblDesignationMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddldesignation.DataTextField = "UserType_Name";
-                ddldesignation.DataValueField = "UserType_Id";
+                ddldesignation.DataTextField = "Designation_Name";
+                ddldesignation.DataValueField = "Designation_Id";
                 ddldesignation.DataSource = ds;
                 ddldesignation.DataBind();
             }
@@ -236,8 +236,7 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         try
         {
             ddlOfficeType.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_Officetype", new string[] { }
-           , new string[] { }, "dataset");
+            ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name From tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlOfficeType.DataTextField = "OfficeType_Name";
@@ -392,10 +391,10 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                     {
                         txtWPCaseNo.Text = ds.Tables[0].Rows[0]["CurrentOfficeStatus"].ToString();
                     }
-                    if (ds.Tables[0].Rows[0]["UserType_Id"].ToString() != "")
+                    if (ds.Tables[0].Rows[0]["Designation_Id"].ToString() != "")
                     {
                         ddldesignation.ClearSelection();
-                        ddldesignation.Items.FindByValue(ds.Tables[0].Rows[0]["UserType_Id"].ToString()).Selected = true;
+                        ddldesignation.Items.FindByValue(ds.Tables[0].Rows[0]["Designation_Id"].ToString()).Selected = true;
 
                     }
                     if (ds.Tables[0].Rows[0]["NodalOfficer_Name"].ToString() != "")

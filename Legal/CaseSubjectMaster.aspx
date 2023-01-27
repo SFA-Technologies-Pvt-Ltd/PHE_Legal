@@ -16,8 +16,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <div class="content-wrapper">
-        <asp:ValidationSummary ID="vs" runat="server" ValidationGroup="a" ShowMessageBox="true" ShowSummary="false" />
+      <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />   
          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
@@ -45,6 +44,7 @@
             </div>
         </div>
     </div>
+     <div class="content-wrapper">     
         <section class="content">
             <div class="container-fluid">
                 <div class="box">
@@ -66,7 +66,7 @@
                                             <div class="form-group">
                                                 <label>Case Subject Code<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="Rfv2" ValidationGroup="a"
+                                                    <asp:RequiredFieldValidator ID="Rfv2" ValidationGroup="Save"
                                                         ErrorMessage="Enter Case Subject Code" Text="<i class='fa fa-exclamation-circle' title='Enter Case Subject Code'></i>"
                                                         ControlToValidate="txtCaseSubjectCode" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
@@ -78,7 +78,7 @@
                                             <div class="form-group">
                                                 <label>Case Subject<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="a"
+                                                    <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="Save"
                                                         ErrorMessage="Enter Case Subject" Text="<i class='fa fa-exclamation-circle' title='Enter Case Subject'></i>"
                                                         ControlToValidate="txtCaseSubject" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
@@ -91,7 +91,7 @@
                                             <div class="form-group">
                                                 <label>Case Subject Detail<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="Tfv3" ValidationGroup="a"
+                                                    <asp:RequiredFieldValidator ID="Tfv3" ValidationGroup="Save"
                                                         ErrorMessage="Enter Case Subject Detail" Text="<i class='fa fa-exclamation-circle' title='Enter Case Subject Detail'></i>"
                                                         ControlToValidate="txtCaseSubjectDetail" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
@@ -106,7 +106,7 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <asp:Button runat="server" ValidationGroup="a" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
+                                                        <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <a href="CaseSubjectMaster.aspx" class="btn btn-default btn-block">Clear</a>

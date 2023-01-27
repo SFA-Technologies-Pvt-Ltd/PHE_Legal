@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="~/Legal/Pending_Case_Since_2000.aspx.cs" Inherits="Legal_Pending_Case_Since_2000" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="~/Legal/Order_By_Direction_Count_IsComplainceNo.aspx.cs" Inherits="Legal_Order_By_Direction_Count_IsComplainceNo" %>
 
 <!DOCTYPE html>
 
@@ -264,8 +264,8 @@
                                 <span style="font-size: 18px; color: #e5e5e5" id="spnCaseType" runat="server"></span>
                             </div>
                             <div class="card-body" style="opacity: 1;">
-                                <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found" 
-                                    AutoGenerateColumns="false" CssClass="table-responsive" Width="100%" 
+                                <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found"
+                                    AutoGenerateColumns="false" CssClass="table-responsive" Width="100%"
                                     OnRowEditing="grdCaseTypeDetail_RowEditing" OnRowCommand="grdCaseTypeDetail_RowCommand"
                                     OnRowUpdating="grdCaseTypeDetail_RowUpdating" OnRowCancelingEdit="grdCaseTypeDetail_RowCancelingEdit"
                                     OnRowDataBound="grdCaseTypeDetail_RowDataBound" OnPageIndexChanging="grdCaseTypeDetail_PageIndexChanging" PageSize="5" AllowPaging="true">
@@ -275,44 +275,65 @@
                                                 <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                             </ItemTemplate>
                                         </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Is Order By Direction">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblIsOrderByDirection" Text='<%#Eval("IsOrderByDirection") %>' runat="server" />
+                                            </ItemTemplate>
+                                            <%--<EditItemTemplate>
+                                                <asp:DropDownList ID="ddlIsOrderByDirection" runat="server">
+                                                    <asp:ListItem Text="Select" />
+                                                    <asp:ListItem Text="Yes" />
+                                                    <asp:ListItem Text="No" />
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>--%>
+                                        </asp:TemplateField>
                                         <asp:BoundField DataField="FilingNo" HeaderText="Filing No" ReadOnly="true" />
                                         <asp:BoundField DataField="Court" HeaderText="Court" ReadOnly="true" />
                                         <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" ReadOnly="true" />
-                                        
-                                         <asp:TemplateField HeaderText="Respondent">
+
+                                        <asp:TemplateField HeaderText="Respondent" >
                                             <ItemTemplate>
                                                 <asp:Label ID="lblRespondent" Text='<%#Eval("Respondent") %>' runat="server" />
                                             </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtRespondent" TextMode="MultiLine"  Text='<%#Eval("Respondent") %>' runat="server" />
-                                            </EditItemTemplate>
+                                           <%-- <EditItemTemplate>
+                                                <asp:TextBox ID="txtRespondent" TextMode="MultiLine" Text='<%#Eval("Respondent") %>' runat="server" />
+                                            </EditItemTemplate>--%>
                                         </asp:TemplateField>
-                                          <asp:TemplateField HeaderText="Respondent Office">
+                                        <asp:TemplateField HeaderText="Respondent Office" >
                                             <ItemTemplate>
                                                 <asp:Label ID="txtRespondentOffice" Text='<%#Eval("RespondentOffice") %>' runat="server" />
                                             </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtRespondentOffice"  TextMode="MultiLine" Text='<%#Eval("RespondentOffice") %>' runat="server" />
+                                            <%--<EditItemTemplate>
+                                                <asp:TextBox ID="txtRespondentOffice" TextMode="MultiLine" Text='<%#Eval("RespondentOffice") %>' runat="server" />
                                                 <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
                                                 <asp:HiddenField ID="hdnCaseNo" runat="server" Value='<%#Eval("CaseNo") %>' />
-                                            </EditItemTemplate>
+                                            </EditItemTemplate>--%>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Case Subject">
+                                        <asp:TemplateField HeaderText="Case Subject"  >
                                             <ItemTemplate>
                                                 <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
                                             </ItemTemplate>
-                                            <EditItemTemplate>
+                                           <%-- <EditItemTemplate>
                                                 <asp:DropDownList ID="ddlCaseSubject" runat="server">
                                                 </asp:DropDownList>
-                                            </EditItemTemplate>
+                                            </EditItemTemplate>--%>
+                                        </asp:TemplateField> 
+                                        <asp:TemplateField HeaderText="Case Sub Subject" >
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblCaseSubSubjectId" Text='<%#Eval("CaseSubSubjectId") %>' runat="server" />
+                                            </ItemTemplate>
+                                           <%-- <EditItemTemplate>
+                                                <asp:TextBox runat="server" ID="txtCaseSubSubjectId" Text="1" ReadOnly="true"/>  
+                                            </EditItemTemplate>--%>
                                         </asp:TemplateField>
-                                      
+
                                         <asp:TemplateField HeaderText="OIC Name">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblOICName" Text='<%#Eval("OICId") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
-                                                <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId") %>' runat="server" />                                                
+                                                <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId")%>' runat="server" />
+                                                 <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
                                                 <asp:DropDownList ID="ddlOICName" runat="server" OnTextChanged="ddlOICName_TextChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </EditItemTemplate>
@@ -325,12 +346,20 @@
                                                 <asp:TextBox ID="txtOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" ReadOnly="true" />
                                             </EditItemTemplate>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Hearing Date">
+                                       <%-- <asp:TemplateField HeaderText="Hearing Date">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblHearingDate" Text='<%#Eval("HearingDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:TextBox ID="txtHearingDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("HearingDate","{0:dd/MM/yyyy}") %>' runat="server" />
+                                            </EditItemTemplate>
+                                        </asp:TemplateField>--%>
+                                        <asp:TemplateField HeaderText="Order Compliance Date">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblOrderComplianceDate" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:TextBox ID="txtOrderComplianceDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                             </EditItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="Remarks">
@@ -341,8 +370,21 @@
                                                 <asp:TextBox ID="txtRemarks" TextMode="MultiLine" Text='<%#Eval("Remarks") %>' runat="server" />
                                             </EditItemTemplate>
                                         </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Is Complaince">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblIsComplaince" Text='<%#Eval("IsComplaince") %>' runat="server" />
+                                            </ItemTemplate>
+                                            <EditItemTemplate>
+                                                <asp:DropDownList ID="ddlIsComplaince" runat="server">
+                                                    <asp:ListItem Text="Select" />
+                                                    <asp:ListItem Text="Yes" />
+                                                    <asp:ListItem Text="No" />
+                                                    <asp:ListItem Text="Pending" />
+                                                </asp:DropDownList>
+                                            </EditItemTemplate>
+                                        </asp:TemplateField>
                                         
-
+                                        
                                         <asp:CommandField ShowEditButton="true" ShowCancelButton="true" ShowHeader="true" />
                                         <%-- <asp:TemplateField HeaderText="Edit" >
                                     <ItemTemplate>

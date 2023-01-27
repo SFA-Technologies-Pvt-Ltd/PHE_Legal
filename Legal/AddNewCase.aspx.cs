@@ -119,7 +119,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
     protected void BindOfficeType()
     {
         ddlOfficetypeName.Items.Clear();
-        ds = objdb.ByProcedure("USP_Select_Officetype", new string[] { }, new string[] { }, "dataset");
+        ds = objdb.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             ddlOfficetypeName.DataTextField = "OfficeType_Name";

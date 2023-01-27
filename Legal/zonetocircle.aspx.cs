@@ -37,7 +37,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         try
         {
 
-            ds = obj.ByProcedure("USP_SelectCircleMaster", new string[] { "flag" }
+            ds = obj.ByProcedure("USP_Select_CircleMaster", new string[] { "flag" }
                     , new string[] { "1" }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -89,12 +89,12 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertCircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "CreatedBy", "CreatedByIP", "Office_Id" }
+                    ds = obj.ByProcedure("USP_Insert_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "CreatedBy", "CreatedByIP", "Office_Id" }
                     , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), txtCircleCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["CircleID"].ToString() != "" && ViewState["CircleID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateCircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Circle_ID" }
+                    ds = obj.ByProcedure("USP_Update_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Circle_ID" }
                     , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), txtCircleCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["CircleID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)

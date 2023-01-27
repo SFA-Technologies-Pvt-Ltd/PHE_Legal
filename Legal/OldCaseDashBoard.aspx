@@ -3,6 +3,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 
     <style>
+        #myModal {
+            padding-right: 256px;
+            /*padding: 0 256px 0 0;*/
+        }
+
         .LegalImage {
             background-image: url("../image/Legal%203.png");
             /*background-position: center;
@@ -110,7 +115,7 @@
         }
 
         .Space {
-            margin-bottom: 40px;
+            margin-bottom: 23px;
         }
 
         .NewCaseCourtImage {
@@ -162,57 +167,48 @@
           graph                      <div id="piechart" style="width: 900px; height: 500px;"></div>--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+    <asp:ScriptManager runat="server" />
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 80%; position: absolute; left: 10%;">
             <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
                 <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
                     <div class="modal-header" style="background-color: #D9D9D9;">
-                        <span class="modal-title" style="float: left" id="myModalLabel">High Priority Case Details</span>
+                        <span class="modal-title" id="myModalLabel">
+                            <h5>High Priority Case Details</h5>
+                        </span>
                         <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            <span aria-hidden="true" style="font-size: 28px;">&times;</span><span class="sr-only">Close</span>
                         </button>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="modal-body">
+                    <div class="modal-body scroll-smooth">
                         <div class="container-fluid">
                             <fieldset>
                                 <legend>High Priority Case</legend>
-
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-lg">
                                         <div class="table-responsive">
-                                            <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false">
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="S.No.">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Case Subject">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblCaseSubject" runat="server" Text='<%# Eval("CaseSubject") %>'></asp:Label>
-
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Case No.">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("CaseNO") %>'></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Petitioner Name">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetionerName") %>'></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Court Name">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:BoundField HeaderText="High Priority Case" DataField="HighPrirtyCaseSts" />
-                                                    <asp:BoundField HeaderText="High Priority Case" DataField="Casetype_Name" />
-                                                </Columns>
-                                            </asp:GridView>
+                                            <asp:UpdatePanel runat="server" ID="up1">
+                                                <ContentTemplate>
+                                                    <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table-responsive" Width="100%" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdHighpriorityCase_PageIndexChanging"
+                                                        AutoGenerateColumns="false">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="S.No.">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:BoundField DataField="FilingNo" HeaderText="Filing No" />
+                                                            <asp:BoundField DataField="Court" HeaderText="Court" />
+                                                            <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
+                                                            <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
+                                                            <asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
+                                                            <asp:BoundField DataField="CaseSubject" HeaderText="CaseSubject" />
+                                                            <asp:BoundField DataField="OICName" HeaderText="OICName" />
+                                                        </Columns>
+                                                    </asp:GridView>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
                                         </div>
                                     </div>
                                 </div>
@@ -234,60 +230,96 @@
                 <asp:Label ID="lblMsg" runat="server"></asp:Label>
                 <div class="card">
                     <div class="card-header" style="text-align: center;">
-                        <span style="font-size: 18px; color: #e5e5e5">Old Cases Dashboard</span>
+                        <span style="font-size: 18px; color: #e5e5e5">Running Cases Dashboard</span>
                     </div>
 
-                    <div class="card-body" style="opacity: 1;">
-                        <div class="row Space">
-                            <div class="col-md-12">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
-                                <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL Case<span id="spnhighpriorityCase" runat="server" style="font-weight: bold;"></span></asp:LinkButton>
-                            </div>
-                        </div>
-                        <div class="row Space">
-                            <div class="col-md-6">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE :
-                                    <asp:Label ID="lblCaseCount" runat="server" CssClass="Heading" />
-                                </span>
-                            </div>
-                            <div class="col-md-6">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE TYPE WISE :(TOTAL PENDING CASES : <span id="CasetypeCountno" runat="server" class="Heading"></span>No's)</span>
-                            </div>
+                    <div class="align-items-center;" style="border: 5px solid;text-align: center;">
 
-                        </div>
-
-                        <div class="row Space">
-                            <%-- <div class="col-md-1"></div>--%>
-                            <div class="col-md-6">
-                                <%--<img src="../image/Courtwise.png"  class="NewCaseCourtImage"/>--%>
-                                <%--  <img src="../image/New1.png" class="NewCaseCourtImage"/>--%>
-                                <div id="sbid" runat="server"></div>
-                                <br />
-                                <div class="col-md-6 Headerwidth">
-                                    <img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE CONTEMP CASES:
-                                    <asp:Label ID="lblConcCount" runat="server" CssClass="Heading" />
-                                    </span>
+                        <div class="card-body">
+                            <div class="row Space">
+                                <div class="col-md-12">
+                                    <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
+                                    <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL <span id="spnhighpriorityCase" runat="server" style="font-weight: bold; font-size: 18px;"></span></asp:LinkButton>
                                 </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row  Space">
+                            <div class="col-md-5">
+                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE :
+                                    <asp:Label ID="lblCaseCount" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>
+                                <div id="sbid" runat="server"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE ORDER BY DIRECTION :
+                                    <asp:Label ID="lblCaseCount1" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>
+                                <div id="sbid1" runat="server"></div>
+                            </div>
+                        </div>
+                        <div class="row  Space">
+                            <div class="col-md-5">
+                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE SUBJECT WISE :
+                                    <asp:Label ID="lblCaseCount2" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>
+                                <div id="sbid2" runat="server"></div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE CONTEMPT CASES:
+                                    <asp:Label ID="lblConcCount" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>
                                 <div id="cwcc" runat="server"></div>
                             </div>
 
-                            <%-- <div class="col-md-1"></div>--%>
 
-                            <div class="col-md-6">
-                                <%--  <img src="../image/New2.png" class="NewCaseCourtImage" />--%>
-                                <%--<img src="../image/CaseWise.png" class="NewCaseCourtImage" />--%>
-                                <div id="CasetypeCountID" runat="server"></div>
-                            </div>
                         </div>
+                        <div class="row  Space">
+                            <div class="col-md-5">
+                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION COMPLAINES :
+                                    <asp:Label ID="lblCaseCount3" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>
+                                <div id="sbid3" runat="server"></div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <%--<img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">
+                                    <asp:Label ID="Label2" runat="server" CssClass="Heading" Style="color: #201f1e;" />
+                                </span>--%>
+                                <div id="Div2" runat="server"></div>
+                            </div>
 
 
+                        </div>
 
                     </div>
                 </div>
+
             </div>
+            <div class="row  Space">
+
+                <div class="col-md-5">
+                    <img src="../image/Legal%201.png" style="height: 25px;" />
+                    &nbsp;&nbsp;<span class="Heading">CASE TYPE WISE :<asp:Label ID="lblCasetypeCountno" runat="server" class="Heading" Style="color: #201f1e;"></asp:Label>
+                    </span>
+                    <div id="CasetypeCountID1" runat="server" style="50%"></div>
+                </div>
+                <div class="col-md-7">
+                    <img src="../image/Legal%201.png" style="height: 25px;" />
+                    &nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION CASES :<asp:Label ID="lblOrderByDirectionalCases" runat="server" class="Heading" Style="color: #201f1e;"></asp:Label>
+                    </span>
+                    <div id="CasetypeCountID2" runat="server" style="50%"></div>
+                </div>
+            </div>
+
+
         </section>
 
     </div>
+
+
 
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">

@@ -149,7 +149,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="GrdImpleAuthority" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="GrdImpleAuthority_PageIndexChanging" OnRowCommand="GrdImpleAuthority_RowCommand" PageSize="10" DataKeyNames="IAuthority_ID">
+                                        <asp:GridView ID="GrdImpleAuthority" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="GrdImpleAuthority_PageIndexChanging" OnRowCommand="GrdImpleAuthority_RowCommand" PageSize="10" DataKeyNames="IAuthority_ID" EmptyDataText="NO RECORD FOUND">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>

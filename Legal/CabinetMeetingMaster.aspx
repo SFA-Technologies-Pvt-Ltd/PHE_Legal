@@ -110,7 +110,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="table-responsive">
-                                            <asp:GridView runat="server" DataKeyNames="CabinetId" ID="gridview" CssClass="table table-bordered table-striped" AutoGenerateColumns="False" OnPageIndexChanging="gridview_PageIndexChanging" AllowPaging="true" PageSize="10" OnRowCommand="gridview_RowCommand">
+                                            <asp:GridView runat="server" DataKeyNames="CabinetId" ID="gridview" CssClass="table table-bordered table-striped" AutoGenerateColumns="False" OnPageIndexChanging="gridview_PageIndexChanging" AllowPaging="true" PageSize="10" OnRowCommand="gridview_RowCommand" EmptyDataText="NO RECORD FOUND">
                                                 <PagerStyle HorizontalAlign="Left" CssClass="GridPager" />
                                                 <Columns>
                                                     <asp:TemplateField HeaderText=" S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">

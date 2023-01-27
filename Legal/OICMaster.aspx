@@ -167,7 +167,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="table-responsive">
-                                                <asp:GridView ID="gridoicmaster" AutoGenerateColumns="false" runat="server" DataKeyNames="OICMaster_ID" OnPageIndexChanging="gridoicmaster_PageIndexChanging" OnRowCommand="gridoicmaster_RowCommand"
+                                                <asp:GridView ID="gridoicmaster" AutoGenerateColumns="false" runat="server" DataKeyNames="OICMaster_ID" OnPageIndexChanging="gridoicmaster_PageIndexChanging" EmptyDataText="NO RECORD FOUND" OnRowCommand="gridoicmaster_RowCommand"
                                                     CssClass="table table-bordered table-hover" PageSize="10" AllowPaging="true">
                                                     <RowStyle HorizontalAlign="Center" />
                                                     <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />

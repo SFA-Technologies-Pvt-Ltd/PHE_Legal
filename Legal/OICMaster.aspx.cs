@@ -36,7 +36,7 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_SelectOICMaster", new string[] { }
+            ds = obj.ByProcedure("USP_Select_OICMaster", new string[] { }
                     , new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -89,13 +89,13 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "Office_ID", "CreatedBy", "CreatedByIP" }
-                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue, txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_OICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "OICEmailID", "Office_ID", "CreatedBy", "CreatedByIP" }
+                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue, txtmobileno.Text.Trim(),txtEmailID.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["OICID"].ToString() != "" && ViewState["OICID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateOICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "OICEmailID", "Office_ID", "LastupdatedBy", "LastupdatedByIP", "OICMaster_ID" }
-                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue,txtoicnme.Text.Trim(), txtmobileno.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OICID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_OICMaster", new string[] { "Zone_ID", "Circle_ID", "Division_ID", "OICName", "Designation_ID", "OICMobileNo", "OICEmailID", "Office_ID", "LastupdatedBy", "LastupdatedByIP", "OICMaster_ID" }
+                    , new string[] { ddlzone.SelectedValue, ddlcircle.SelectedValue, ddldivision.SelectedValue, txtoicnme.Text.Trim(), ddlDesignation.SelectedValue,txtmobileno.Text.Trim(),txtEmailID.Text.Trim(), ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OICID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -216,7 +216,7 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
         try
         {
             ddlcircle.Items.Clear();
-            ds = obj.ByProcedure("USP_SelectCircleMaster", new string[] { "flag", "Zone_ID" }
+            ds = obj.ByProcedure("USP_Select_CircleMaster", new string[] { "flag", "Zone_ID" }
                     , new string[] { "2", ddlzone.SelectedValue }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

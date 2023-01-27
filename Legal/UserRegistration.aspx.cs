@@ -39,7 +39,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         {
             grdUserDetails.DataSource = null;
             grdUserDetails.DataBind();
-            ds = obj.ByProcedure("USP_Legal_Select_UserMaster", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByProcedure("USP_Select_UserMaster", new string[] { }, new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 grdUserDetails.DataSource = ds;
@@ -62,7 +62,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         try
         {
             ddlofficetype.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_Officetype", new string[] { }, new string[] { }, "dataset");
+            ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name from tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ddlofficetype.DataTextField = "OfficeType_Name";
@@ -90,7 +90,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
 
                     if (btnSave.Text == "Save")
                     {
-                        ds = obj.ByProcedure("USP_Legal_Insert_UserMaster", new string[] { "EMPName", "UserName", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
+                        ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "EMPName", "UserName", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
                             , new string[] { txtEmpployeeName.Text.Trim(), ddlOfficeName.SelectedItem.Text.Trim(), txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
 
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
