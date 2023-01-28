@@ -57,15 +57,15 @@
                                                 <asp:TextBox ID="txtZoneName" runat="server" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" placeholder="Enter Zone Name" CssClass="form-control" AutoComplete="off" MaxLength="80"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" style="display:none">
                                             <div class="form-group">
                                                 <label>
                                                     Zone Code
                                             <span style="color: red;"><b>*</b></span></label>
-                                                <asp:RequiredFieldValidator ID="rfvcode" ValidationGroup="Save"
+                                              <%--  <asp:RequiredFieldValidator ID="rfvcode" ValidationGroup="Save"
                                                     ErrorMessage="Enter Zone Code." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtZoneCode" Display="Dynamic" runat="server">
-                                                </asp:RequiredFieldValidator>
+                                                </asp:RequiredFieldValidator>--%>
                                                 <asp:TextBox ID="txtZoneCode" runat="server" placeholder="Enter Zone Code"  onkeypress="return NumberOnly();" CssClass="form-control" AutoComplete="off" MaxLength="80"></asp:TextBox>
                                             </div>
                                         </div>

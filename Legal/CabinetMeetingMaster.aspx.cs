@@ -126,6 +126,9 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
                     {
                         if (ds != null && ds.Tables[0].Rows[0]["stat"].ToString() == "OK")
                         {
+                            btnSave.Text = "Save";
+                            FillGrid();
+                            ClearData();
                             lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ds.Tables[0].Rows[0]["msg"].ToString());
                         }
                     }
@@ -138,9 +141,7 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
                 {
                     ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
                 }
-                btnSave.Text = "Save";
-                FillGrid();
-                ClearData();
+                
             }
         }
         catch (Exception ex)

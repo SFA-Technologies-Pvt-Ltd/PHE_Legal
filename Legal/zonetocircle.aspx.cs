@@ -146,7 +146,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 Label lblZoneID = (Label)row.FindControl("lblZoneID");
                 Label lblCircleName = (Label)row.FindControl("lblCircleName");
                 Label lblCircleCode = (Label)row.FindControl("lblCircleCode");
-                txtCircleCode.Text = lblCircleCode.Text;
+               // txtCircleCode.Text = lblCircleCode.Text;
                 txtCircleName.Text = lblCircleName.Text;
                 ddlzone.ClearSelection();
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;

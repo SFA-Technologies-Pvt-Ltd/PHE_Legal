@@ -61,19 +61,25 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "CreatedBy", "CreatedByIP", "Office_Id" }
-                    , new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "CreatedBy", "CreatedByIP", "Office_Id" }
+                    //, new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "CreatedBy", "CreatedByIP", "Office_Id" }
+                         , new string[] { txtZoneName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["ZoneID"].ToString() != "" && ViewState["ZoneID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
-                    , new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
+                    //, new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
+                                        , new string[] { txtZoneName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
+                        FillGrid();
+                        btnSave.Text = "Save";
                         txtZoneName.Text = "";
                         txtZoneCode.Text = "";
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
@@ -87,10 +93,6 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 {
                     lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Warning !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
                 }
-                FillGrid();
-                btnSave.Text = "Save";
-                txtZoneName.Text = "";
-                txtZoneCode.Text = "";
             }
         }
         catch (Exception ex)
@@ -110,7 +112,7 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 Label lblZoneName = (Label)row.FindControl("lblZoneName");
                 Label lblZoneCode = (Label)row.FindControl("lblZoneCode");
                 txtZoneName.Text = lblZoneName.Text;
-                txtZoneCode.Text = lblZoneCode.Text;
+                //txtZoneCode.Text = lblZoneCode.Text;
                 ViewState["ZoneID"] = e.CommandArgument;
                 btnSave.Text = "Update";
             }
