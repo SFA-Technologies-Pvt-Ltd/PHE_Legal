@@ -182,7 +182,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Petitioner Name<br />याचिकाकर्ता का नाम">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
+                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitonerName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Status<br />स्थिति">

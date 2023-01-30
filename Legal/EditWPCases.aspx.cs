@@ -34,6 +34,8 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                 BindCasetype();
                 BindCaseSubject();
                 FillDesignation();
+                FillOfficetype_EditRes();
+                FillDesig_EditRes();
             }
         }
         else
@@ -42,35 +44,65 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
 
     }
-
     protected void Page_PreRender(object sender, EventArgs e)
     {
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
     }
-
     #region Fill Designarion
     protected void FillDesignation()
     {
         try
         {
             ddldesignation.Items.Clear();
+            ddlDesignation_Res.Items.Clear();
             ds = obj.ByDataSet("select Designation_Id,Designation_Name from tblDesignationMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddldesignation.DataTextField = "Designation_Name";
+                ddldesignation.DataTextField = "Designation_Name"; // for Petitioner
                 ddldesignation.DataValueField = "Designation_Id";
                 ddldesignation.DataSource = ds;
                 ddldesignation.DataBind();
+
+                ddlDesignation_Res.DataTextField = "Designation_Name";// for for Add_Respondent
+                ddlDesignation_Res.DataValueField = "Designation_Id";
+                ddlDesignation_Res.DataSource = ds;
+                ddlDesignation_Res.DataBind();
+
+                ddlDesig_EditRes.DataTextField = "Designation_Name"; // for Edit_Respondent
+                ddlDesig_EditRes.DataValueField = "Designation_Id";
+                ddlDesig_EditRes.DataSource = ds;
+                ddlDesig_EditRes.DataBind();
             }
             ddldesignation.Items.Insert(0, new ListItem("Select", "0"));
+            ddlDesig_EditRes.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    #endregion
+    protected void FillDesig_EditRes()
+    {
+        try
+        {
+            ddlDesig_EditRes.Items.Clear();
+            ds = obj.ByDataSet("select Designation_Id,Designation_Name from tblDesignationMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlDesig_EditRes.DataTextField = "Designation_Name"; // for Edit_Respondent
+                ddlDesig_EditRes.DataValueField = "Designation_Id";
+                ddlDesig_EditRes.DataSource = ds;
+                ddlDesig_EditRes.DataBind();
+            }
+            ddlDesignation_Res.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
 
+    #endregion
     #region Fill CaseSubject
     protected void BindCaseSubject()
     {
@@ -93,28 +125,27 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Fill Respondent
     protected void BindRespondertype()
     {
         try
         {
-            ddlResponderType.Items.Clear();
+            ddlResponderType_Res.Items.Clear();
             ddlEditRespondertype.Items.Clear();
             ds = obj.ByProcedure("USP_Get_ResponderType", new string[] { }, new string[] { }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddlResponderType.DataTextField = "RespondertypeName";
-                ddlResponderType.DataValueField = "Respondertype_ID";
-                ddlResponderType.DataSource = ds;
-                ddlResponderType.DataBind();
+                ddlResponderType_Res.DataTextField = "RespondertypeName";
+                ddlResponderType_Res.DataValueField = "Respondertype_ID";
+                ddlResponderType_Res.DataSource = ds;
+                ddlResponderType_Res.DataBind();
 
                 ddlEditRespondertype.DataTextField = "RespondertypeName";
                 ddlEditRespondertype.DataValueField = "Respondertype_ID";
                 ddlEditRespondertype.DataSource = ds;
                 ddlEditRespondertype.DataBind();
             }
-            ddlResponderType.Items.Insert(0, new ListItem("Select", "0"));
+            ddlResponderType_Res.Items.Insert(0, new ListItem("Select", "0"));
             ddlEditRespondertype.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
@@ -123,7 +154,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Fill Year
     protected void BindYear()
     {
@@ -138,7 +168,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         ddlWPCaseYear.Items.Insert(0, new ListItem("Select", "0"));
     }
     #endregion
-
     #region Fill CaseDispose Status
     protected void CaseDisposeStatus() // Case Dispose By Default On NO condtiton
     {
@@ -157,7 +186,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Fill Case DisposeType
     protected void BindDisposeType()
     {
@@ -181,7 +209,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Fill CaseType
     protected void BindCasetype()
     {
@@ -205,7 +232,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Hearing Datatable
     protected void HearingDatacolumn()
     {
@@ -220,7 +246,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         ViewState["HearingDt"] = dt;
     }
     #endregion
-
     protected void FieldClose()
     {
         Case_EditField.Visible = false;
@@ -229,22 +254,51 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         FieldSet_ResponderDetail.Visible = false;
         Field_AddResponder.Visible = false;
     }
-
     #region Fill OfficeType
     protected void BindOfficeType()
     {
         try
         {
             ddlOfficeType.Items.Clear();
+            ddlOfficeType_Res.Items.Clear();
+
             ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name From tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ddlOfficeType.DataTextField = "OfficeType_Name";
+                ddlOfficeType.DataTextField = "OfficeType_Name"; // for Petitioner Office
                 ddlOfficeType.DataValueField = "OfficeType_Id";
                 ddlOfficeType.DataSource = ds;
                 ddlOfficeType.DataBind();
+
+                ddlOfficeType_Res.DataTextField = "OfficeType_Name"; // for Add_respondent
+                ddlOfficeType_Res.DataValueField = "OfficeType_Id";
+                ddlOfficeType_Res.DataSource = ds;
+                ddlOfficeType_Res.DataBind();
             }
             ddlOfficeType.Items.Insert(0, new ListItem("Select", "0"));
+            ddlOfficeType_Res.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
+    protected void FillOfficetype_EditRes()
+    {
+        try
+        {
+            ddlOfficetype_EditRes.Items.Clear();
+            ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name From tblOfficeTypeMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficetype_EditRes.DataTextField = "OfficeType_Name"; // for Edit_respondent
+                ddlOfficetype_EditRes.DataValueField = "OfficeType_Id";
+                ddlOfficetype_EditRes.DataSource = ds;
+                ddlOfficetype_EditRes.DataBind();
+
+            }
+            ddlOfficetype_EditRes.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
@@ -252,7 +306,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Fill MainDetails
     protected void BindDetails()
     {
@@ -315,12 +368,11 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
         finally { ds.Clear(); }
     }
     #endregion
-
     #region Fill ResponderRowCommand
     protected void GrdResponderDtl_RowCommand(object sender, GridViewCommandEventArgs e)  // Navigate on the Edit Case Detail Div.
     {
@@ -337,17 +389,29 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                 Label lblDepartent = (Label)row.FindControl("lblDepartent");
                 Label lblAddress = (Label)row.FindControl("lblAddress");
                 Label lblrespondertypeID = (Label)row.FindControl("lblrespondertypeID");
-                Label lblOicName = (Label)row.FindControl("lblOicName");
-                Label lblOicMbileno = (Label)row.FindControl("lblOicMbileno");
-                Label lblOiceEmailid = (Label)row.FindControl("lblOiceEmailid");
-
+                Label lblofficetype_ID = (Label)row.FindControl("lblofficetype_ID");
+                Label lblOffice_ID = (Label)row.FindControl("lblOffice_ID");
+                Label lblDesignation_ID = (Label)row.FindControl("lblDesignation_ID");
                 txtResponderName.Text = lblResponderName.Text;
                 txtResponderNo.Text = lblResponderNo.Text;
                 txtDepartment.Text = lblDepartent.Text;
                 txtAddress.Text = lblAddress.Text;
-                txtOicNameRespondent.Text = lblOicName.Text;
-                txtOicMobileNoRespondent.Text = lblOicMbileno.Text;
-                txtOicEmailIDRespondent.Text = lblOiceEmailid.Text;
+                if (lblofficetype_ID.Text != "")
+                {
+                    ddlOfficetype_EditRes.ClearSelection();
+                    ddlOfficetype_EditRes.Items.FindByValue(lblofficetype_ID.Text).Selected = true;
+                }
+                if (lblOffice_ID.Text != "")
+                {
+                    ddlOfficetype_EditRes_SelectedIndexChanged(sender, e);
+                    ddlOfficename_EditRes.ClearSelection();
+                    ddlOfficename_EditRes.Items.FindByValue(lblOffice_ID.Text).Selected = true;
+                }
+                if (lblDesignation_ID.Text != "")
+                {
+                    ddlDesig_EditRes.ClearSelection();
+                    ddlDesig_EditRes.Items.FindByValue(lblDesignation_ID.Text).Selected = true;
+                }
                 if (lblrespondertypeID.Text != "")
                 {
                     ddlEditRespondertype.ClearSelection();
@@ -360,12 +424,11 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
 
     }
     #endregion
-
     #region Fill Petitioner Dtl
     protected void lnkEditCaseDtl_Click(object sender, EventArgs e)
     {
@@ -487,7 +550,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         finally { ds.Clear(); }
     }
     #endregion
-
     #region Edit Petitioner Dtl
     protected void btnUpdate_Click(object sender, EventArgs e) // Only Case & Petitioner INformation Update.
     {
@@ -576,7 +638,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     protected void lnkAddResponderDtl_Click(object sender, EventArgs e) // Navigate on the Add Responder Div.
     {
         try
@@ -595,7 +656,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     #region Insert Edit Respondent Dtl
     protected void btnAddResponder_Click(object sender, EventArgs e) // Add New Responder.
     {
@@ -606,13 +666,17 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnAddResponder.Text == "Add" && ViewState["ID"].ToString() != null && ViewState["ID"].ToString() != "")
                 {
-                    ds = obj.ByProcedure("USP_Legal_Insert_ResponderName", new string[] { "Case_ID", "Respondertype_ID", "Respondent_Name", "RespondentNo", "Address", "Department", "CreatedBy", "CreatedByIP", "OICNAME", "OICMobileNO", "OICEailID" }
-                        , new string[] { ViewState["ID"].ToString(), ddlResponderType.SelectedValue, txtAddResponderName.Text.Trim(), txtAddResponderNo.Text.Trim(), txtAddResponderAddress.Text.Trim(), txtAddResponderDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), txtOicNameRespondent.Text.Trim(), txtOicMobileNoRespondent.Text.Trim(), txtOicEmailIDRespondent.Text.Trim() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Legal_Insert_ResponderName", new string[] { "Case_ID", "Respondertype_ID", "Respondent_Name", "RespondentNo", "Address", "Department", "CreatedBy", "CreatedByIP", "OICNAME", "OICMobileNO", "OICEailID" }
+                    //    , new string[] { ViewState["ID"].ToString(), ddlResponderType_Res.SelectedValue, txtResponderName_Res.Text.Trim(), txtResponderNo_Res.Text.Trim(), txtResponderAdd_Res.Text.Trim(), txtResponderDept_Res.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), txtOicNameRespondent.Text.Trim(), txtOicMobileNoRespondent.Text.Trim(), txtOicEmailIDRespondent.Text.Trim() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_Insert_ResponderName", new string[] { "Case_ID", "Respondertype_ID", "Officetype_Id", "Office_Id", "Designation_Id", "Respondent_Name", "RespondentNo", "Address", "Department", "CreatedBy", "CreatedByIP" }
+                        , new string[] { ViewState["ID"].ToString(), ddlResponderType_Res.SelectedValue, ddlOfficeType_Res.SelectedValue, ddlOfficeName_Res.SelectedValue, ddlDesignation_Res.SelectedValue, txtResponderName_Res.Text.Trim(), txtResponderNo_Res.Text.Trim(), txtResponderAdd_Res.Text.Trim(), txtResponderDept_Res.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnAddResponder.Text == "Update" && ViewState["ResponderID"].ToString() != null && ViewState["ResponderID"].ToString() != "")
                 {
-                    ds = obj.ByProcedure("USP_Legal_Update_ResponderDtl", new string[] { "Respondent_ID", "Respondertype_ID", "Case_ID", "Respondent_Name", "RespondentNo", "Address", "Department", "LastupdatedBy", "LastupdatedByIp", "OICNAME", "OICMobileNO", "OICEailID" }
-                        , new string[] { ViewState["ResponderID"].ToString(), ddlEditRespondertype.SelectedValue, ViewState["ID"].ToString(), txtResponderName.Text.Trim(), txtResponderNo.Text.Trim(), txtAddress.Text.Trim(), txtDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), txtEditRespondentOICName.Text.Trim(), txtEditRepondentOICMObile.Text.Trim(), txtEditRepondentOICEmail.Text.Trim() }, "dataset");
+                    //ds = obj.ByProcedure("USP_Legal_Update_ResponderDtl", new string[] { "Respondent_ID", "Respondertype_ID", "Case_ID", "Respondent_Name", "RespondentNo", "Address", "Department", "LastupdatedBy", "LastupdatedByIp", "OICNAME", "OICMobileNO", "OICEailID" }
+                    //    , new string[] { ViewState["ResponderID"].ToString(), ddlEditRespondertype.SelectedValue, ViewState["ID"].ToString(), txtResponderName.Text.Trim(), txtResponderNo.Text.Trim(), txtAddress.Text.Trim(), txtDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), txtEditRespondentOICName.Text.Trim(), txtEditRepondentOICMObile.Text.Trim(), txtEditRepondentOICEmail.Text.Trim() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_Update_ResponderDtl", new string[] { "Respondent_ID", "Respondertype_ID", "Officetype_Id", "Office_Id", "Designation_Id", "Case_ID", "Respondent_Name", "RespondentNo", "Address", "Department", "LastupdatedBy", "LastupdatedByIp" }
+                      , new string[] { ViewState["ResponderID"].ToString(), ddlEditRespondertype.SelectedValue, ddlOfficetype_EditRes.SelectedValue, ddlOfficename_EditRes.SelectedValue, ddlDesig_EditRes.SelectedValue, ViewState["ID"].ToString(), txtResponderName.Text.Trim(), txtResponderNo.Text.Trim(), txtAddress.Text.Trim(), txtDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -624,8 +688,16 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                         txtResponderNo.Text = "";
                         txtAddress.Text = "";
                         txtDepartment.Text = "";
-                        ddlResponderType.ClearSelection();
+                        ddlResponderType_Res.ClearSelection();
                         ddlEditRespondertype.ClearSelection();
+                        ddlEditRespondertype.ClearSelection();
+                        ddlOfficetype_EditRes.ClearSelection();
+                        ddlOfficename_EditRes.ClearSelection();
+                        ddlDesig_EditRes.ClearSelection();
+                        txtResponderName.Text = "";
+                        txtResponderNo.Text = "";
+                        txtAddress.Text = "";
+                        txtDepartment.Text = "";
                     }
                     else
                     {
@@ -646,7 +718,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     protected void lnkAddEditDoc_Click(object sender, EventArgs e) // For Back Button
     {
         try
@@ -665,7 +736,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     #region insert edit Doc
     protected void btnSaveDoc_Click(object sender, EventArgs e) // Add & Edit Document.
     {
@@ -797,7 +867,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     protected void GrdCaseDoc_RowCommand(object sender, GridViewCommandEventArgs e)// on row command Event for Edit Document
     {
         try
@@ -820,7 +889,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     protected void ddlDisponsType_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -847,7 +915,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     protected void rdCaseDispose_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -865,31 +932,29 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+    protected void ddlOfficeType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            ddlOfficeName_Res.Items.Clear();
+            ds = obj.ByProcedure("USP_legal_select_OfficeName", new string[] { "OfficeType_Id" }
+                , new string[] { ddlOfficeType_Res.SelectedValue }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficeName_Res.DataTextField = "OfficeName";
+                ddlOfficeName_Res.DataValueField = "Office_Id";
+                ddlOfficeName_Res.DataSource = ds;
+                ddlOfficeName_Res.DataBind();
 
-    // Thise Dropdown Comment by me Due to Change Office dropdown into textbox
-    //protected void ddlOfficeType_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        lblMsg.Text = "";
-    //        ddlOfficeName.Items.Clear();
-    //        ds = obj.ByProcedure("USP_legal_select_OfficeName", new string[] { "OfficeType_Id" }
-    //            , new string[] { ddlOfficeType.SelectedValue }, "dataset");
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            ddlOfficeName.DataTextField = "OfficeName";
-    //            ddlOfficeName.DataValueField = "Office_Id";
-    //            ddlOfficeName.DataSource = ds;
-    //            ddlOfficeName.DataBind();
-    //        }
-    //        ddlOfficeName.Items.Insert(0, new ListItem("Select", "0"));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
-    //    }
-    //}
-
+            }
+            ddlOfficeName_Res.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
     #region Add Hearing_datatable
     protected void btnAddHearingDtl_Click(object sender, EventArgs e) //  Add Hearing Dtl.
     {
@@ -975,7 +1040,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region Save Edit Hearing
     protected void btnSaveHearingDtl_Click(object sender, EventArgs e) //Save Hearing Dtl.
     {
@@ -1074,7 +1138,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     protected void lnkbtnAddNewHering_Click(object sender, EventArgs e)
     {
         try
@@ -1088,7 +1151,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     #region Case Dispose Save
     protected void btnCaseDispose_Click(object sender, EventArgs e) // Case Dispose Event
     {
@@ -1183,7 +1245,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     protected void GrdHearingDtl_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
@@ -1207,7 +1268,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     protected void btnHearingBack_Click(object sender, EventArgs e)
     {
         try
@@ -1223,6 +1283,28 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
 
             AddNewHearing.Visible = false;
             FiledSet_HearingDBDtl.Visible = true;
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+    protected void ddlOfficetype_EditRes_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            ddlOfficename_EditRes.Items.Clear();
+            ds = obj.ByProcedure("USP_legal_select_OfficeName", new string[] { "OfficeType_Id" }
+                , new string[] { ddlOfficetype_EditRes.SelectedValue }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficename_EditRes.DataTextField = "OfficeName";
+                ddlOfficename_EditRes.DataValueField = "Office_Id";
+                ddlOfficename_EditRes.DataSource = ds;
+                ddlOfficename_EditRes.DataBind();
+            }
+            ddlOfficeName_Res.Items.Insert(0, new ListItem("Select", "0"));
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
         }
         catch (Exception ex)
         {

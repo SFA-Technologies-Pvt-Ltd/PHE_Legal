@@ -128,7 +128,7 @@
                                                     <asp:RegularExpressionValidator runat="server" ID="Rev_mobno" Display="Dynamic" ForeColor="Red" ControlToValidate="txtmobileno" SetFocusOnError="true"
                                                         Text="<i class='fa fa-exclamation-circle' title='Mobile No. is Not Valid'></i>"
                                                         ValidationExpression="[6-9]{1}[0-9]{5}[0-9]{4}" ErrorMessage="Mobile No. is Not Valid"
-                                                        ValidationGroup="save"></asp:RegularExpressionValidator>
+                                                        ValidationGroup="Save"></asp:RegularExpressionValidator>
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtmobileno" CssClass="form-control" onkeypress="return NumberOnly();" MaxLength="10" placeholder="Enter Mobile No" AutoComplete="off"></asp:TextBox>
                                             </div>

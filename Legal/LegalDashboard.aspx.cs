@@ -260,7 +260,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "1";
                 string CaseType = "MP Govt Case"; // Here MP Govt Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
@@ -277,7 +277,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "2";
                 string CaseType = "ENC Case"; // Here ENC Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
@@ -294,7 +294,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "3";
                 string CaseType = "Zone Case"; // Here Zone Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
@@ -311,7 +311,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "4";
                 string CaseType = "Cirlce Case"; // Here Cirlce Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
@@ -328,7 +328,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "5";
                 string CaseType = "Jal Nigam Case"; // Here Jal Nigam Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
@@ -345,7 +345,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             {
                 string ID = "6";
                 string CaseType = "DO Case"; // Here DO Case
-                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType);
+                Response.Redirect("../Legal/Dashboard_ViewCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&Casetype=" + CaseType, false);
             }
         }
         catch (Exception ex)
