@@ -115,7 +115,7 @@
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        WP Case Detail
+                        Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -143,6 +143,18 @@
                                             </asp:RequiredFieldValidator><br />
                                             अंतिम तिथि</label>
                                         <asp:TextBox ID="txtEndDate" runat="server" data-provide="datepicker" data-date-end-date="0d" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
+                                    </div>
+                                </div>
+                                  <div class="col-md-3 col-sm">
+                                    <div class="form-group">
+                                        <label>
+                                            Case Type<span style="color: red;"><b> *</b></span>
+                                            <asp:RequiredFieldValidator ID="rfvCasetype" ValidationGroup="Save"
+                                                ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="ddlCasetype" Display="Dynamic" runat="server" InitialValue="0">
+                                            </asp:RequiredFieldValidator><br />
+                                           प्रकरण का प्रकार</label>
+                                        <asp:DropDownList ID="ddlCasetype" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm mt-5">

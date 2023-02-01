@@ -73,7 +73,7 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
             SbCount.Append("bottom: 12");
             SbCount.Append("},");
             SbCount.Append(" height: 250,");
-          //  SbCount.Append(" 'is3D': false,pieHole: 0.03,pieSliceTextStyle: {bold:true,fontSize: 12}, "); // Piehole using For Create Circle Into Center.
+            //  SbCount.Append(" 'is3D': false,pieHole: 0.03,pieSliceTextStyle: {bold:true,fontSize: 12}, "); // Piehole using For Create Circle Into Center.
             SbCount.Append(" 'is3D': false,pieSliceTextStyle: {bold:true,fontSize: 12}, ");
             SbCount.Append("legend: {");
             SbCount.Append("position: 'labeled',");
@@ -195,44 +195,84 @@ public partial class mis_Legal_LegalDashboard : System.Web.UI.Page
         try
         {
             ds = objdb.ByProcedure("USP_Get_WACaseCount", new string[] { }, new string[] { }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "MP Govt")
+                    {
+                        lblPPCase.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "ENC Case")
+                    {
+                        lblDPICase.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "Zone")
+                    {
+                        lblJDCases.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "Circle")
+                    {
+                        lblDEOCases.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "Jal Nigam")
+                    {
+                        lblRskCases.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                    if (ds.Tables[0].Rows[i]["RespondertypeName"].ToString() == "DO")
+                    {
+                        lblTBCCases.Text = ds.Tables[0].Rows[i]["CaseCount"].ToString() + " No's";
+                    }
+                }
+            }
+            else
+            {
+                lblPPCase.Text = "00 No's";
+                lblDPICase.Text = "00 No's";
+                lblJDCases.Text = "00 No's";
+                lblDEOCases.Text = "00 No's";
+                lblRskCases.Text = "00 No's";
+                lblTBCCases.Text = "00 No's";
+            }
+           
 
             // PP Case
-            if (ds.Tables[0].Rows[0]["PPCase"].ToString() != "")
-            {
-                lblPPCase.Text = ds.Tables[0].Rows[0]["PPCase"].ToString() + " No's";
-            }
-            else { lblPPCase.Text = "00 No's"; }
+            //if (ds.Tables[0].Rows[0]["PPCase"].ToString() != "")
+            //{
+            //    lblPPCase.Text = ds.Tables[0].Rows[0]["PPCase"].ToString() + " No's";
+            //}
+            //else { lblPPCase.Text = "00 No's"; }
 
-            // DPI Case
-            if (ds.Tables[0].Rows[0]["DPICase"].ToString() != "")
-            {
-                lblDPICase.Text = ds.Tables[0].Rows[0]["DPICase"].ToString() + " No's";
-            }
-            else { lblDPICase.Text = "00 No's"; }
-            // JD Case
-            if (ds.Tables[0].Rows[0]["JDCase"].ToString() != "")
-            {
-                lblJDCases.Text = ds.Tables[0].Rows[0]["JDCase"].ToString() + " No's";
-            }
-            else { lblJDCases.Text = "00 No's"; }
-            // DEO Case
-            if (ds.Tables[0].Rows[0]["DEOCase"].ToString() != "")
-            {
-                lblDEOCases.Text = ds.Tables[0].Rows[0]["DEOCase"].ToString() + " No's";
-            }
-            else { lblDEOCases.Text = "00 No's"; }
-            // RSK Case
-            if (ds.Tables[0].Rows[0]["RSKCase"].ToString() != "")
-            {
-                lblRskCases.Text = ds.Tables[0].Rows[0]["RSKCase"].ToString() + " No's";
-            }
-            else { lblRskCases.Text = "00 No's"; }
-            // TBC Case
-            if (ds.Tables[0].Rows[0]["TBCCase"].ToString() != "")
-            {
-                lblTBCCases.Text = ds.Tables[0].Rows[0]["TBCCase"].ToString() + " No's";
-            }
-            else { lblTBCCases.Text = "00 No's"; }
+            //// DPI Case
+            //if (ds.Tables[0].Rows[0]["DPICase"].ToString() != "")
+            //{
+            //    lblDPICase.Text = ds.Tables[0].Rows[0]["DPICase"].ToString() + " No's";
+            //}
+            //else { lblDPICase.Text = "00 No's"; }
+            //// JD Case
+            //if (ds.Tables[0].Rows[0]["JDCase"].ToString() != "")
+            //{
+            //    lblJDCases.Text = ds.Tables[0].Rows[0]["JDCase"].ToString() + " No's";
+            //}
+            //else { lblJDCases.Text = "00 No's"; }
+            //// DEO Case
+            //if (ds.Tables[0].Rows[0]["DEOCase"].ToString() != "")
+            //{
+            //    lblDEOCases.Text = ds.Tables[0].Rows[0]["DEOCase"].ToString() + " No's";
+            //}
+            //else { lblDEOCases.Text = "00 No's"; }
+            //// RSK Case
+            //if (ds.Tables[0].Rows[0]["RSKCase"].ToString() != "")
+            //{
+            //    lblRskCases.Text = ds.Tables[0].Rows[0]["RSKCase"].ToString() + " No's";
+            //}
+            //else { lblRskCases.Text = "00 No's"; }
+            //// TBC Case
+            //if (ds.Tables[0].Rows[0]["TBCCase"].ToString() != "")
+            //{
+            //    lblTBCCases.Text = ds.Tables[0].Rows[0]["TBCCase"].ToString() + " No's";
+            //}
+            //else { lblTBCCases.Text = "00 No's"; }
             if (ds.Tables.Count >= 1 && ds.Tables[1].Rows.Count > 0)
             {
                 if (ds.Tables[1].Rows[0]["HIghPriorityCase"].ToString() != "")

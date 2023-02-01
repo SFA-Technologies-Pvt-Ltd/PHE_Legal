@@ -450,8 +450,8 @@
                                         <legend>Respondent Detail</legend>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="table embed-responsive">
-                                                    <asp:GridView ID="GrdRespondent" runat="server" AutoGenerateColumns="false">
+                                                <div class="table table-responsive">
+                                                    <asp:GridView ID="GrdRespondent" runat="server" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND" CssClass="table table-bordered">
                                                         <Columns>
                                                             <asp:TemplateField HeaderText="SNo.">
                                                                 <ItemTemplate>

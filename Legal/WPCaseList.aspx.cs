@@ -21,7 +21,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             {
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
-               
+                FillCasetype();
             }
         }
         else
@@ -29,30 +29,50 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             Response.Redirect("../Login.aspx");
         }
     }
+
+    protected void FillCasetype()
+    {
+        try
+        {
+            ddlCasetype.Items.Clear();
+            ds = obj.ByDataSet("select Casetype_ID, Casetype_Name from tbl_Legal_Casetype");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCasetype.DataTextField = "Casetype_Name";
+                ddlCasetype.DataValueField = "Casetype_ID";
+                ddlCasetype.DataSource = ds;
+                ddlCasetype.DataBind();
+            }
+            ddlCasetype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            
-                lblMsg.Text = "";
+            lblMsg.Text = "";
+            GrdCaseDetails.DataSource = null;
+            GrdCaseDetails.DataBind();
+
+            ds = obj.ByProcedure("USP_Legal_SelectWP_CaseList", new string[] { "Fromdate", "Todate" }
+                , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                GrdCaseDetails.DataSource = ds;
+                GrdCaseDetails.DataBind();
+                GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdCaseDetails.UseAccessibleHeader = true;
+            }
+            else
+            {
                 GrdCaseDetails.DataSource = null;
                 GrdCaseDetails.DataBind();
+            }
 
-                ds = obj.ByProcedure("USP_Legal_SelectWP_CaseList", new string[] { "Fromdate", "Todate" }
-                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    GrdCaseDetails.DataSource = ds;
-                    GrdCaseDetails.DataBind();
-                    GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
-                    GrdCaseDetails.UseAccessibleHeader = true;
-                }
-                else
-                {
-                    GrdCaseDetails.DataSource = null;
-                    GrdCaseDetails.DataBind();
-                }
-            
         }
         catch (Exception ex)
         {
@@ -74,17 +94,5 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    //protected void GrdCaseDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
-    //{
-    //    try
-    //    {
-    //        GrdCaseDetails.PageIndex = e.NewPageIndex;
-    //        btnSearch_Click(sender,  e);
-    //        GrdCaseDetails.DataBind();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
-    //    }
-    //}
+
 }
