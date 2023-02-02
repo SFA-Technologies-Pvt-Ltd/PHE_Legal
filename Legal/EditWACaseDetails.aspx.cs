@@ -38,6 +38,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                     BindCaseSubject();
                     FillCourtName();
                     FillOicList();
+                    FillAuthorityList();
                 }
             }
             else
@@ -80,14 +81,31 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
         try
         {
             ddlDesignation.Items.Clear();
+            ddlDesignation_AddRes.Items.Clear();
+            ddlDesig_EditRes.Items.Clear();
             ds = obj.ByDataSet("select Designation_Id,Designation_Name from tblDesignationMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
+                // Here For Petitioner Info.
                 ddlDesignation.DataTextField = "Designation_Name";
                 ddlDesignation.DataValueField = "Designation_Id";
                 ddlDesignation.DataSource = ds;
                 ddlDesignation.DataBind();
+
+                // Here For Add Responder
+                ddlDesignation_AddRes.DataTextField = "Designation_Name";
+                ddlDesignation_AddRes.DataValueField = "Designation_Id";
+                ddlDesignation_AddRes.DataSource = ds;
+                ddlDesignation_AddRes.DataBind();
+
+                // Here For Edi Responder 
+                ddlDesig_EditRes.DataTextField = "Designation_Name";
+                ddlDesig_EditRes.DataValueField = "Designation_Id";
+                ddlDesig_EditRes.DataSource = ds;
+                ddlDesig_EditRes.DataBind();
             }
+            ddlDesig_EditRes.Items.Insert(0, new ListItem("Select", "0"));
+            ddlDesignation_AddRes.Items.Insert(0, new ListItem("Select", "0"));
             ddlDesignation.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
@@ -116,6 +134,26 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+    protected void FillAuthorityList()
+    {
+        try
+        {
+            ddlAutorityList.Items.Clear();
+            ds = obj.ByDataSet("select IAuthority_ID, IAuthority_Name from tblImplementation_AuthMst");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlAutorityList.DataTextField = "IAuthority_Name";
+                ddlAutorityList.DataValueField = "IAuthority_ID";
+                ddlAutorityList.DataSource = ds;
+                ddlAutorityList.DataBind();
+            }
+            ddlAutorityList.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
     protected void HearingDatacolumn()
     {
         DataTable dt = new DataTable();
@@ -124,6 +162,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             dt.Columns.Add("HearingDate", typeof(string));
             dt.Columns.Add("HearingDetail", typeof(string));
             dt.Columns.Add("HearingDoc", typeof(string));
+            dt.Columns.Add("Instruction", typeof(string));
         }
         ViewState["HearingDt"] = dt;
     }
@@ -164,8 +203,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
 
             }
             caseDisposeYes.Visible = false;
-            OrderBy1.Visible = false;
-            OrderBy2.Visible = false;
+            CaseDisDate_Div.Visible = false;
+            CaseDisDoc_Div.Visible = false;
         }
     }
     protected void BindDisposeType()
@@ -262,8 +301,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             GrdCaseDoc.DataBind();
             GrdCaseDispose.DataSource = null;
             GrdCaseDispose.DataBind();
-            GrdHearingDtl.DataSource = null;
-            GrdHearingDtl.DataBind();
+            GrdHearingDtl_DB.DataSource = null;
+            GrdHearingDtl_DB.DataBind();
             FieldClose();
             ds = obj.ByProcedure("USP_Legal_Select_ForWACaseDtl", new string[] { "Case_ID" }
                 , new string[] { ViewState["ID"].ToString() }, "dataset");
@@ -274,6 +313,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 FieldSet_DocumentDetail.Visible = true;
                 FieldSet_ResponderDetail.Visible = true;
                 FieldSet_SaveHeringDtl.Visible = false;
+                FiledSet_HearingDBDtl.Visible = true;
                 // WPCase Dtl.
                 lblRefCaseNO.Text = ds.Tables[0].Rows[0]["CaseNo"].ToString();
                 lblWPCasetype.Text = ds.Tables[0].Rows[0]["Casetype_Name"].ToString();
@@ -345,19 +385,14 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         GrdCaseDispose.DataBind();
                     }
                     else { Fieldset_CaseDispose.Visible = false; }
-
-                    GrdHearingDtl.DataSource = ds.Tables[4]; // Hearing Dtl Bind.
-                    GrdHearingDtl.DataBind();
-
+                    GrdHearingDtl_DB.DataSource = ds.Tables[4]; // Hearing Dtl Bind.
+                    GrdHearingDtl_DB.DataBind();
                     GrdCaseDoc.DataSource = ds.Tables[5]; // Documnets Bind.
                     GrdCaseDoc.DataBind();
-                    // Case Dipose Dtl
-
                 }
             }
             else
             {
-
                 GrdResponderDtl.DataSource = null;
                 GrdResponderDtl.DataBind();
                 GrdCaseDoc.DataSource = null;
@@ -375,7 +410,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
         try
         {
             ddlOfficetype_AddRes.Items.Clear();
-            ddlEditRespondertype.Items.Clear();
+            ddlOfficetype_EditRes.Items.Clear();
             ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -384,13 +419,13 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 ddlOfficetype_AddRes.DataSource = ds;
                 ddlOfficetype_AddRes.DataBind();
 
-                ddlEditRespondertype.DataTextField = "OfficeType_Name";
-                ddlEditRespondertype.DataValueField = "OfficeType_Id";
-                ddlEditRespondertype.DataSource = ds;
-                ddlEditRespondertype.DataBind();
+                ddlOfficetype_EditRes.DataTextField = "OfficeType_Name";
+                ddlOfficetype_EditRes.DataValueField = "OfficeType_Id";
+                ddlOfficetype_EditRes.DataSource = ds;
+                ddlOfficetype_EditRes.DataBind();
             }
             ddlOfficetype_AddRes.Items.Insert(0, new ListItem("Select", "0"));
-            ddlEditRespondertype.Items.Insert(0, new ListItem("Select", "0"));
+            ddlOfficetype_EditRes.Items.Insert(0, new ListItem("Select", "0"));
         }
         catch (Exception ex)
         {
@@ -418,7 +453,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-
     protected void GrdResponderDtl_RowCommand(object sender, GridViewCommandEventArgs e)  // Navigate on the Edit Case Detail Div.
     {
         try
@@ -435,18 +469,31 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 Label lblResponderNo = (Label)row.FindControl("lblResponderNo");
                 Label lblDepartent = (Label)row.FindControl("lblDepartent");
                 Label lblAddress = (Label)row.FindControl("lblAddress");
-                Label lblrespondertypeID = (Label)row.FindControl("lblrespondertypeID");
+                Label lblOfficeTypeID = (Label)row.FindControl("lblOfficeTypeID");
+                Label lblOfficeID = (Label)row.FindControl("lblOfficeID");
+                Label lblDesignationID = (Label)row.FindControl("lblDesignationID");
 
-                txtResponderName.Text = lblResponderName.Text;
-                txtResponderNo.Text = lblResponderNo.Text;
-                txtDepartment.Text = lblDepartent.Text;
-                txtAddress.Text = lblAddress.Text;
+                txtResName_EditRes.Text = lblResponderName.Text;
+                txtMobileNo_EditRes.Text = lblResponderNo.Text;
+                txtDept_EditRes.Text = lblDepartent.Text;
+                txtAdd_EditRes.Text = lblAddress.Text;
                 ViewState["ResponderID"] = lblResponderID.Text;
                 ViewState["lblCaseID"] = lblCaseID.Text;
-                if (lblrespondertypeID.Text != "")
+                if (lblOfficeTypeID.Text != "")
                 {
-                    ddlEditRespondertype.ClearSelection();
-                    ddlEditRespondertype.Items.FindByValue(lblrespondertypeID.Text).Selected = true;
+                    ddlOfficetype_EditRes.ClearSelection();
+                    ddlOfficetype_EditRes.Items.FindByValue(lblOfficeTypeID.Text).Selected = true;
+                }
+                if (lblOfficeID.Text != "")
+                {
+                    ddlOfficetype_EditRes_SelectedIndexChanged(sender, e);
+                    ddlOffice_EditRes.ClearSelection();
+                    ddlOffice_EditRes.Items.FindByValue(lblOfficeID.Text).Selected = true;
+                }
+                if (lblDesignationID.Text != "")
+                {
+                    ddlDesig_EditRes.ClearSelection();
+                    ddlDesig_EditRes.Items.FindByValue(lblDesignationID.Text).Selected = true;
                 }
                 btnAddResponder.Text = "Update";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
@@ -543,7 +590,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                             ddlDisponsType.ClearSelection();
                             ddlDisponsType.Items.FindByValue(ds.Tables[0].Rows[0]["CaseDisposalType_Id"].ToString()).Selected = true;
                             ddlDisponsType_SelectedIndexChanged(sender, e);
-                            txtCaseDispose_OrderNo.Text = ds.Tables[0].Rows[0]["CaseDisposal_timeline"].ToString();
+                            txtCaseDis_OrderTimeline.Text = ds.Tables[0].Rows[0]["CaseDisposal_timeline"].ToString();
                             ViewDoc_CaseDipose.Visible = true;
                             hyPerlinkViewDisposeDoc.NavigateUrl = "WACaseDispose/" + ds.Tables[0].Rows[0]["CaseDisposalDoc"].ToString();
                         }
@@ -625,13 +672,13 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnAddResponder.Text == "Add" && ViewState["ID"].ToString() != null && ViewState["ID"].ToString() != "")
                 {
-                    ds = obj.ByProcedure("USP_Legal_Insert_WACaseRespoderDtl", new string[] { "WPCase_ID", "Respondertype_ID", "ResponderName", "ResponderNo", "ResponderAddress", "ResponderDepartMent", "CreatedBy", "CreatedByIP" }
-                        , new string[] { ViewState["ID"].ToString(), ddlOfficetype_AddRes.SelectedValue, txtAddResponderName.Text.Trim(), txtAddResponderMobileNo.Text.Trim(), txtAddResponderAddress.Text.Trim(), txtAddResponderDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_Insert_WACaseRespoderDtl", new string[] { "WPCase_ID", "Officetype_Id", "Office_Id", "Designation_Id", "ResponderName", "ResponderNo", "ResponderAddress", "ResponderDepartMent", "CreatedBy", "CreatedByIP" }
+                        , new string[] { ViewState["ID"].ToString(), ddlOfficetype_AddRes.SelectedValue, ddlOfficetype_AddRes.SelectedValue, ddlDesignation_AddRes.SelectedValue, txtAddResponderName.Text.Trim(), txtAddResponderMobileNo.Text.Trim(), txtAddResponderAddress.Text.Trim(), txtAddResponderDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnAddResponder.Text == "Update" && ViewState["ResponderID"].ToString() != null && ViewState["ResponderID"].ToString() != "")
                 {
-                    ds = obj.ByProcedure("USP_Legal_UpdateWAResponderDtl", new string[] { "Responder_ID", "Respondertype_ID", "WACase_ID", "ResponderName", "ResponderNo", "ResponderAddress", "ResponderDepartMent", "LastupdatedBy", "LastupdatedByIP" }
-                        , new string[] { ViewState["ResponderID"].ToString(), ddlEditRespondertype.SelectedValue, ViewState["lblCaseID"].ToString(), txtResponderName.Text.Trim(), txtResponderNo.Text.Trim(), txtAddress.Text.Trim(), txtDepartment.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Legal_UpdateWAResponderDtl", new string[] { "Responder_ID", "Officetype_Id", "Office_Id", "Designation_Id", "WACase_ID", "ResponderName", "ResponderNo", "ResponderAddress", "ResponderDepartMent", "LastupdatedBy", "LastupdatedByIP" }
+                        , new string[] { ViewState["ResponderID"].ToString(), ddlOfficetype_EditRes.SelectedValue, ddlOffice_EditRes.SelectedValue, ddlDesig_EditRes.SelectedValue, ViewState["lblCaseID"].ToString(), txtResName_EditRes.Text.Trim(), txtMobileNo_EditRes.Text.Trim(), txtAdd_EditRes.Text.Trim(), txtDept_EditRes.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -639,11 +686,11 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
-                        txtResponderName.Text = "";
-                        txtResponderNo.Text = "";
-                        txtAddress.Text = "";
-                        txtDepartment.Text = "";
-                        ddlEditRespondertype.ClearSelection();
+                        txtResName_EditRes.Text = "";
+                        txtMobileNo_EditRes.Text = "";
+                        txtAdd_EditRes.Text = "";
+                        txtDept_EditRes.Text = "";
+                        ddlOfficetype_EditRes.ClearSelection();
                         ddlOfficetype_AddRes.ClearSelection();
                     }
                     else
@@ -773,7 +820,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 {
                     if (btnSaveDoc.Text == "Upload Doc")
                     {
-
                         ds = obj.ByProcedure("USP_Legal_Insert_WACaseDocDtl", new string[] { "WPCase_ID", "DocName", "DocPath", "CreatedBy", "CreatedByIP" }
                             , new string[] { ViewState["ID"].ToString(), txtDocumentName.Text.Trim(), ViewState["FileUploadDOC"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                     }
@@ -790,6 +836,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                             lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
                             txtDocumentName.Text = "";
                             ViewState["FileUploadDOC"] = "";
+                            FiledSet_HearingDBDtl.Visible = true;
+                            FieldSet_SaveHeringDtl.Visible = true;
                         }
                         else
                         {
@@ -843,21 +891,23 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
         try
         {
             lblMsg.Text = "";
-            OrderBy1.Visible = false;
-            OrderBy2.Visible = false;
-            if (ddlDisponsType.SelectedValue == "2")
+            CaseDisDate_Div.Visible = false;
+            CaseDisDoc_Div.Visible = false;
+            if (ddlDisponsType.SelectedIndex > 0)
             {
-                OrderBy1.Visible = true;
-                OrderBy2.Visible = true;
+                CaseDisDate_Div.Visible = true;
+                CaseDisDoc_Div.Visible = true;
                 HearingDtl_CaseDispose.Visible = true;
-                DivOrderTimeline.Visible = true;
-
+                CaseDisOrderTime_Div.Visible = true;
+                Div_AuthCaseDispose.Visible = true;
             }
             else
             {
                 HearingDtl_CaseDispose.Visible = false;
-                OrderBy1.Visible = false;
-                OrderBy2.Visible = false;
+                CaseDisDate_Div.Visible = false;
+                CaseDisDoc_Div.Visible = false;
+                Div_AuthCaseDispose.Visible = false;
+                CaseDisOrderTime_Div.Visible = false;
             }
         }
         catch (Exception ex)
@@ -874,8 +924,17 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             if (rdCaseDispose.SelectedValue == "1")
             {
                 caseDisposeYes.Visible = true;
+                ddlDisponsType.ClearSelection();
             }
-            else { caseDisposeYes.Visible = false; }
+            else
+            {
+                caseDisposeYes.Visible = false;
+                HearingDtl_CaseDispose.Visible = false;
+                CaseDisDate_Div.Visible = false;
+                CaseDisDoc_Div.Visible = false;
+                Div_AuthCaseDispose.Visible = false;
+                CaseDisOrderTime_Div.Visible = false;
+            }
         }
         catch (Exception ex)
         {
@@ -902,7 +961,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
-
     protected void btnUpdateWaDtl_Click(object sender, EventArgs e)
     {
         try
@@ -949,7 +1007,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         txtCaseDetail.Text = "";
                         ddlDisponsType.ClearSelection();
                         CaseDisposeStatus();
-                        txtCaseDispose_OrderNo.Text = "";
                         ViewState["FileOrderDOC"] = "";
                         lnkEditCaseDtl.Visible = true;
                         lnkBackbtn.Visible = false;
@@ -978,6 +1035,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = "";
             AddNewHearing.Visible = true;
             FiledSet_HearingDBDtl.Visible = false;
+            btnHearingBack.Visible = true;
+            lnkbtnAddNewHering.Visible = false;
         }
         catch (Exception ex)
         {
@@ -997,23 +1056,23 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 string strFileName = "";
                 string strExtension = "";
                 string strTimeStamp = "";
-                if (fileUpload_HearingDoc.HasFile)     // CHECK IF ANY FILE HAS BEEN SELECTED.
+                if (fileDoc_AddHearing.HasFile)// CHECK IF ANY FILE HAS BEEN SELECTED.
                 {
 
-                    string fileExt = System.IO.Path.GetExtension(fileUpload_HearingDoc.FileName).Substring(1);
+                    string fileExt = System.IO.Path.GetExtension(fileDoc_AddHearing.FileName).Substring(1);
                     string[] supportedTypes = { "PDF", "pdf" };
                     if (!supportedTypes.Contains(fileExt))
                     {
                         DocFailedCntExt += 1;
                     }
-                    else if (fileUpload_HearingDoc.PostedFile.ContentLength > 204800) // 500 KB = 1024 * 500
+                    else if (fileDoc_AddHearing.PostedFile.ContentLength > 204800) // 500 KB = 1024 * 500
                     {
                         DocFailedCntSize += 1;
                     }
                     else
                     {
 
-                        strFileName = fileUpload_HearingDoc.FileName.ToString();
+                        strFileName = fileDoc_AddHearing.FileName.ToString();
                         strExtension = Path.GetExtension(strFileName);
                         strTimeStamp = DateTime.Now.ToString();
                         strTimeStamp = strTimeStamp.Replace("/", "-");
@@ -1022,7 +1081,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         string strName = Path.GetFileNameWithoutExtension(strFileName);
                         strFileName = strName + "-WAHearing-" + strTimeStamp + strExtension;
                         string path = Path.Combine(Server.MapPath("../Legal/WACaseHearingDoc/"), strFileName);
-                        fileUpload_HearingDoc.SaveAs(path);
+                        fileDoc_AddHearing.SaveAs(path);
 
                         ViewState["HearingDOC"] = strFileName;
                         path = "";
@@ -1040,19 +1099,18 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                     DataTable dt1 = (DataTable)ViewState["HearingDt"];
                     if (dt1.Columns.Count > 0)
                     {
-                        dt1.Rows.Add(Convert.ToDateTime(txtHearingDate.Text, cult).ToString("yyyy/MM/dd"), ddlHearingDtl.SelectedItem.Text.Trim(), ViewState["HearingDOC"].ToString());
+                        dt1.Rows.Add(Convert.ToDateTime(txtHearingDate_AddHearing.Text, cult).ToString("yyyy/MM/dd"), ddlHearingDtl_AddHearing.SelectedItem.Text.Trim(), ViewState["HearingDOC"].ToString(), txtInstruc_AddHearing.Text.Trim());
                     }
 
                     if (dt1.Rows.Count > 0)
                     {
                         FieldSet_SaveHeringDtl.Visible = true;
                         btnSaveHearingDtl.Visible = true;
-                        txtHearingDtl.Text = "";
-                        txtHearingDate.Text = "";
-                        ddlHearingDtl.ClearSelection();
+                        txtHearingDate_AddHearing.Text = "";
+                        ddlHearingDtl_AddHearing.ClearSelection();
                         ViewState["HearingDOC"] = "";
-                        GrdHearingDetail.DataSource = dt1;
-                        GrdHearingDetail.DataBind();
+                        Grd_AddHearing.DataSource = dt1;
+                        Grd_AddHearing.DataBind();
                         ViewState["HearingDt"] = dt1;
 
                     }
@@ -1130,8 +1188,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 }
                 else if (btnSaveHearingDtl.Text == "Update" && ViewState["HearingID"] != "" && ViewState["HearingID"] != null)
                 {
-                    ds = obj.ByProcedure("USP_Legal_Update_WACaseHearingDtl", new string[] { "WACase_ID", "NxtHearingDate", "HearingDtl", "HearingDoc", "LastupdatedBy", "LastupdatedByIP", "WaNxtHearing_ID" }
-                        , new string[] { ViewState["WaCaseIDHearing"].ToString(), Convert.ToDateTime(txtEditHearingDate.Text, cult).ToString("yyyy/MM/dd"), ddleditHearing.SelectedItem.Text.Trim(), ViewState["EditHearingDOC"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["HearingID"].ToString() }
+                    ds = obj.ByProcedure("USP_Legal_Update_WACaseHearingDtl", new string[] { "WACase_ID", "NxtHearingDate", "HearingDtl", "InstructionByCourt", "HearingDoc", "LastupdatedBy", "LastupdatedByIP", "WaNxtHearing_ID" }
+                        , new string[] { ViewState["WaCaseIDHearing"].ToString(), Convert.ToDateTime(txtEditHearingDate.Text, cult).ToString("yyyy/MM/dd"), ddleditHearing.SelectedItem.Text.Trim(), txtEditHearing_Inst.Text.Trim(), ViewState["EditHearingDOC"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["HearingID"].ToString() }
                        , "dataset");
                 }
 
@@ -1142,7 +1200,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                     {
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrorMsg);
                         AddNewHearing.Visible = false;
-
+                        lnkbtnAddNewHering.Visible = true;
+                        btnHearingBack.Visible = false;
                     }
                     else
                     {
@@ -1166,7 +1225,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    protected void GrdHearingDtl_RowCommand(object sender, GridViewCommandEventArgs e)
+    protected void GrdHearingDtl_DB_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
         {
@@ -1176,19 +1235,22 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             if (e.CommandName == "EditHearing")
             {
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-
                 Label lblWACaseID = (Label)row.FindControl("lblWACaseID");
                 Label lblHearingID = (Label)row.FindControl("lblHearingID");
                 Label lblHearingDate = (Label)row.FindControl("lblHearingDate");
                 Label lblHearingDetail = (Label)row.FindControl("lblHearingDetail");
-                //Label lblWaCaseID = (Label)row.FindControl("");
+                Label lblInstructionbycourt = (Label)row.FindControl("lblInstructionbycourt");
 
                 txtEditHearingDate.Text = lblHearingDate.Text;
-                txtEditHearingDtl.Text = lblHearingDetail.Text;
                 ViewState["WaCaseIDHearing"] = lblWACaseID.Text;
                 ViewState["HearingID"] = lblHearingID.Text;
                 ddleditHearing.ClearSelection();
                 ddleditHearing.Items.FindByText(lblHearingDetail.Text).Selected = true;
+                if (lblInstructionbycourt.Text != "")
+                {
+                    ddleditHearing_SelectedIndexChanged(sender, e);
+                    txtEditHearing_Inst.Text = lblInstructionbycourt.Text;
+                }
                 btnSaveHearingDtl.Text = "Update";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "$('#ModalEditHearingDtl').modal('show')", true);
             }
@@ -1205,7 +1267,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             if (Page.IsValid)
             {
                 lblMsg.Text = "";
-                if (btnCaseDispose.Text == "Case Dispose")
+                if (btnCaseDispose.Text == "Case Disposal")
                 {
                     ViewState["FileOrderDOC"] = "";
                     int DocFailedCntExt = 0;
@@ -1252,8 +1314,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
 
                     if (errormsg == "")
                     {
-                        ds = obj.ByProcedure("USP_Legal_UpdateWACaseDisposeDtl", new string[] { "WPCase_ID", "CaseDisposeType_Id", "CaseDisposeDate", "CaseDisposeStatus", "CaseDsiposeOrderNo", "CaseDisposeOrderDoc", "LastIsactiveBy", "LastIsactiveByIP" }
-                            , new string[] { ViewState["ID"].ToString(), ddlDisponsType.SelectedValue, Convert.ToDateTime(txtCaseDisposeDate.Text, cult).ToString("yyyy/MM/dd"), rdCaseDispose.SelectedItem.Text.Trim(), txtOrderimpletimeline.Text.Trim(), ViewState["FileOrderDOC"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                        ds = obj.ByProcedure("USP_Legal_UpdateWACaseDisposeDtl", new string[] { "WPCase_ID", "CaseDisposeType_Id", "CaseDisposeDate", "CaseDisposeStatus", "CaseDsiposeOrderNo", "CaseDisposeOrderDoc", "LastIsactiveBy", "LastIsactiveByIP", "IAuthority_ID" }
+                            , new string[] { ViewState["ID"].ToString(), ddlDisponsType.SelectedValue, Convert.ToDateTime(txtCaseDis_Date.Text, cult).ToString("yyyy/MM/dd"), rdCaseDispose.SelectedItem.Text.Trim(), txtCaseDis_OrderTimeline.Text.Trim(), ViewState["FileOrderDOC"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ddlAutorityList.SelectedValue }, "dataset");
 
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1262,7 +1324,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                             {
                                 lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
                                 ddlDisponsType.ClearSelection();
-                                txtCaseDispose_OrderNo.Text = "";
                                 ViewState["FileOrderDOC"] = "";
                                 CaseDisposeStatus();
                             }
@@ -1300,6 +1361,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             FieldSet_DocumentDetail.Visible = true;
             FieldSet_ResponderDetail.Visible = true;
             Fieldset_HearingDtl.Visible = true;
+            btnHearingBack.Visible = false;
+            lnkbtnAddNewHering.Visible = true;
             BindDetails();
 
             AddNewHearing.Visible = false;
@@ -1381,6 +1444,68 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 }
             }
             ddlofficeName_AddRes.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+    protected void ddlHearingDtl_AddHearing_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            if (ddlHearingDtl_AddHearing.SelectedValue == "3")
+            {
+                instructionDiv.Visible = true;
+            }
+            else { instructionDiv.Visible = false; }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+    protected void ddlOfficetype_EditRes_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            if (ddlOfficetype_EditRes.SelectedIndex > 0)
+            {
+                ddlOffice_EditRes.Items.Clear();
+                ds = obj.ByDataSet("select Office_Id, OfficeName from tblOfficeMaster where OfficeType_Id=" + ddlOfficetype_EditRes.SelectedValue);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlOffice_EditRes.DataTextField = "OfficeName";
+                    ddlOffice_EditRes.DataValueField = "Office_Id";
+                    ddlOffice_EditRes.DataSource = ds;
+                    ddlOffice_EditRes.DataBind();
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
+                }
+            }
+            ddlOffice_EditRes.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+    protected void ddleditHearing_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddleditHearing.SelectedValue == "3")
+            {
+                EditHearing_InsDiv.Visible = true;
+            }
+            else
+            {
+                EditHearing_InsDiv.Visible = false;
+                txtEditHearing_Inst.Text = "";
+            }
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "$('#ModalEditHearingDtl').modal('show')", true);
+
         }
         catch (Exception ex)
         {

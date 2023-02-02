@@ -31,7 +31,7 @@
                         <fieldset>
                             <legend>Edit Respondent</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="display: none;">
                                     <div class="form-group">
                                         <label>Respondent Type</label>
                                         <asp:DropDownList ID="ddlEditRespondertype" runat="server" CssClass="form-control"></asp:DropDownList>
@@ -55,14 +55,14 @@
                                         <asp:TextBox ID="txtResponderName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Designation Name</label>
                                         <asp:DropDownList ID="ddlDesig_EditRes" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Respondent Mobile No.</label>
@@ -175,24 +175,26 @@
                                             ErrorMessage="Select Hearing Detail." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlEditHearngDtl" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlEditHearngDtl" runat="server" CssClass="form-control">
+                                        <asp:DropDownList ID="ddlEditHearngDtl" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlEditHearngDtl_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Select</asp:ListItem>
-                                            <asp:ListItem Value="1">Next Hearing Date</asp:ListItem>
-                                            <asp:ListItem Value="2">Not Hearing</asp:ListItem>
-                                            <asp:ListItem Value="3">Dispose</asp:ListItem>
+                                                <asp:ListItem Value="1">Next Hearing Date</asp:ListItem>
+                                                <asp:ListItem Value="2">Not Hearing</asp:ListItem>
+                                                <asp:ListItem Value="3">Instruction By Court</asp:ListItem>
+                                                <asp:ListItem Value="4">Disposed</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </div>
+                                <div class="col-md-6" id="Editinst_Div" runat="server" visible="false">
+                                    <div class="form-group">
+                                        <label>Instruction</label>
+                                            <asp:TextBox ID="txtInst_EditHearing" runat="server" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" CssClass="form-control" AutoComplete="off" MaxLength="100"></asp:TextBox>
+                                        </div>
+                                    </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Hearing Document</label>
-                                        <%-- <span style="color: red;"><b> *</b></span>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ValidationGroup="EditHearing"
-                                            ErrorMessage="Upload Hearing Document." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="FileUpEditHearigDoc" Display="Dynamic" runat="server">
-                                        </asp:RequiredFieldValidator>--%>
+                                        <label>Hearing Document</label>                                        
                                         <asp:FileUpload ID="FileUpEditHearigDoc" runat="server" CssClass="form-control"></asp:FileUpload>
-                                        <span style="color: red;">Document Should be 200Kb.</span>
+                                        <span style="color: red; font-size:13px; font-weight:700;">Document Should be 200Kb.</span>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +381,7 @@
                                     <div class="table-responsive">
                                         <asp:GridView ID="GrdCaseDoc_FromDB" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false" DataKeyNames="CaseDoc_ID" OnRowCommand="GrdCaseDoc_FromDB_RowCommand">
                                             <Columns>
-                                                <asp:TemplateField HeaderText="Sr.No.">
+                                                <asp:TemplateField HeaderText="Sr.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                         <asp:Label ID="lblCaseID" runat="server" Text='<%# Eval("Case_ID") %>' Visible="false"></asp:Label>
@@ -391,14 +393,14 @@
                                                         <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("Doc_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="View">
+                                                <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:HyperLink ID="hyperViewDoc" runat="server" CssClass="btn btn-primary" Target="_blank" Enableds='<%#  Eval("Doc_Path").ToString() == "" ? false : true %>' NavigateUrl='<%# "../Legal/Documents/" +  Eval("Doc_Path") %>'><i class="fa fa-eye"></i></asp:HyperLink>
+                                                        <asp:HyperLink ID="hyperViewDoc" runat="server" CssClass="fa fa-eye" ToolTip="View" Target="_blank" Enabled='<%#  Eval("Doc_Path").ToString() == "" ? false : true %>' NavigateUrl='<%# "../Legal/Documents/" +  Eval("Doc_Path") %>'></asp:HyperLink>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Action">
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkEditDoc" runat="server" CssClass="btn btn-primary" CommandName="EditDocument" ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkEditDoc" runat="server" CssClass="fa fa-edit" CommandName="EditDocument" ToolTip="Edit"></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
@@ -415,19 +417,14 @@
                                 <div class="table-responsive">
                                     <asp:GridView ID="GrdResponderDtl" runat="server" CssClass="table" BorderWidth="2px" DataKeyNames="Respondent_ID" AutoGenerateColumns="false" OnRowCommand="GrdResponderDtl_RowCommand">
                                         <Columns>
-                                            <asp:TemplateField HeaderText="Sr.No.">
+                                            <asp:TemplateField HeaderText="Sr.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                     <asp:Label ID="lblResponderID" runat="server" Text='<%# Eval("Respondent_ID") %>' Visible="false"></asp:Label>
                                                     <asp:Label ID="lblCaseID" runat="server" Text='<%# Eval("Case_ID") %>' Visible="false"></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Responder Type">
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblResponderTypeName" runat="server" Text='<%# Eval("RespondertypeName") %>'></asp:Label>
-                                                    <asp:Label ID="lblrespondertypeID" runat="server" Text='<%# Eval("Respondertype_ID") %>' Visible="false"></asp:Label>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
+                                          
                                             <asp:TemplateField HeaderText="Office Type Name">
                                                 <ItemTemplate>
                                                     <asp:Label ID="lblofficetypeName" runat="server" Text='<%# Eval("OfficeType_Name") %>'></asp:Label>
@@ -466,9 +463,9 @@
                                                     <asp:Label ID="lblAddress" runat="server" Text='<%# Eval("responderAddress") %>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Action">
+                                            <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Respondent_ID") %>' CommandName="EditResponder" ToolTip="Edit" CssClass="btn btn-primary"><i class="fa fa-edit"</asp:LinkButton>
+                                                    <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Respondent_ID") %>' CommandName="EditResponder" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
@@ -505,14 +502,21 @@
                                                 ErrorMessage="Select Hearing Detail." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="ddlHearingDtl" Display="Dynamic" runat="server" InitialValue="0">
                                             </asp:RequiredFieldValidator>
-                                            <asp:DropDownList ID="ddlHearingDtl" runat="server" CssClass="form-control">
-                                                <asp:ListItem Value="0">Select</asp:ListItem>
+                                            <asp:DropDownList ID="ddlHearingDtl" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlHearingDtl_SelectedIndexChanged" AutoPostBack="true">
+                                                 <asp:ListItem Value="0">Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Next Hearing Date</asp:ListItem>
                                                 <asp:ListItem Value="2">Not Hearing</asp:ListItem>
-                                                <asp:ListItem Value="3">Dispose</asp:ListItem>
+                                                <asp:ListItem Value="3">Instruction By Court</asp:ListItem>
+                                                <asp:ListItem Value="4">Disposed</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
                                     </div>
+                                     <div class="col-md-3" id="Inst_AddHearing" runat="server" visible="false">
+                                        <div class="form-group">
+                                            <label>Instruction</label>
+                                            <asp:TextBox ID="txtInst_AddHearing" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="100"></asp:TextBox>
+                                            </div>
+                                         </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hearing Document</label>
@@ -552,9 +556,14 @@
                                                                         <asp:Label ID="lblHearingDetail" runat="server" Text='<%# Eval("HearingDetail") %>'></asp:Label>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
-                                                                <asp:TemplateField HeaderText="Hearing Document" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                                 <asp:TemplateField HeaderText="Instruction">
                                                                     <ItemTemplate>
-                                                                        <asp:HyperLink ID="lblHearingDoc" runat="server" Target="_blank" NavigateUrl='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") %>' CssClass="btn-sm label label-primary" Enabled='<%#  Eval("HearingDoc") == "" ? false : true  %>'>View</asp:HyperLink>
+                                                                        <asp:Label ID="lblInstruction" runat="server" Text='<%# Eval("Instruction") %>'></asp:Label>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:TemplateField HeaderText="Hearing" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                                    <ItemTemplate>
+                                                                        <asp:HyperLink ID="lblHearingDoc" runat="server" Target="_blank" Enabled='<%#  Eval("HearingDoc").ToString() == "" ? false : true  %>' NavigateUrl='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") %>' CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
                                                             </Columns>
@@ -597,14 +606,19 @@
                                                             <asp:Label ID="lblHearingDetail" runat="server" Text='<%# Eval("HearingDtl") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Hearing Document">
+                                                      <asp:TemplateField HeaderText="Instruction">
                                                         <ItemTemplate>
-                                                            <asp:HyperLink ID="hplnkHearingDocument" runat="server" NavigateUrl='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") %>' Enabled='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") == null ? false : true  %>' Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
+                                                            <asp:Label ID="lblInstruction" runat="server" Text='<%# Eval("InstructionByCourt") %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Document" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                        <ItemTemplate>
+                                                            <asp:HyperLink ID="hplnkHearingDocument" runat="server" Enabled='<%#  Eval("HearingDoc").ToString() == "" ? false : true  %>' NavigateUrl='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") %>' Target="_blank" CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="lnEditHearing" runat="server" CssClass="btn btn-primary" CommandName="EditHearing" CommandArgument='<%# Eval("NextHearing_ID") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnEditHearing" runat="server" CommandName="EditHearing" CommandArgument='<%# Eval("NextHearing_ID") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
@@ -718,7 +732,7 @@
                                             <asp:BoundField HeaderText="Case Disposal Date" DataField="CaseDisposeDate" />
                                             <asp:TemplateField HeaderText="Order Document">
                                                 <ItemTemplate>
-                                                    <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" NavigateUrl='<%# "UploadOrderDoc/" + Eval("CaseDispose_OrderDoc") %>' CssClass="btn-sm label label-primary">View</asp:HyperLink>
+                                                    <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" Enabled='<%#  Eval("CaseDispose_OrderDoc") %>' NavigateUrl='<%# "UploadOrderDoc/" + Eval("CaseDispose_OrderDoc") %>' CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
@@ -747,11 +761,11 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Year</label>
-                                        <%-- <span style="color: red;"><b>*</b></span>
+                                        <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RfvtxtOrder" ValidationGroup="CaseDtl"
-                                            ErrorMessage="Select WP Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlWPCaseYear" InitialValue="0" Display="Dynamic" runat="server">
-                                        </asp:RequiredFieldValidator>--%>
+                                            ErrorMessage="Select Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCaseYear" InitialValue="0" Display="Dynamic" runat="server">
+                                        </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
@@ -893,11 +907,16 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>OIC Name</label>
-                                        <asp:TextBox ID="txtOicName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70" onkeypress="return chcode();"></asp:TextBox>
+                                        <label>OIC Name</label><span style="color: red;"><b>*</b></span>
+                                        <asp:RequiredFieldValidator ID="rfv_OicName" ValidationGroup="CaseDtl"
+                                            ErrorMessage="Select Oic Name" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlOicName" Display="Dynamic" runat="server" InitialValue="0">
+                                        </asp:RequiredFieldValidator>
+                                        <%-- <asp:TextBox ID="txtOicName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70" onkeypress="return chcode();"></asp:TextBox>--%>
+                                        <asp:DropDownList ID="ddlOicName" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlOicName_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="Div_OicMobileNo" runat="server" visible="false">
                                     <div class="form-group">
                                         <label>OIC Mobile No.</label>
                                         <asp:RegularExpressionValidator ID="RfvOicMobileno" ValidationGroup="CaseDtl" runat="server" Display="Dynamic" ControlToValidate="txtOicMobileNo"
@@ -906,8 +925,14 @@
                                         <asp:TextBox ID="txtOicMobileNo" runat="server" CssClass="form-control" onkeypress="return NumberOnly();" AutoComplete="off" MaxLength="10"></asp:TextBox>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
+                                 <div class="col-md-3" id="Div_OicEmailID" runat="server" visible="false">
+                                    <div class="form-group">
+                                        <label>OIC Email-ID</label>
+                                        <asp:TextBox ID="txtOicEmailID" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="10"></asp:TextBox>
+                                    </div>
+                                </div>
+                            <%--</div>
+                            <div class="row">--%>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>High Priority Case</label><span style="color: red;"><b> *</b></span>
@@ -965,14 +990,14 @@
                         <fieldset id="Field_AddResponder" runat="server" visible="false">
                             <legend>Add Respondent</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" style="display: none;">
                                     <div class="form-group">
                                         <label>Respondent Type</label>
                                         <span style="color: red;"><b>*</b></span>
-                                        <asp:RequiredFieldValidator ID="RFVResponderType" ValidationGroup="AddResponder"
+                                      <%--  <asp:RequiredFieldValidator ID="RFVResponderType" ValidationGroup="AddResponder"
                                             ErrorMessage="Enter Responder Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlResponderType_Res" Display="Dynamic" runat="server" InitialValue="0">
-                                        </asp:RequiredFieldValidator>
+                                        </asp:RequiredFieldValidator>--%>
                                         <asp:DropDownList ID="ddlResponderType_Res" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
@@ -1011,8 +1036,6 @@
                                         <asp:TextBox ID="txtResponderName_Res" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70" onkeypress="return chcode();"></asp:TextBox>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Designation</label>
@@ -1024,11 +1047,12 @@
                                         <asp:DropDownList ID="ddlDesignation_Res" runat="server" CssClass="form-control select2"></asp:DropDownList>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Respondent Mobile No.</label>
                                         <span style="color: red;"><b>*</b></span>
-
                                         <asp:RequiredFieldValidator ID="RfvtxtAddResponderNo" ValidationGroup="AddResponder"
                                             ErrorMessage="Enter Responder No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtResponderNo_Res" Display="Dynamic" runat="server">
@@ -1061,8 +1085,11 @@
                                         <asp:TextBox ID="txtResponderAdd_Res" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70" onkeypress="return chcode();"></asp:TextBox>
                                     </div>
                                 </div>
+                                <div class="col-md-2" style="padding-top: 2rem! important;">
+                                    <asp:Button ID="btnAddResponder" Text="Add" runat="server" ValidationGroup="AddResponder" CssClass="btn btn-primary btn-block" OnClick="btnAddResponder_Click" />
+                                </div>
                             </div>
-                            <div class="row">
+                            <%--  <div class="row">
                                 <div class="col-md-2">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -1070,7 +1097,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--%>
                         </fieldset>
                         <%---End Here For Add Responder Details ---%>
                         <%---Start Here For Add && Edit Documents ---%>
