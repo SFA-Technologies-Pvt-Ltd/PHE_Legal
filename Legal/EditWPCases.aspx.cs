@@ -350,7 +350,7 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
             {
                 // Case Dipose Dtl
                 if (ds.Tables[0].Rows[0]["CaseDispose_Status"].ToString() != "")
-                {
+                {      
                     Fieldset_CaseDispose.Visible = true;
                     dtlCaseDispose.DataSource = ds.Tables[0];
                     dtlCaseDispose.DataBind();
@@ -558,6 +558,12 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                         ddlOicName.Items.FindByValue(ds.Tables[0].Rows[0]["OICMaster_ID"].ToString()).Selected = true;
                         ddlOicName_SelectedIndexChanged(sender, e);
                     }
+                    if(ds.Tables[0].Rows[0]["CaseSubSubj_Id"].ToString() != "")
+                    {
+                        ddlCase_SubSubject.ClearSelection();
+                        ddlCaseSubject_SelectedIndexChanged(sender, e);
+                        ddlCase_SubSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubSubj_Id"].ToString()).Selected = true;
+                    }
                 }
             }
 
@@ -587,7 +593,8 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                         "OfficeType_Id",
                         "OfficeName", 
                         "CurrentOfficeStatus", 
-                        "CaseSubject", 
+                        "CaseSubject",
+                        "CaseSubSubj_Id",
                         "NodalOfficer_Name", 
                         "NodalOfficerMobileNo", 
                         "JusticeName", 
@@ -608,6 +615,7 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                             txtOfficeName.Text.Trim(),
                             txtUpdatedCaseStatus.Text.Trim(),
                             ddlCaseSubject.SelectedValue,
+                            ddlCase_SubSubject.SelectedValue,
                             txtNOdalOfficerName.Text.Trim(),
                             txtNodalOfficerMobileNo.Text.Trim(), 
                             txtJusticeName.Text.Trim(), 
@@ -640,6 +648,7 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
                         txtPetiAdvocateMobileNo.Text = "";
                         ddlDisposalType.ClearSelection();
                         CaseDisposeStatus();
+                        
                     }
                     else
                     {
@@ -742,7 +751,6 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         }
     }
     #endregion
-
     #region insert edit Doc
     protected void btnSaveDoc_Click(object sender, EventArgs e) // Add & Edit Document.
     {
@@ -1417,5 +1425,26 @@ public partial class Legal_EditWPCases : System.Web.UI.Page
         {
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
+    }
+    protected void ddlCaseSubject_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            ddlCase_SubSubject.Items.Clear();
+            DataSet DsSubs = obj.ByDataSet("select CaseSubSubj_Id, CaseSubSubject from tbl_CaseSubSubjectMaster where CaseSubjectID=" + ddlCaseSubject.SelectedValue);
+            if(DsSubs != null && DsSubs.Tables[0].Rows.Count > 0)
+            {
+                ddlCase_SubSubject.DataTextField = "CaseSubSubject";
+                ddlCase_SubSubject.DataValueField = "CaseSubSubj_Id";
+                ddlCase_SubSubject.DataSource = DsSubs;
+                ddlCase_SubSubject.DataBind();
+            }
+            ddlCase_SubSubject.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        } 
     }
 }

@@ -262,6 +262,15 @@
                         <div class="card">
                             <div class="card-header" style="text-align: center;">
                                 <span style="font-size: 18px; color: #e5e5e5" id="spnCaseType" runat="server"></span>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <asp:TextBox ID="txtSearch"  AutoComplete="Off"  runat="server" Font-Size="20px" onkeyup="Search_Gridview(this, 'grdCaseTypeDetail')" CssClass="form-control" placeholder="Case No Search"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <asp:Button Text="Search" runat="server" ID="btnSearch" OnClick="btnSearch_Click" CssClass="btn btn-primary" />
+                                        <asp:Button Text="Clear Search" runat="server" ID="btnClearSearch" OnClick="btnClearSearch_Click" CssClass="btn btn-secondary" />
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body" style="opacity: 1;">
                                 <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found"
@@ -291,15 +300,15 @@
                                         <asp:BoundField DataField="Court" HeaderText="Court" ReadOnly="true" />
                                         <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" ReadOnly="true" />
 
-                                        <asp:TemplateField HeaderText="Respondent" >
+                                        <asp:TemplateField HeaderText="Respondent">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblRespondent" Text='<%#Eval("Respondent") %>' runat="server" />
                                             </ItemTemplate>
-                                           <%-- <EditItemTemplate>
+                                            <%-- <EditItemTemplate>
                                                 <asp:TextBox ID="txtRespondent" TextMode="MultiLine" Text='<%#Eval("Respondent") %>' runat="server" />
                                             </EditItemTemplate>--%>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Respondent Office" >
+                                        <asp:TemplateField HeaderText="Respondent Office">
                                             <ItemTemplate>
                                                 <asp:Label ID="txtRespondentOffice" Text='<%#Eval("RespondentOffice") %>' runat="server" />
                                             </ItemTemplate>
@@ -309,20 +318,20 @@
                                                 <asp:HiddenField ID="hdnCaseNo" runat="server" Value='<%#Eval("CaseNo") %>' />
                                             </EditItemTemplate>--%>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Case Subject"  >
+                                        <asp:TemplateField HeaderText="Case Subject">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
                                             </ItemTemplate>
-                                           <%-- <EditItemTemplate>
+                                            <%-- <EditItemTemplate>
                                                 <asp:DropDownList ID="ddlCaseSubject" runat="server">
                                                 </asp:DropDownList>
                                             </EditItemTemplate>--%>
-                                        </asp:TemplateField> 
-                                        <asp:TemplateField HeaderText="Case Sub Subject" >
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Case Sub Subject">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblCaseSubSubjectId" Text='<%#Eval("CaseSubSubjectId") %>' runat="server" />
                                             </ItemTemplate>
-                                           <%-- <EditItemTemplate>
+                                            <%-- <EditItemTemplate>
                                                 <asp:TextBox runat="server" ID="txtCaseSubSubjectId" Text="1" ReadOnly="true"/>  
                                             </EditItemTemplate>--%>
                                         </asp:TemplateField>
@@ -333,7 +342,7 @@
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId")%>' runat="server" />
-                                                 <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
+                                                <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
                                                 <asp:DropDownList ID="ddlOICName" runat="server" OnTextChanged="ddlOICName_TextChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </EditItemTemplate>
@@ -346,7 +355,7 @@
                                                 <asp:TextBox ID="txtOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" ReadOnly="true" />
                                             </EditItemTemplate>
                                         </asp:TemplateField>
-                                       <%-- <asp:TemplateField HeaderText="Hearing Date">
+                                        <%-- <asp:TemplateField HeaderText="Hearing Date">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblHearingDate" Text='<%#Eval("HearingDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                             </ItemTemplate>
@@ -383,8 +392,8 @@
                                                 </asp:DropDownList>
                                             </EditItemTemplate>
                                         </asp:TemplateField>
-                                        
-                                        
+
+
                                         <asp:CommandField ShowEditButton="true" ShowCancelButton="true" ShowHeader="true" />
                                         <%-- <asp:TemplateField HeaderText="Edit" >
                                     <ItemTemplate>

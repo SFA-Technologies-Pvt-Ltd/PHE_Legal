@@ -732,7 +732,7 @@
                                             <asp:BoundField HeaderText="Case Disposal Date" DataField="CaseDisposeDate" />
                                             <asp:TemplateField HeaderText="Order Document">
                                                 <ItemTemplate>
-                                                    <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" Enabled='<%#  Eval("CaseDispose_OrderDoc") %>' NavigateUrl='<%# "UploadOrderDoc/" + Eval("CaseDispose_OrderDoc") %>' CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
+                                                    <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" Enabled='<%#  Eval("CaseDispose_OrderDoc").ToString() == "" ? false: true %>' NavigateUrl='<%# "UploadOrderDoc/" + Eval("CaseDispose_OrderDoc") %>' CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
@@ -933,7 +933,7 @@
                                 </div>
                             <%--</div>
                             <div class="row">--%>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>High Priority Case</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ValidationGroup="CaseDtl"
@@ -955,7 +955,19 @@
                                             ErrorMessage="Select Case Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control select2">
+                                        <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control select2" OnSelectedIndexChanged="ddlCaseSubject_SelectedIndexChanged" AutoPostBack="true">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Case Sub Subject</label>
+                                        <span style="color: red;"><b>*</b></span>
+                                        <asp:RequiredFieldValidator ID="rfvCaseSub_Subject" ValidationGroup="CaseDtl"
+                                            ErrorMessage="Select Case Sub Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCase_SubSubject" Display="Dynamic" runat="server" InitialValue="0">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:DropDownList ID="ddlCase_SubSubject" runat="server" CssClass="form-control select2">
                                         </asp:DropDownList>
                                     </div>
                                 </div>

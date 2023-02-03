@@ -80,7 +80,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="table-responsive">
-                                                <asp:GridView ID="GridView1" PageSize="50" runat="server" DataKeyNames="Ho_Id" AutoGenerateColumns="False" CssClass="table-bordered table-striped" OnRowCommand="GridView1_RowCommand"  OnPageIndexChanging="GridView1_PageIndexChanging" AllowPaging="true"  EmptyDataText="NO RECORD FOUND">
+                                                <asp:GridView ID="GridView1" PageSize="50" runat="server" DataKeyNames="Ho_Id" AutoGenerateColumns="False" CssClass="table table-bordered table-striped" OnRowCommand="GridView1_RowCommand"  OnPageIndexChanging="GridView1_PageIndexChanging" AllowPaging="true"  EmptyDataText="NO RECORD FOUND">
                                                     <PagerStyle HorizontalAlign="Left" CssClass="GridPager" />
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="Sr.No." ItemStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
@@ -96,7 +96,7 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action" HeaderStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Ho_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="btn btn-primary"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Ho_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>

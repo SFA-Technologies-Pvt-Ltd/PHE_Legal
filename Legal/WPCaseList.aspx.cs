@@ -87,7 +87,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
 
             string ID = e.CommandArgument.ToString();
-            Response.Redirect("../Legal/EditWPCases.aspx?ID=" + Server.UrlEncode(ID));
+            Response.Redirect("../Legal/EditWPCases.aspx?ID=" + Server.UrlEncode(ID), false);
         }
         catch (Exception ex)
         {

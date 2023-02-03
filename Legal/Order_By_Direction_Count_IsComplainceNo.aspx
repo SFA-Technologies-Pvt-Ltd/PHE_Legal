@@ -262,6 +262,15 @@
                         <div class="card">
                             <div class="card-header" style="text-align: center;">
                                 <span style="font-size: 18px; color: #e5e5e5" id="spnCaseType" runat="server"></span>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <asp:TextBox ID="txtSearch"  AutoComplete="Off"  runat="server" Font-Size="20px" onkeyup="Search_Gridview(this, 'grdCaseTypeDetail')" CssClass="form-control" placeholder="Case No Search"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <asp:Button Text="Search" runat="server" ID="btnSearch" OnClick="btnSearch_Click" CssClass="btn btn-primary" />
+                                        <asp:Button Text="Clear Search" runat="server" ID="btnClearSearch" OnClick="btnClearSearch_Click" CssClass="btn btn-secondary" />
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body" style="opacity: 1;">
                                 <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found"

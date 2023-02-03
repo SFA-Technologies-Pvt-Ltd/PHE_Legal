@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -96,82 +98,96 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
 
     protected void grdCaseTypeDetail_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-
-    }
-
-    protected void grdCaseTypeDetail_RowEditing(object sender, GridViewEditEventArgs e)
-    {
-        grdCaseTypeDetail.EditIndex = e.NewEditIndex;
-        BindGrid(Request.QueryString["CaseType"]);
-        //bindGridData();
-    }
-    public string convertQuotes(string str)
-    {
-        return str.Replace("'", "''");
-    }
-
-    [Obsolete]
-    protected void grdCaseTypeDetail_RowUpdating(object sender, GridViewUpdateEventArgs e)
-    {
-        string OICemail = "";
-
-        HiddenField hdnUId = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnUId");
-        HiddenField hdnCaseNo = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnCaseNo");
-        TextBox txtOICMobileNo = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtOICMobileNo");
-        TextBox txtRespondentOffice = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRespondentOffice");
-        TextBox txtHearingDate = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtHearingDate");
-        TextBox txtRemarks = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRemarks");
-        DropDownList ddlOICName = (DropDownList)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("ddlOICName");
-        DropDownList ddlCaseSubject = (DropDownList)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("ddlCaseSubject");
-        TextBox txtRespondent = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRespondent");
-        string strQuery = "update tbl_OldCaseDetail set RespondentOffice='" + convertQuotes(txtRespondentOffice.Text.Trim()) + "',OICId=" + ddlOICName.SelectedItem.Value
-            + ",CaseSubjectId=" + ddlCaseSubject.SelectedItem.Value + ",Remarks='" + convertQuotes(txtRemarks.Text.Trim()) + "',OICMobileNo='" + convertQuotes(txtOICMobileNo.Text.Trim());
-        if (!string.IsNullOrEmpty(txtHearingDate.Text)) strQuery += "',HearingDate='" + Convert.ToDateTime(txtHearingDate.Text, cult).ToString("yyyy/MM/dd");
-        strQuery += "',Respondent='" + convertQuotes(txtRespondent.Text.Trim()) + "' where UniqueNo='" + Convert.ToString(hdnUId.Value) + "'";
-        obj.ByTextQuery(strQuery);
-        grdCaseTypeDetail.EditIndex = -1;
-        BindGrid(Request.QueryString["CaseType"]);
-
-        //HiddenField hdnOICId = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnOICId");
-        dsCase = obj.ByDataSet("select a.OICName,a.OICEmailID,a.OICMobileNo,b.CirlceName,c.ZoneName,d.OfficeName,e.Designation_Name designation,f.Division_Name from tblOICMaster a " +
-            "inner join tblCircleMaster b on b.Circle_ID = a.Circle_ID " +
-            "inner join tblZoneMaster c on c.Zone_ID = a.Zone_ID " +
-            "inner join tblOfficeMaster d on d.Office_Id = a.Office_ID " +
-            "inner join tblDesignationMaster e on e.Designation_Name = a.DesignationID " +
-            "inner join tblDivisionMaster f on f.Division_ID = a.Division_ID " +
-            "where OICMaster_ID = " + Convert.ToInt32(ddlOICName.SelectedItem.Value));
-
-       
-
-
-        if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICEmailID"].ToString()))
+        try
         {
-            DataTable dt = (DataTable)dsCase.Tables[0];
-            EmailContent ObjEC = new EmailContent();
-            ObjEC.OIC_Name = dt.Rows[0]["OICName"].ToString();
-            ObjEC.OIC_Mobile = dt.Rows[0]["OICMobileNo"].ToString();
-            ObjEC.OIC_Email = dt.Rows[0]["OICEmailID"].ToString();
-            ObjEC.OIC_Circle = dt.Rows[0]["CirlceName"].ToString();
-            ObjEC.OIC_Designation = dsCase.Tables[0].Rows[0]["designation"].ToString();
-            ObjEC.OIC_Office = dsCase.Tables[0].Rows[0]["OfficeName"].ToString();
-            ObjEC.OIC_Zone = dsCase.Tables[0].Rows[0]["ZoneName"].ToString();
-            ObjEC.OIC_Division = dsCase.Tables[0].Rows[0]["Division_Name"].ToString();
-
-            ObjEC.Petitioner = grdCaseTypeDetail.Rows[e.RowIndex].Cells[3].Text;
-            ObjEC.respondent = txtRespondent.Text.Trim();
-            ObjEC.Case_Number = hdnCaseNo.Value;
-            ObjEC.Curr_Date = DateTime.Now.ToString("dd-MM-yyyy");
-            ObjEC.Curr_Year = DateTime.Now.Year.ToString();
-            ObjEC.Court_Name = grdCaseTypeDetail.Rows[e.RowIndex].Cells[2].Text;
-            sendmail(ObjEC, "sfatech.bot@gmail.com");
+            lblMsg.Text = "";
+            if (e.CommandName == "EditDetails")
+            {
+        
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+                Label lblUnique = (Label)row.FindControl("lblUniqueNo");
+                string ID = lblUnique.Text;
+                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID), false);
+             }
         }
-        else
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "alertMessage", "alertMessage()", true);
+        catch (Exception ex)
+        {    
+            throw ex;
         }
     }
 
+    //protected void grdCaseTypeDetail_RowEditing(object sender, GridViewEditEventArgs e)
+    //{
+    //    grdCaseTypeDetail.EditIndex = e.NewEditIndex;
+    //    if (ViewState["dtsearch"] != null)
+    //        bindGridData();
+    //    else
+    //        BindGrid(Request.QueryString["CaseType"]);
+    //    //bindGridData();
+    //}
+    //public string convertQuotes(string str)
+    //{
+    //    return str.Replace("'", "''");
+    //}
+
     [Obsolete]
+    //protected void grdCaseTypeDetail_RowUpdating(object sender, GridViewUpdateEventArgs e)
+    //{
+    //    HiddenField hdnUId = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnUId");
+    //    HiddenField hdnCaseNo = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnCaseNo");
+    //    TextBox txtOICMobileNo = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtOICMobileNo");
+    //    TextBox txtRespondentOffice = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRespondentOffice");
+    //    TextBox txtHearingDate = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtHearingDate");
+    //    TextBox txtRemarks = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRemarks");
+    //    DropDownList ddlOICName = (DropDownList)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("ddlOICName");
+    //    DropDownList ddlCaseSubject = (DropDownList)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("ddlCaseSubject");
+    //    TextBox txtRespondent = (TextBox)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("txtRespondent");
+    //    string strQuery = "update tbl_OldCaseDetail set RespondentOffice='" + convertQuotes(txtRespondentOffice.Text.Trim()) + "',OICId=" + ddlOICName.SelectedItem.Value
+    //        + ",CaseSubjectId=" + ddlCaseSubject.SelectedItem.Value + ",Remarks='" + convertQuotes(txtRemarks.Text.Trim()) + "',OICMobileNo='" + convertQuotes(txtOICMobileNo.Text.Trim());
+    //    if (!string.IsNullOrEmpty(txtHearingDate.Text)) strQuery += "',HearingDate='" + Convert.ToDateTime(txtHearingDate.Text, cult).ToString("yyyy/MM/dd");
+    //    strQuery += "',Respondent='" + convertQuotes(txtRespondent.Text.Trim()) + "' where UniqueNo='" + Convert.ToString(hdnUId.Value) + "'";
+    //    obj.ByTextQuery(strQuery);
+
+    //    //HiddenField hdnOICId = (HiddenField)grdCaseTypeDetail.Rows[e.RowIndex].FindControl("hdnOICId");
+    //    dsCase = obj.ByDataSet("select a.OICName,a.OICEmailID,a.OICMobileNo,b.CirlceName,c.ZoneName,d.OfficeName,e.Designation_Name designation,f.Division_Name from tblOICMaster a " +
+    //        "inner join tblCircleMaster b on b.Circle_ID = a.Circle_ID " +
+    //        "inner join tblZoneMaster c on c.Zone_ID = a.Zone_ID " +
+    //        "inner join tblOfficeMaster d on d.Office_Id = a.Office_ID " +
+    //        "inner join tblDesignationMaster e on e.Designation_ID = a.DesignationID " +
+    //        "inner join tblDivisionMaster f on f.Division_ID = a.Division_ID " +
+    //        "where OICMaster_ID = " + Convert.ToInt32(ddlOICName.SelectedItem.Value));
+
+    //    if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICEmailID"].ToString()))
+    //    {
+    //        DataTable dt = (DataTable)dsCase.Tables[0];
+    //        EmailContent ObjEC = new EmailContent();
+    //        ObjEC.OIC_Name = dt.Rows[0]["OICName"].ToString();
+    //        ObjEC.OIC_Mobile = dt.Rows[0]["OICMobileNo"].ToString();
+    //        ObjEC.OIC_Email = dt.Rows[0]["OICEmailID"].ToString();
+    //        ObjEC.OIC_Circle = dt.Rows[0]["CirlceName"].ToString();
+    //        ObjEC.OIC_Designation = dsCase.Tables[0].Rows[0]["designation"].ToString();
+    //        ObjEC.OIC_Office = dsCase.Tables[0].Rows[0]["OfficeName"].ToString();
+    //        ObjEC.OIC_Zone = dsCase.Tables[0].Rows[0]["ZoneName"].ToString();
+    //        ObjEC.OIC_Division = dsCase.Tables[0].Rows[0]["Division_Name"].ToString();
+
+    //        ObjEC.Petitioner = grdCaseTypeDetail.Rows[e.RowIndex].Cells[3].Text;
+    //        ObjEC.respondent = txtRespondent.Text.Trim();
+    //        ObjEC.Case_Number = hdnCaseNo.Value;
+    //        ObjEC.Curr_Date = DateTime.Now.ToString("dd-MM-yyyy");
+    //        ObjEC.Curr_Year = DateTime.Now.Year.ToString();
+    //        ObjEC.Court_Name = grdCaseTypeDetail.Rows[e.RowIndex].Cells[2].Text;
+    //        sendmail(ObjEC, "sfatech.bot@gmail.com");
+    //    }
+    //    //else
+    //    //{
+    //    //    //Page.ClientScript.RegisterStartupScript(this.GetType(), "alertMessage", "alertMessage()", true);
+    //    //}
+    //    grdCaseTypeDetail.EditIndex = -1;
+    //    BindGrid(Request.QueryString["CaseType"]);
+    //    txtSearch.Text = "";
+    //}
+
+
     private void sendmail(EmailContent ObjEC, string CC)
     {
         try
@@ -224,14 +240,14 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 // create the HTML to PDF converter
                 HiQPdf.HtmlToPdf htmlToPdfConverter = new HiQPdf.HtmlToPdf();
 
-              
-               // htmlToPdfConverter.BrowserWidth = ;
 
-                
+                // htmlToPdfConverter.BrowserWidth = ;
+
+
                 //if (textBoxBrowserHeight.Text.Length > 0)
                 //    htmlToPdfConverter.BrowserHeight = int.Parse(textBoxBrowserHeight.Text);
 
-                
+
                 //htmlToPdfConverter.HtmlLoadedTimeout = ;
 
                 // set PDF page size and orientation
@@ -239,7 +255,7 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 htmlToPdfConverter.Document.PageOrientation = HiQPdf.PdfPageOrientation.Portrait;
 
                 // set the PDF standard used by the document
-                htmlToPdfConverter.Document.PdfStandard = HiQPdf.PdfStandard.PdfA; 
+                htmlToPdfConverter.Document.PdfStandard = HiQPdf.PdfStandard.PdfA;
 
                 // set PDF page margins
                 htmlToPdfConverter.Document.Margins = new HiQPdf.PdfMargins(10);
@@ -251,7 +267,7 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 //switch (dropDownListTriggeringMode.SelectedValue)
                 //{
                 //    case "Auto":
-                        htmlToPdfConverter.TriggerMode = HiQPdf.ConversionTriggerMode.Auto;
+                htmlToPdfConverter.TriggerMode = HiQPdf.ConversionTriggerMode.Auto;
                 //        break;
                 //    case "WaitTime":
                 //        htmlToPdfConverter.TriggerMode = ConversionTriggerMode.WaitTime;
@@ -266,11 +282,11 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 //}
 
                 // set header and footer
-              //  SetHeader(htmlToPdfConverter.Document);
-               // SetFooter(htmlToPdfConverter.Document);
+                //  SetHeader(htmlToPdfConverter.Document);
+                // SetFooter(htmlToPdfConverter.Document);
 
                 // set the document security
-              //  htmlToPdfConverter.Document.Security.OpenPassword = textBoxOpenPassword.Text;
+                //  htmlToPdfConverter.Document.Security.OpenPassword = textBoxOpenPassword.Text;
                 htmlToPdfConverter.Document.Security.AllowPrinting = true;
 
                 // set the permissions password too if an open password was set
@@ -289,12 +305,12 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 //}
                 //else
                 //{
-                    // convert HTML code
-                    string htmlCode = Att_content;
-                    string baseUrl = "";
+                // convert HTML code
+                string htmlCode = Att_content;
+                string baseUrl = "";
 
-                    // convert HTML code to a PDF memory buffer
-                    pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(htmlCode, baseUrl);
+                // convert HTML code to a PDF memory buffer
+                pdfBuffer = htmlToPdfConverter.ConvertHtmlToMemory(htmlCode, baseUrl);
                 //}
 
                 // inform the browser about the binary data format
@@ -308,8 +324,10 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 HttpContext.Current.Response.BinaryWrite(pdfBuffer);
 
                 // call End() method of HTTP response to stop ASP.NET page processing
-               
 
+                HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+                HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
                 #endregion
 
                 mm.Subject = "OIC Successfully Mapped";
@@ -325,10 +343,10 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
                 smtp.Credentials = networkCred;
                 smtp.Port = smtpSection.Network.Port;
                 smtp.Send(mm);
-                HttpContext.Current.Response.End();
+
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "alertMessage", "alert('Email sent.');", true);
             }
-        
+
         }
         catch (Exception ex)
         {
@@ -336,141 +354,192 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     }
 
     private void bindGridData()
-{
-    if (ViewState["dt"] != null)
     {
-        dtCase = (DataTable)ViewState["dt"];
-        grdCaseTypeDetail.DataSource = dtCase;
-        grdCaseTypeDetail.DataBind();
-    }
-}
-
-protected void grdCaseTypeDetail_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-{
-    grdCaseTypeDetail.EditIndex = -1;
-    BindGrid(Request.QueryString["CaseType"]);
-}
-
-
-
-protected void grdCaseTypeDetail_RowDataBound(object sender, GridViewRowEventArgs e)
-{
-
-    int OICId = 0;
-    int CaseSubjectId = 0;
-
-    if (e.Row.RowType == DataControlRowType.DataRow)
-    {
-        if ((e.Row.RowState & DataControlRowState.Edit) <= 0)
+        if (ViewState["dtsearch"] != null)
         {
-            Label lblOICName = e.Row.FindControl("lblOICName") as Label;
-            Label lblOICMobileNo = e.Row.FindControl("lblOICMobileNo") as Label;
-            Label lblCaseSubjectId = e.Row.FindControl("lblCaseSubjectId") as Label;
-            if (lblOICName.Text != "" && lblOICMobileNo.Text != "")
-            {
-                OICId = Convert.ToInt32(lblOICName.Text);
-                dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId + " and Isactive=1");
-                if (dsCase.Tables[0].Rows.Count > 0)
-                {
-                    lblOICName.Text = dsCase.Tables[0].Rows[0]["OICName"].ToString();
-                    lblOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
-                }
-            }
-            if (lblCaseSubjectId.Text != "")
-            {
-                CaseSubjectId = Convert.ToInt32(lblCaseSubjectId.Text);
-                dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject where CaseSubjectID=" + CaseSubjectId);
-                if (dsCase.Tables[0].Rows.Count > 0)
-                {
-                    lblCaseSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubject"].ToString();
-                }
-            }
+            dtCase = (DataTable)ViewState["dtsearch"];
+            grdCaseTypeDetail.DataSource = dtCase;
+            grdCaseTypeDetail.DataBind();
         }
-        if ((e.Row.RowState & DataControlRowState.Edit) > 0)
+        else
         {
-
-            HiddenField hdnUId = e.Row.FindControl("hdnUId") as HiddenField;
-            dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks from tbl_OldCaseDetail where CaseType='" + Convert.ToString(Request.QueryString["CaseType"]) + "' and UniqueNo='" + hdnUId.Value + "'");
-            if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICId"].ToString()) && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["CaseSubjectId"].ToString()))
-            {
-                OICId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["OICId"]);
-                CaseSubjectId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["CaseSubjectId"]);
-            }
-
-            //int index = e.Row.RowIndex;
-            Label lblOICName = e.Row.FindControl("lblOICName") as Label;
-
-
-            // TextBox txtOICMobileNo = e.Row.FindControl("txtOICMobileNo") as TextBox;
-            //dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where Isactive=1");
-            //if (dsCase.Tables[0].Rows.Count > 0)
-            //{
-            //    txtOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
-            //}
-
-            DropDownList ddlOICName = e.Row.FindControl("ddlOICName") as DropDownList;
-
-            dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where Isactive=1");
-            if (dsCase.Tables[0].Rows.Count > 0)
-            {
-                ddlOICName.DataSource = dsCase.Tables[0];
-                ddlOICName.DataTextField = "OICName";
-                ddlOICName.DataValueField = "OICMaster_ID";
-                ddlOICName.DataBind();
-                ddlOICName.Items.Insert(0, new ListItem("Select", "0"));
-                ddlOICName.Items.FindByValue(OICId.ToString()).Selected = true;
-            }
-            else
-            {
-                ddlOICName.DataSource = null;
-                ddlOICName.DataBind();
-                ddlOICName.Items.Insert(0, new ListItem("Select", "0"));
-            }
-
-
-            DropDownList ddlCaseSubject = (DropDownList)e.Row.FindControl("ddlCaseSubject");
-            dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject");
-            if (dsCase.Tables[0].Rows.Count > 0)
-            {
-
-                ddlCaseSubject.DataSource = dsCase.Tables[0];
-                ddlCaseSubject.DataTextField = "CaseSubject";
-                ddlCaseSubject.DataValueField = "CaseSubjectID";
-                ddlCaseSubject.DataBind();
-                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
-                ddlCaseSubject.Items.FindByValue(CaseSubjectId.ToString()).Selected = true;
-            }
-            else
-            {
-                ddlCaseSubject.DataSource = null;
-                ddlCaseSubject.DataBind();
-                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
-            }
+            dtCase = (DataTable)ViewState["dt"];
+            grdCaseTypeDetail.DataSource = dtCase;
+            grdCaseTypeDetail.DataBind();
         }
     }
-}
 
-protected void ddlOICName_TextChanged(object sender, EventArgs e)
-{
-    GridViewRow grow = (GridViewRow)((Control)sender).NamingContainer;
-    DropDownList ddlOICName = (DropDownList)grow.FindControl("ddlOICName");
-    DropDownList ddl_state = (DropDownList)grow.FindControl("ddl_state");
-    int OICId = Convert.ToInt32(ddlOICName.SelectedValue);
-    // Label lblOICMobileNo = (Label)gvRow.FindControl("lblOICMobileNo");
-    TextBox txtOICMobileNo = grow.FindControl("txtOICMobileNo") as TextBox;
+    //protected void grdCaseTypeDetail_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+    //{
+    //    grdCaseTypeDetail.EditIndex = -1;
+    //    if (ViewState["dtsearch"] != null)
+    //        bindGridData();
+    //    else
+    //        BindGrid(Request.QueryString["CaseType"]);
+    //}
 
-    dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId);
-    if (dsCase.Tables[0].Rows.Count > 0)
+    //protected void grdCaseTypeDetail_RowDataBound(object sender, GridViewRowEventArgs e)
+    //{
+
+    //    int OICId = 0;
+    //    int CaseSubjectId = 0;
+
+    //    if (e.Row.RowType == DataControlRowType.DataRow)
+    //    {
+    //        if ((e.Row.RowState & DataControlRowState.Edit) <= 0)
+    //        {
+    //            Label lblOICName = e.Row.FindControl("lblOICName") as Label;
+    //            Label lblOICMobileNo = e.Row.FindControl("lblOICMobileNo") as Label;
+    //            Label lblCaseSubjectId = e.Row.FindControl("lblCaseSubjectId") as Label;
+    //            if (lblOICName.Text != "" && lblOICMobileNo.Text != "")
+    //            {
+    //                OICId = Convert.ToInt32(lblOICName.Text);
+    //                dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId + " and Isactive=1");
+    //                if (dsCase.Tables[0].Rows.Count > 0)
+    //                {
+    //                    lblOICName.Text = dsCase.Tables[0].Rows[0]["OICName"].ToString();
+    //                    lblOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
+    //                }
+    //            }
+    //            if (lblCaseSubjectId.Text != "")
+    //            {
+    //                CaseSubjectId = Convert.ToInt32(lblCaseSubjectId.Text);
+    //                dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject where CaseSubjectID=" + CaseSubjectId);
+    //                if (dsCase.Tables[0].Rows.Count > 0)
+    //                {
+    //                    lblCaseSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubject"].ToString();
+    //                }
+    //            }
+    //        }
+    //        if ((e.Row.RowState & DataControlRowState.Edit) > 0)
+    //        {
+
+    //            HiddenField hdnUId = e.Row.FindControl("hdnUId") as HiddenField;
+    //            dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks from tbl_OldCaseDetail where CaseType='" + Convert.ToString(Request.QueryString["CaseType"]) + "' and UniqueNo='" + hdnUId.Value + "'");
+    //            if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICId"].ToString()) && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["CaseSubjectId"].ToString()))
+    //            {
+    //                OICId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["OICId"]);
+    //                CaseSubjectId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["CaseSubjectId"]);
+    //            }
+
+    //            //int index = e.Row.RowIndex;
+    //            Label lblOICName = e.Row.FindControl("lblOICName") as Label;
+
+
+    //            // TextBox txtOICMobileNo = e.Row.FindControl("txtOICMobileNo") as TextBox;
+    //            //dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where Isactive=1");
+    //            //if (dsCase.Tables[0].Rows.Count > 0)
+    //            //{
+    //            //    txtOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
+    //            //}
+
+    //            DropDownList ddlOICName = e.Row.FindControl("ddlOICName") as DropDownList;
+
+    //            dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where Isactive=1");
+    //            if (dsCase.Tables[0].Rows.Count > 0)
+    //            {
+    //                ddlOICName.DataSource = dsCase.Tables[0];
+    //                ddlOICName.DataTextField = "OICName";
+    //                ddlOICName.DataValueField = "OICMaster_ID";
+    //                ddlOICName.DataBind();
+    //                ddlOICName.Items.Insert(0, new ListItem("Select", "0"));
+    //                ddlOICName.Items.FindByValue(OICId.ToString()).Selected = true;
+    //            }
+    //            else
+    //            {
+    //                ddlOICName.DataSource = null;
+    //                ddlOICName.DataBind();
+    //                ddlOICName.Items.Insert(0, new ListItem("Select", "0"));
+    //            }
+
+
+    //            DropDownList ddlCaseSubject = (DropDownList)e.Row.FindControl("ddlCaseSubject");
+    //            dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject");
+    //            if (dsCase.Tables[0].Rows.Count > 0)
+    //            {
+
+    //                ddlCaseSubject.DataSource = dsCase.Tables[0];
+    //                ddlCaseSubject.DataTextField = "CaseSubject";
+    //                ddlCaseSubject.DataValueField = "CaseSubjectID";
+    //                ddlCaseSubject.DataBind();
+    //                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+    //                ddlCaseSubject.Items.FindByValue(CaseSubjectId.ToString()).Selected = true;
+    //            }
+    //            else
+    //            {
+    //                ddlCaseSubject.DataSource = null;
+    //                ddlCaseSubject.DataBind();
+    //                ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
+    //            }
+    //        }
+    //    }
+    //}
+
+    protected void ddlOICName_TextChanged(object sender, EventArgs e)
     {
-        txtOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
-    }
-}
+        GridViewRow grow = (GridViewRow)((Control)sender).NamingContainer;
+        DropDownList ddlOICName = (DropDownList)grow.FindControl("ddlOICName");
+        DropDownList ddl_state = (DropDownList)grow.FindControl("ddl_state");
+        int OICId = Convert.ToInt32(ddlOICName.SelectedValue);
+        // Label lblOICMobileNo = (Label)gvRow.FindControl("lblOICMobileNo");
+        TextBox txtOICMobileNo = grow.FindControl("txtOICMobileNo") as TextBox;
 
-protected void grdCaseTypeDetail_PageIndexChanging(object sender, GridViewPageEventArgs e)
-{
-    grdCaseTypeDetail.PageIndex = e.NewPageIndex;
-    BindGrid(Request.QueryString["CaseType"]);
-}
+        dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId);
+        if (dsCase.Tables[0].Rows.Count > 0)
+        {
+            txtOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
+        }
+    }
+
+    protected void grdCaseTypeDetail_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        grdCaseTypeDetail.PageIndex = e.NewPageIndex;
+        if (ViewState["dtsearch"] != null)
+            bindGridData();
+        else
+            BindGrid(Request.QueryString["CaseType"]);
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            try
+            {
+                dsCase = obj.ByDataSet("Select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo," +
+                    "CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail where FilingNo like '%" + Convert.ToString(txtSearch.Text.Trim()) + "%'  order by HearingDate Desc");
+                if (dsCase.Tables[0].Rows.Count > 0)
+                {
+                    ViewState["dtsearch"] = null;
+                    ViewState["dtsearch"] = dsCase.Tables[0];
+                    grdCaseTypeDetail.DataSource = dsCase.Tables[0];
+                    grdCaseTypeDetail.DataBind();
+                }
+                else
+                {
+                    grdCaseTypeDetail.DataSource = null;
+                    grdCaseTypeDetail.DataBind();
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('No record found')", true);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
+    protected void btnClearSearch_Click(object sender, EventArgs e)
+    {
+        ViewState["dtsearch"] = null;
+        BindGrid(Request.QueryString["CaseType"]);
+        txtSearch.Text = "";
+    }
 }
 
 public class EmailContent

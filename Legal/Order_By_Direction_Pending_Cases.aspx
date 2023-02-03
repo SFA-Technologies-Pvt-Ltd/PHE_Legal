@@ -166,6 +166,7 @@
             color: white !important;
         }
     </style>
+
     <style>
         /* Thise Style For Datatable On Full Page.*/
         .form-inline {
@@ -180,11 +181,62 @@
             font-size: 17px;
             padding-right: 10px;
         }
-           table tbody tr td span {
-           font-size: 20px;
-           padding-right:10px;
+
+        table tbody tr td span {
+            font-size: 20px;
+            padding-right: 10px;
+        }
+
+        .multiselect-native-select .multiselect {
+            text-align: left !important;
+        }
+
+        .multiselect-native-select .multiselect-selected-text {
+            width: 100% !important;
+        }
+
+        .multiselect-native-select .checkbox, .multiselect-native-select .dropdown-menu {
+            width: 100% !important;
+            transform: translate3d(0px, 0px, 0px) !important;
+            padding: 2px !important;
+            max-height: 18em !important;
+            overflow-y: auto !important;
+            /*#EC8712*/
+        }
+
+        .multiselect-native-select .btn .caret {
+            float: right !important;
+            vertical-align: middle !important;
+            margin-top: 8px;
+            border-top: 6px dashed;
+        }
+
+        .form-controlSearchBox {
+            display: block;
+            width: 100%;
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #CED4DA;
+            /*border-radius: 0.25rem;*/
+            box-shadow: inset 0 0 0 transparent;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .multiselect-native-select button {
+            border-radius: 0.5em;
+            border-color: #579FBB !important;
         }
     </style>
+
+    <link href="../Main_plugins/bootstrap/css/bootstrap-multiselect.css" rel="stylesheet" />
+
+
 
     <script src="../Main_plugins/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -221,7 +273,7 @@
     <%--====================================================End Select 2==========================================================--%>
     <script src="../Main_plugins/dist/js/adminlte.js"></script>
     <script src="../Main_plugins/plugins/bootstrap/js/bootstrap-datepicker.js"></script>
-    <script src="../Main_plugins/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src='../Main_plugins/plugins/daterangepicker/daterangepicker.js'></script>
     <script>
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
@@ -257,105 +309,132 @@
             alert('Emailid Not Found')
         }
     </script>
+
+    <script type="text/javascript">
+        $(function () {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+            function endRequestHandle(sender, Args) {
+                $('[id*=ddlRespondentOffice]').multiselect({
+                    includeSelectAllOption: true,
+                    buttonWidth: '100%',
+                });
+            }
+        });
+        function OpenModal() {
+            $('#EditModal').modal('show');
+        }
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
+
         <div>
             <asp:ScriptManager runat="server" ID="ScriptManager1" />
-            <asp:UpdatePanel runat="server" ID="UP1">
-                <ContentTemplate>
 
-                    <div class="container-fluid">
-                        <asp:Label ID="lblMsg" runat="server"></asp:Label>
-                        <a href="OldCaseDashBoard.aspx" title="<<Back" class="btn btn-link"></a>
-                        <div class="card">
-                            <div class="card-header" style="text-align: center;">
-                                <span style="font-size: 18px; color: #e5e5e5" id="spnCaseType" runat="server"></span>
+            <%--<asp:ListBox runat="server" ID="ddlRespondentOffice1" SelectionMode="Multiple" ClientIDMode="Static" CssClass="multiselect"></asp:ListBox>--%>
+            <div class="container-fluid">
+                <asp:Label ID="lblMsg" runat="server"></asp:Label>
+                <a href="OldCaseDashBoard.aspx" title="<<Back" class="btn btn-link"></a>
+                <div class="card">
+                    <div class="card-header" style="text-align: center;">
+                        <span style="font-size: 18px; color: #e5e5e5" id="spnCaseType" runat="server"></span>
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtSearch" AutoComplete="Off" runat="server" Font-Size="20px" onkeyup="Search_Gridview(this, 'grdCaseTypeDetail')" CssClass="form-control" placeholder="Case No Search"></asp:TextBox>
                             </div>
-                            <div class="card-body" style="opacity: 1;">
-                                <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found"
-                                    AutoGenerateColumns="false" CssClass="table-responsive" Width="100%"
-                                    OnRowEditing="grdCaseTypeDetail_RowEditing" OnRowCommand="grdCaseTypeDetail_RowCommand"
-                                    OnRowUpdating="grdCaseTypeDetail_RowUpdating" OnRowCancelingEdit="grdCaseTypeDetail_RowCancelingEdit"
-                                    OnRowDataBound="grdCaseTypeDetail_RowDataBound" OnPageIndexChanging="grdCaseTypeDetail_PageIndexChanging" PageSize="5" AllowPaging="true">
-                                    <PagerSettings Mode="Numeric" Position="Bottom" />
-                                    <Columns>
-                                        <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Left">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Is Order By Direction">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblIsOrderByDirection" Text='<%#Eval("IsOrderByDirection") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:DropDownList ID="ddlIsOrderByDirection" runat="server">
-                                                    <asp:ListItem Text="Select" />
-                                                    <asp:ListItem Text="Yes" />
-                                                    <asp:ListItem Text="No" />
-                                                </asp:DropDownList>
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:BoundField DataField="FilingNo" HeaderText="Filing No" ReadOnly="true" />
-                                        <asp:BoundField DataField="Court" HeaderText="Court" ReadOnly="true" />
-                                        <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" ReadOnly="true" />
+                            <div class="col-md-3">
+                                <asp:Button Text="Search" runat="server" ID="btnSearch" OnClick="btnSearch_Click" CssClass="btn btn-primary" />
+                                <asp:Button Text="Clear Search" runat="server" ID="btnClearSearch" OnClick="btnClearSearch_Click" CssClass="btn btn-secondary" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="opacity: 1;">
+                        <%--<asp:UpdatePanel runat="server" ID="UP1">
+                            <ContentTemplate>--%>
+                        <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found"
+                            AutoGenerateColumns="false" CssClass="table-responsive" Width="100%"
+                            OnRowEditing="grdCaseTypeDetail_RowEditing" OnRowCommand="grdCaseTypeDetail_RowCommand"
+                            OnRowUpdating="grdCaseTypeDetail_RowUpdating" OnRowCancelingEdit="grdCaseTypeDetail_RowCancelingEdit"
+                            OnRowDataBound="grdCaseTypeDetail_RowDataBound">
+                            <PagerSettings Mode="Numeric" Position="Bottom" />
+                            <Columns>
+                                <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Left">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Is Order By Direction">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblIsOrderByDirection" Text='<%#Eval("IsOrderByDirection") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlIsOrderByDirection" runat="server">
+                                            <asp:ListItem Text="Select" />
+                                            <asp:ListItem Text="Yes" />
+                                            <asp:ListItem Text="No" />
+                                        </asp:DropDownList>
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="FilingNo" HeaderText="Filing No" ReadOnly="true" />
+                                <asp:BoundField DataField="Court" HeaderText="Court" ReadOnly="true" />
+                                <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" ReadOnly="true" />
 
-                                        <asp:TemplateField HeaderText="Respondent">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblRespondent" Text='<%#Eval("Respondent") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtRespondent" TextMode="MultiLine" Text='<%#Eval("Respondent") %>' runat="server" />
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Respondent Office">
-                                            <ItemTemplate>
-                                                <asp:Label ID="txtRespondentOffice" Text='<%#Eval("RespondentOffice") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtRespondentOffice" TextMode="MultiLine" Text='<%#Eval("RespondentOffice") %>' runat="server" />
-                                                <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
-                                                <asp:HiddenField ID="hdnCaseNo" runat="server" Value='<%#Eval("CaseNo") %>' />
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Case Subject">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:DropDownList ID="ddlCaseSubject" runat="server">
-                                                </asp:DropDownList>
-                                            </EditItemTemplate>
-                                        </asp:TemplateField> 
-                                        <asp:TemplateField HeaderText="Case Sub Subject">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblCaseSubSubjectId" Text='<%#Eval("CaseSubSubjectId") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox runat="server" ID="txtCaseSubSubjectId" Text="1" ReadOnly="true"/>  
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Respondent">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblRespondent" Text='<%#Eval("Respondent") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRespondent" TextMode="MultiLine" Text='<%#Eval("Respondent") %>' runat="server" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Respondent Office">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblRespondentOfficeId" Text='<%#Eval("RespondentOffice") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <%--<asp:ListBox runat="server" ID="ddlRespondentOffice" showcheckbox="true" SelectionMode="Multiple" CssClass="multiselect-all"></asp:ListBox>--%>
+                                        <asp:TextBox ID="txtRespondentOffice" TextMode="MultiLine" Text='<%#Eval("RespondentOffice") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnUId" runat="server" Value='<%#Eval("UniqueNo") %>' />
+                                        <asp:HiddenField ID="hdnCaseNo" runat="server" Value='<%#Eval("CaseNo") %>' />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Case Subject">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubject") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlCaseSubject" runat="server">
+                                        </asp:DropDownList>
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Case Sub Subject">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblCaseSubSubjectId" Text='<%#Eval("CaseSubSubject") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox runat="server" ID="txtCaseSubSubjectId" Text="1" ReadOnly="true" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="OIC Name">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblOICName" Text='<%#Eval("OICId") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId")%>' runat="server" />
-                                                <asp:DropDownList ID="ddlOICName" runat="server" OnTextChanged="ddlOICName_TextChanged" AutoPostBack="true">
-                                                </asp:DropDownList>
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="OIC Mobile No">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" ReadOnly="true" />
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                       <%-- <asp:TemplateField HeaderText="Hearing Date">
+                                <asp:TemplateField HeaderText="OIC Name">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblOICName" Text='<%#Eval("OICId") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId")%>' runat="server" />
+                                        <asp:DropDownList ID="ddlOICName" runat="server" OnTextChanged="ddlOICName_TextChanged" AutoPostBack="true">
+                                        </asp:DropDownList>
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="OIC Mobile No">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtOICMobileNo" Text='<%#Eval("OICMobileNo") %>' runat="server" ReadOnly="true" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <%-- <asp:TemplateField HeaderText="Hearing Date">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblHearingDate" Text='<%#Eval("HearingDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                             </ItemTemplate>
@@ -363,55 +442,214 @@
                                                 <asp:TextBox ID="txtHearingDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("HearingDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                             </EditItemTemplate>
                                         </asp:TemplateField>--%>
-                                        <asp:TemplateField HeaderText="Order Compliance Date">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblOrderComplianceDate" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtOrderComplianceDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Remarks">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblRemarks" Text='<%#Eval("Remarks") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="txtRemarks" TextMode="MultiLine" Text='<%#Eval("Remarks") %>' runat="server" />
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Is Complaince">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblIsComplaince" Text='<%#Eval("IsComplaince") %>' runat="server" />
-                                            </ItemTemplate>
-                                            <EditItemTemplate>
-                                                <asp:DropDownList ID="ddlIsComplaince" runat="server">
-                                                    <asp:ListItem Text="Select" />
-                                                    <asp:ListItem Text="Yes" />
-                                                    <asp:ListItem Text="No" />
-                                                    <asp:ListItem Text="Pending" />
-                                                </asp:DropDownList>
-                                            </EditItemTemplate>
-                                        </asp:TemplateField>
-                                        
-                                        
-                                        <asp:CommandField ShowEditButton="true" ShowCancelButton="true" ShowHeader="true" />
-                                        <%-- <asp:TemplateField HeaderText="Edit" >
+                                <asp:TemplateField HeaderText="Order Compliance Date">
                                     <ItemTemplate>
-                                        <asp:LinkButton Text="Edit" runat="server" CommandName="edit" CommandArgument='<%#Eval("UniqueNo") %>' />
-                                         <asp:LinkButton Text="Update" runat="server" CommandName="Update" CommandArgument='<%#Eval("UniqueNo") %>' />
-                                         <asp:LinkButton Text="Cancel" runat="server" CommandName="Cancel" CommandArgument='<%#Eval("UniqueNo") %>' />
+                                        <asp:Label ID="lblOrderComplianceDate" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
                                     </ItemTemplate>
-                                </asp:TemplateField>--%>
-                                    </Columns>
-                                </asp:GridView>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtOrderComplianceDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Remarks">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblRemarks" Text='<%#Eval("Remarks") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine" Text='<%#Eval("Remarks") %>' runat="server" />
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Is Complaince">
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblIsComplaince" Text='<%#Eval("IsComplaince") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:DropDownList ID="ddlIsComplaince" runat="server">
+                                            <asp:ListItem Text="Select" />
+                                            <asp:ListItem Text="Yes" />
+                                            <asp:ListItem Text="No" />
+                                            <asp:ListItem Text="Pending" />
+                                        </asp:DropDownList>
+                                    </EditItemTemplate>
+                                </asp:TemplateField>
+                                <%-- <asp:CommandField ShowEditButton="true" ShowCancelButton="true" ShowHeader="true" />--%>
+                                <asp:TemplateField HeaderText="Edit">
+                                    <ItemTemplate>
+                                        <asp:HiddenField runat="server" Value='<%#Eval("UniqueNo") %>'
+                                            ID="hdnUniqueNo" />
+                                        <asp:HyperLink runat="server" NavigateUrl='<%# string.Format("OrderByDirectionEdit.aspx?U={0}&CT={1}",
+                    Eval("UniqueNo").ToString(), Eval("CaseType").ToString()) %>'>Edit</asp:HyperLink>
+                                        <%-- <a href="OrderByDirectionEdit.aspx?U=<%#Eval("UniqueNo")&CT=Eval("caseype") %>" target="_parent">Edit</a>--%>
+                                        <%-- <asp:LinkButton Text="Edit" runat="server" CommandArgument='<%#Eval("UniqueNo") %>'
+                                                    ID="lnkEdit" OnClick="lnkEdit_Click" />--%>
+                                        <%-- <asp:LinkButton Text="Update" runat="server" CommandName="Update" CommandArgument='<%#Eval("UniqueNo") %>' />
+                                         <asp:LinkButton Text="Cancel" runat="server" CommandName="Cancel" CommandArgument='<%#Eval("UniqueNo") %>' />--%>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                        <%--</ContentTemplate>
+
+                        </asp:UpdatePanel>--%>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <div>
+            <asp:UpdatePanel runat="server" ID="uuup1">
+                <ContentTemplate>
+                    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div style="display: table; height: 100%; width: 100%;">
+                            <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
+                                <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
+                                    <div class="modal-header" style="background-color: #D9D9D9;">
+                                        <span class="modal-title" style="float: left" id="myModalLabel">Edit Pending Case Details</span>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                        </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="modal-body">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Is Order By Direction</label>
+                                                        <asp:DropDownList ID="ddlIsOrderByDirection" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Text="Select" />
+                                                            <asp:ListItem Text="Yes" />
+                                                            <asp:ListItem Text="No" />
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Filing No</label>
+                                                        <asp:TextBox ID="txtFilingNo" runat="server" CssClass="form-control"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Court</label>
+                                                        <asp:TextBox ID="txtCourt" runat="server" CssClass="form-control"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Petitionar</label>
+                                                        <asp:TextBox ID="txtPetitioner" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Case Type</label>
+                                                        <asp:TextBox ID="txtRespondent" TextMode="MultiLine" runat="server" CssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Respondent Office</label>
+
+                                                        <asp:ListBox runat="server" ID="ddlRespondentOffice" showcheckbox="true" SelectionMode="Multiple" ClientIDMode="Static" AppendDataBoundItems="true"
+                                                            CssClass="form-control multiselect"></asp:ListBox>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Case Subject</label>
+                                                        <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control">
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>OIC Name</label>
+                                                        <asp:DropDownList ID="ddlOICNameOpen" runat="server" OnSelectedIndexChanged="ddlOICNameOpen_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control">
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>OIC Mobile No</label>
+                                                        <asp:TextBox ID="txtOICMobileNoOpen" runat="server" ReadOnly="true" CssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Case Sub Subject</label>
+                                                        <asp:TextBox runat="server" ID="txtCaseSubSubject" ReadOnly="true" CssClass="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Order Compliance Date</label>
+                                                        <asp:TextBox ID="txtOrderComplianceDate" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="disableFuturedate form-control" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" Text='<%#Eval("OrderComplianceDate","{0:dd/MM/yyyy}") %>' runat="server" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Is Complaince</label>
+                                                        <asp:DropDownList ID="ddlIsComplaince" runat="server" CssClass="form-control">
+                                                            <asp:ListItem Text="Select" />
+                                                            <asp:ListItem Text="Yes" />
+                                                            <asp:ListItem Text="No" />
+                                                            <asp:ListItem Text="Pending" />
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Remarks</label>
+                                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine" Text='<%#Eval("Remarks") %>' runat="server" CssClass="form-control" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <asp:Button runat="server" CssClass="btn btn-success" Text="Update" ID="btnUpdate" Style="margin-top: 20px; width: 80px;" />
+                                        <asp:Button ID="btnNo" ValidationGroup="no" runat="server" CssClass="btn btn-danger" Text="Close" data-dismiss="modal" Style="margin-top: 20px; width: 60px;" />
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </ContentTemplate>
-
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="ddlIsOrderByDirection" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlRespondentOffice" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlCaseSubject" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlOICNameOpen" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlIsComplaince" />
+                    <asp:AsyncPostBackTrigger ControlID="ddlOICNameOpen" />
+                </Triggers>
             </asp:UpdatePanel>
         </div>
     </form>
+    <link href="../Main_plugins/bootstrap/css/bootstrap-multiselect.css" rel="stylesheet" />
+    <script src="../Main_plugins/bootstrap/js/bootstrap-multiselect.js"></script>
+    <script type="text/javascript">
+        $('[id*=ddlRespondentOffice]').multiselect({
+            includeSelectAllOption: true,
+            buttonWidth: '100%',
+        });
+    </script>
+
 </body>
+
 </html>

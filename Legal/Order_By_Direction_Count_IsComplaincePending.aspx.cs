@@ -71,7 +71,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
         try
         {
             dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo,OrderComplianceDate,IsComplaince,CaseSubSubjectId,IsOrderByDirection from tbl_OrderByDirectionPendingCase where CaseType='" + Convert.ToString(CaseType) + "' and IsOrderByDirection='Yes' and IsComplaince='Pending'");
-            if (dsCase.Tables[0].Rows.Count > 0)
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
             {
                 ViewState["dt"] = null;
                 ViewState["dt"] = dsCase.Tables[0];
@@ -102,7 +102,10 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
     protected void grdCaseTypeDetail_RowEditing(object sender, GridViewEditEventArgs e)
     {
         grdCaseTypeDetail.EditIndex = e.NewEditIndex;
-        BindGrid(Request.QueryString["CaseType"]);
+        if (ViewState["dtsearch"] != null)
+            bindGridData();
+        else
+            BindGrid(Request.QueryString["CaseType"]);
         //bindGridData();
     }
     public string convertQuotes(string str)
@@ -144,7 +147,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
         //dsCase = obj.ByDataSet("select a.OICName,a.OICEmailID,a.OICMobileNo,b.CirlceName,c.ZoneName,d.OfficeName,e.UserType_Name designation,f.Division_Name from tblOICMaster a " +
         //    "inner join tblCircleMaster b on b.Circle_ID = a.Circle_ID " +
         //    "inner join tblZoneMaster c on c.Zone_ID = a.Zone_ID " +
-        //    "inner join tblLegal_OfficeMaster d on d.Office_Id = a.Office_ID " +
+        //    "inner join  tblOfficeMaster  d on d.Office_Id = a.Office_ID " +
         //    "inner join tblLegal_UserTypeMaster e on e.UserType_Id = a.DesignationID " +
         //    "inner join tblDivisionMaster f on f.Division_ID = a.Division_ID " +
         //    "where OICMaster_ID = " + Convert.ToInt32(ddlOICName.SelectedItem.Value));
@@ -182,9 +185,9 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
 
     private void bindGridData()
     {
-        if (ViewState["dt"] != null)
+        if (ViewState["dtsearch"] != null)
         {
-            dtCase = (DataTable)ViewState["dt"];
+            dtCase = (DataTable)ViewState["dtsearch"];
             grdCaseTypeDetail.DataSource = dtCase;
             grdCaseTypeDetail.DataBind();
         }
@@ -193,19 +196,45 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
     protected void grdCaseTypeDetail_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
     {
         grdCaseTypeDetail.EditIndex = -1;
-        BindGrid(Request.QueryString["CaseType"]);
+        if (ViewState["dtsearch"] != null)
+            bindGridData();
+        else
+            BindGrid(Request.QueryString["CaseType"]);
     }
 
 
 
     protected void grdCaseTypeDetail_RowDataBound(object sender, GridViewRowEventArgs e)
     {
-
         int OICId = 0;
         int CaseSubjectId = 0;
-
+        string RES_Office = string.Empty;
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
+
+
+            Label lblRespondentOffice = (Label)e.Row.FindControl("txtRespondentOffice");
+
+            if (!string.IsNullOrEmpty(lblRespondentOffice.Text))
+            {
+                string[] RespondentOfficeStr = convertQuotes(lblRespondentOffice.Text).Trim().Split(',');
+                for (int i = 0; i < RespondentOfficeStr.Length; i++)
+                {
+                    dsCase = obj.ByDataSet("select Respondent_Office,Respondent_office_Id from  tblRespondentOffice where Respondent_office_Id=" + Convert.ToInt32(RespondentOfficeStr[i]));
+                    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+                        RES_Office = RES_Office + dsCase.Tables[0].Rows[0]["Respondent_Office"].ToString() + ",";
+                }
+            }
+            lblRespondentOffice.Text = RES_Office;
+            //Label lblOICName1 = (Label)e.Row.FindControl("lblOICName");
+            //if (lblOICName1.Text != "")
+            //{
+            //    OICId = Convert.ToInt32(lblOICName1.Text);
+            //    dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId + " and Isactive=1");
+            //    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            //        lblOICName1.Text = dsCase.Tables[0].Rows[0]["OICName"].ToString();
+            //}
+
             if ((e.Row.RowState & DataControlRowState.Edit) <= 0)
             {
                 Label lblOICName = e.Row.FindControl("lblOICName") as Label;
@@ -213,33 +242,27 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
                 Label lblCaseSubjectId = e.Row.FindControl("lblCaseSubjectId") as Label;
                 Label lblCaseSubSubjectId = e.Row.FindControl("lblCaseSubSubjectId") as Label;
 
-                if (lblOICName.Text != "" && lblOICMobileNo.Text != "" && lblOICName.Text != "0" )
+                if (lblOICName.Text != "" && lblOICMobileNo.Text != "" && lblOICName.Text != "0")
                 {
                     OICId = Convert.ToInt32(lblOICName.Text);
                     dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId + " and Isactive=1");
-                    if (dsCase.Tables[0].Rows.Count > 0)
+                    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
                     {
                         lblOICName.Text = dsCase.Tables[0].Rows[0]["OICName"].ToString();
                         lblOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
                     }
                 }
-                if (lblCaseSubjectId.Text != "" && lblCaseSubjectId.Text != "0")
+                if (lblCaseSubjectId.Text != "" && lblCaseSubjectId.Text != "0" && lblCaseSubSubjectId.Text != "0" && lblCaseSubSubjectId.Text != "")
                 {
                     CaseSubjectId = Convert.ToInt32(lblCaseSubjectId.Text);
                     dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject where CaseSubjectID=" + CaseSubjectId);
-                    if (dsCase.Tables[0].Rows.Count > 0)
-                    {
+
+                    DataSet dsCase1 = obj.ByDataSet("select CaseSubSubject from tbl_CaseSubSubjectMaster where CaseSubSubj_Id=" + Convert.ToInt32(lblCaseSubSubjectId.Text) + " and CaseSubjectID = " + CaseSubjectId);
+                    if (dsCase1.Tables.Count > 0 && dsCase1.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase1.Tables[0].Rows[0]["CaseSubSubject"].ToString()))
+                        lblCaseSubSubjectId.Text = dsCase1.Tables[0].Rows[0]["CaseSubSubject"].ToString();
+
+                    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
                         lblCaseSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubject"].ToString();
-                    }
-                }
-                if (lblCaseSubSubjectId.Text != "0" && lblCaseSubSubjectId.Text != "")
-                {
-                    HiddenField hdnUId = e.Row.FindControl("hdnUId") as HiddenField;
-                    dsCase = obj.ByDataSet("select CaseSubSubject from tbl_CaseSubSubjectMaster where CaseSubSubjId=" + Convert.ToInt32(lblCaseSubSubjectId.Text));
-                    if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["CaseSubSubject"].ToString()) )
-                    {
-                        lblCaseSubSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubSubject"].ToString();
-                    }
                 }
             }
             if ((e.Row.RowState & DataControlRowState.Edit) > 0)
@@ -247,7 +270,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
 
                 HiddenField hdnUId = e.Row.FindControl("hdnUId") as HiddenField;
                 dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,IsComplaince,CaseSubSubjectId,IsOrderByDirection from tbl_OrderByDirectionPendingCase where CaseType='" + Convert.ToString(Request.QueryString["CaseType"]) + "' and UniqueNo='" + hdnUId.Value + "'");
-                if (dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICId"].ToString()) && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["CaseSubjectId"].ToString()))
+                if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["OICId"].ToString()) && !string.IsNullOrEmpty(dsCase.Tables[0].Rows[0]["CaseSubjectId"].ToString()))
                 {
                     OICId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["OICId"]);
                     CaseSubjectId = Convert.ToInt32(dsCase.Tables[0].Rows[0]["CaseSubjectId"]);
@@ -260,7 +283,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
                 }
 
                 //int index = e.Row.RowIndex;
-                Label lblOICName = e.Row.FindControl("lblOICName") as Label;
+
 
 
                 // TextBox txtOICMobileNo = e.Row.FindControl("txtOICMobileNo") as TextBox;
@@ -274,7 +297,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
 
 
                 dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where Isactive=1");
-                if (dsCase.Tables[0].Rows.Count > 0)
+                if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
                 {
                     ddlOICName.DataSource = dsCase.Tables[0];
                     ddlOICName.DataTextField = "OICName";
@@ -310,12 +333,22 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
                 //    ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
                 //}
 
-                ///TextBox txtCaseSubSubjectId = (TextBox)e.Row.FindControl("txtCaseSubSubjectId");
+                Label lblCaseSubjectId = (Label)e.Row.FindControl("lblCaseSubjectId");
+                Label lblCaseSubSubjectId = (Label)e.Row.FindControl("lblCaseSubSubjectId");
+                if (lblCaseSubjectId.Text != "" && lblCaseSubjectId.Text != "0" && lblCaseSubSubjectId.Text != "0" && lblCaseSubSubjectId.Text != "")
+                {
+                    CaseSubjectId = Convert.ToInt32(lblCaseSubjectId.Text);
+                    dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubject From tbl_LegalMstCaseSubject where CaseSubjectID=" + CaseSubjectId);
+
+                    DataSet dsCase1 = obj.ByDataSet("select CaseSubSubject from tbl_CaseSubSubjectMaster where CaseSubSubj_Id=" + Convert.ToInt32(lblCaseSubSubjectId.Text) + " and CaseSubjectID = " + CaseSubjectId);
+                    if (dsCase1.Tables.Count > 0 && dsCase1.Tables[0].Rows.Count > 0 && !string.IsNullOrEmpty(dsCase1.Tables[0].Rows[0]["CaseSubSubject"].ToString()))
+                        lblCaseSubSubjectId.Text = dsCase1.Tables[0].Rows[0]["CaseSubSubject"].ToString();
+
+                    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+                        lblCaseSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubject"].ToString();
+                }
                 //dsCase = obj.ByDataSet("select * from tbl_CaseSubSubjectMaster where CaseSubSubjId" + Convert.ToInt32(dsCase.Tables[0].Rows[0]["CaseSubSubjectId"]));
                 //txtCaseSubSubjectId.Text = dsCase.Tables[0].Rows[0]["CaseSubSubject"].ToString();
-
-
-
 
             }
         }
@@ -331,7 +364,7 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
         TextBox txtOICMobileNo = grow.FindControl("txtOICMobileNo") as TextBox;
 
         dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId);
-        if (dsCase.Tables[0].Rows.Count > 0)
+        if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
         {
             txtOICMobileNo.Text = dsCase.Tables[0].Rows[0]["OICMobileNo"].ToString();
         }
@@ -341,6 +374,49 @@ public partial class Legal_Order_By_Direction_Count_IsComplaincePending : System
     {
         grdCaseTypeDetail.PageIndex = e.NewPageIndex;
         BindGrid(Request.QueryString["CaseType"]);
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            try
+            {
+                dsCase = obj.ByDataSet("select distinct UniqueNo,CaseType,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo, " +
+              "(select CaseSubject from tbl_LegalMstCaseSubject b where b.CaseSubjectId=a.CaseSubjectId) CaseSubject,CaseSubjectId," +
+              "(select CaseSubSubject from tbl_CaseSubSubjectMaster c where c.CaseSubSubj_Id=a.CaseSubSubjectId) CaseSubSubject" +
+              ",Remarks,HearingDate,CaseNo,OrderComplianceDate,IsComplaince,CaseSubSubjectId,IsOrderByDirection,RespondentOfficeId  from tbl_OrderByDirectionPendingCase a " +
+               "where CaseType='" + Convert.ToString(Request.QueryString["CaseType"]) + "' and FilingNo like '%" + Convert.ToString(txtSearch.Text.Trim()) + "%'");
+                if (dsCase.Tables[0].Rows.Count > 0)
+                {
+                    ViewState["dtsearch"] = null;
+                    ViewState["dtsearch"] = dsCase.Tables[0];
+                    grdCaseTypeDetail.DataSource = dsCase.Tables[0];
+                    grdCaseTypeDetail.DataBind();
+                }
+                else
+                {
+                    grdCaseTypeDetail.DataSource = null;
+                    grdCaseTypeDetail.DataBind();
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('No record found')", true);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
+    protected void btnClearSearch_Click(object sender, EventArgs e)
+    {
+        ViewState["dtsearch"] = null;
+        BindGrid(Request.QueryString["CaseType"]);
+        txtSearch.Text = "";
     }
 }
 
