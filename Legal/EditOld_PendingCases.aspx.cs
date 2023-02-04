@@ -21,7 +21,7 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
             {
                 bindDropDowns();
                 string ID = Convert.ToString(Request.QueryString["ID"]);
-                FindGridData(ID);
+                FindGridData(sender, e);
             }
         }
         else
@@ -30,31 +30,65 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
         }
     }
 
-    protected void FindGridData(string ID)
+    protected void FindGridData(object sender, EventArgs e)
     {
         try
         {
             DataSet ds = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "flag", "UniqueNo" },
-                new string[] { "1", ID }, "dataset");
+                new string[] { "2", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                txtFilingNo.Text = ds.Tables[0].Rows[0][""].ToString();
-                txtCourt.Text = ds.Tables[0].Rows[0][""].ToString();
-                txtPetitioner.Text = ds.Tables[0].Rows[0][""].ToString();
-                ddlRespondentOffice.ClearSelection();
-                ddlRespondentOffice.Items.FindByValue(ds.Tables[0].Rows[0][""].ToString()).Selected = true;
-                ddlOICNameOpen.ClearSelection();
-                ddlOICNameOpen.Items.FindByValue(ds.Tables[0].Rows[0][""].ToString()).Selected = true;
-                txtOICMobileNoOpen.Text = ds.Tables[0].Rows[0][""].ToString();
-                ddlCaseSubject.ClearSelection();
-                ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0][""].ToString()).Selected = true;
-                ddlCaseSubSubject.ClearSelection();
-                ddlCaseSubSubject.Items.FindByValue(ds.Tables[0].Rows[0][""].ToString()).Selected = true;
+                txtFilingNo.Text = ds.Tables[0].Rows[0]["FilingNo"].ToString();
+                txtCourt.Text = ds.Tables[0].Rows[0]["Court"].ToString();
+                txtPetitioner.Text = ds.Tables[0].Rows[0]["Petitioner"].ToString();
+                txtRemarks.Text = ds.Tables[0].Rows[0]["Remarks"].ToString();
+                if (ds.Tables[0].Rows[0]["OICId"].ToString() != "")
+                {
+                    ddlOICNameOpen.ClearSelection();
+                    ddlOICNameOpen.Items.FindByValue(ds.Tables[0].Rows[0]["OICId"].ToString()).Selected = true;
+                    txtOICMobileNoOpen.Text = ds.Tables[0].Rows[0]["OICMobileNo"].ToString();
+                }
+                if (ds.Tables[0].Rows[0]["CaseSubjectId"].ToString() != "")
+                {
+                    ddlCaseSubject.ClearSelection();
+                    ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubjectId"].ToString()).Selected = true;
+                }
+                if (ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString() != "")
+                {
+                    ddlCaseSubject_SelectedIndexChanged( sender,  e);
+                    ddlCaseSubSubject.ClearSelection();
+                    ddlCaseSubSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString()).Selected = true;
+                }
+                if (ds.Tables[0].Rows[0]["RespondentOffice"].ToString() != "")
+                {
+                    string ROIds = ds.Tables[0].Rows[0]["RespondentOffice"].ToString().Trim();
+                    string[] RespondentOffice = ROIds.Split(',');
+                    if (!string.IsNullOrEmpty(ROIds))
+                    {
+                        for (int i = 0; i < RespondentOffice.Length; i++)
+                        {
+                            ddlRespondentOffice.Items.FindByValue(RespondentOffice[i]).Selected = true;
+                        }
+                    }
+                    else
+                    {
+                        ddlRespondentOffice.SelectedIndex = -1;
+                    }
+                }
+                if (ds.Tables[0].Rows[0]["CaseType"].ToString() != "")
+                {
+                    txtRespondent.Text = ds.Tables[0].Rows[0]["CaseType"].ToString();
+                }
+                if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                {
+                    ddlIsComplaince.ClearSelection();
+                    ddlIsComplaince.Items.FindByText(ds.Tables[0].Rows[0]["Status"].ToString()).Selected = true;
+                }
             }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -113,22 +147,22 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
                 ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
             }
 
-            dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubSubj_Id,CaseSubSubject from tbl_CaseSubSubjectMaster");
-            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
-            {
+            //dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubSubj_Id,CaseSubSubject from tbl_CaseSubSubjectMaster");
+            //if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            //{
 
-                ddlCaseSubSubject.DataSource = dsCase.Tables[0];
-                ddlCaseSubSubject.DataTextField = "CaseSubSubject";
-                ddlCaseSubSubject.DataValueField = "CaseSubSubj_Id";
-                ddlCaseSubSubject.DataBind();
-                ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
-            }
-            else
-            {
-                ddlCaseSubSubject.DataSource = null;
-                ddlCaseSubSubject.DataBind();
-                ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
-            }
+            //    ddlCaseSubSubject.DataSource = dsCase.Tables[0];
+            //    ddlCaseSubSubject.DataTextField = "CaseSubSubject";
+            //    ddlCaseSubSubject.DataValueField = "CaseSubSubj_Id";
+            //    ddlCaseSubSubject.DataBind();
+            //    ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
+            //}
+            //else
+            //{
+            //    ddlCaseSubSubject.DataSource = null;
+            //    ddlCaseSubSubject.DataBind();
+            //    ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
+            //}
         }
         catch (Exception ex)
         {
@@ -179,14 +213,15 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
                 var selItems = ddlRespondentOffice.Items.Cast<ListItem>().Where(x => x.Selected).Select(x => x.Value).ToArray();
                 var result = String.Join(",", selItems);
 
-                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "OICId", "RespondentOffice", "CaseSubjectId", "CaseSubSubjectId", "OICMobileNo", "Remarks", "Court", "Status", "flag" },
-                     new string[] { ddlOICNameOpen.SelectedValue, result, ddlCaseSubject.SelectedValue, ddlCaseSubSubject.SelectedValue, txtOICMobileNoOpen.Text.Trim(), txtRemarks.Text.Trim(), txtCourt.Text.Trim(), ddlIsComplaince.SelectedItem.Text, "1" }, "dataset");
+                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "OICId", "RespondentOffice", "CaseSubjectId", "CaseSubSubjectId", "OICMobileNo", "Remarks", "Status", "flag", "UniqueNo" },
+                     new string[] { ddlOICNameOpen.SelectedValue, result, ddlCaseSubject.SelectedValue, ddlCaseSubSubject.SelectedValue, txtOICMobileNoOpen.Text.Trim(), txtRemarks.Text.Trim(), ddlIsComplaince.SelectedItem.Text, "1", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
                 if (dsCase != null && dsCase.Tables[0].Rows.Count > 0)
                 {
                     string ErrMsg = dsCase.Tables[0].Rows[0]["ErrMsg"].ToString();
                     if (dsCase.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
                         lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                        FindGridData(sender, e);
                     }
                     else
                     {
@@ -197,7 +232,7 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 }

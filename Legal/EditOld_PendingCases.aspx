@@ -78,19 +78,19 @@
                                 <div class="col-md-3">
                                     <div class="form-group">   
                                         <label>Filling No</label>           
-                                        <asp:TextBox ID="txtFilingNo" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtFilingNo" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Court</label>
-                                        <asp:TextBox ID="txtCourt" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtCourt" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Petitionar</label>
-                                        <asp:TextBox ID="txtPetitioner" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtPetitioner" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -147,16 +147,16 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Type</label>
-                                        <asp:TextBox ID="txtRespondent" TextMode="MultiLine" runat="server" CssClass="form-control"  AutoComplete="off" MaxLength="100"/>
+                                        <asp:TextBox ID="txtRespondent" runat="server" CssClass="form-control" ReadOnly="true"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Remarks</label>
+                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine"  runat="server" CssClass="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Remarks</label>
-                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine" Text='<%#Eval("Remarks") %>' runat="server" CssClass="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-md-3" style="padding-top: 2rem! important;">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-primary btn-block" Text="Update" OnClick="btnUpdate_Click" />

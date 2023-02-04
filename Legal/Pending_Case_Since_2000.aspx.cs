@@ -72,6 +72,16 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     {
         try
         {
+            //select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,RespondertypeName,
+            //OICId,OD.OICMobileNo,OD.CaseSubjectId,CaseSubject,scs.CaseSubSubject,OD.CaseSubSubjectId,Remarks,OICName,
+            //HearingDate,CaseNo 
+            //from tbl_OldCaseDetail OD
+            //left join tbl_LegalResponderType RD on cast(RD.Respondertype_ID as varchar) = cast(OD.RespondentOffice as varchar)
+            //left join tblOICMaster OI on OI.OICMaster_ID = OD.OICId
+            //left join tbl_LegalMstCaseSubject SC on SC.CaseSubjectID = OD.CaseSubjectId
+            //left join tbl_CaseSubSubjectMaster scs on scs.CaseSubjectID = SC.CaseSubjectID and OD.CaseSubSubjectId = scs.CaseSubSubj_Id
+            //where CaseType='CONA'order by HearingDate Desc
+
             dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
             if (dsCase.Tables[0].Rows.Count > 0)
             {

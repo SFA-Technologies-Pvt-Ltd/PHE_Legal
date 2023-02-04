@@ -310,8 +310,7 @@
                                                 <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
-                                                <asp:DropDownList ID="ddlCaseSubject" runat="server">
-                                                </asp:DropDownList>
+                                                <asp:DropDownList ID="ddlCaseSubject" runat="server"></asp:DropDownList>
                                             </EditItemTemplate>
                                         </asp:TemplateField>
                                       
