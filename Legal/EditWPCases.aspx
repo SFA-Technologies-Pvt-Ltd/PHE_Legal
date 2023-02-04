@@ -614,6 +614,7 @@
                                                     <asp:TemplateField HeaderText="Document" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:HyperLink ID="hplnkHearingDocument" runat="server" Enabled='<%#  Eval("HearingDoc").ToString() == "" ? false : true  %>' NavigateUrl='<%# "../Legal/HearingDoc/" + Eval("HearingDoc") %>' Target="_blank" CssClass="fa fa-eye" ToolTip="View"></asp:HyperLink>
+                                                            <asp:Label ID="lblHearingDoc" runat="server" Text='<%# Eval("HearingDoc") %>' Visible="false"></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
@@ -683,24 +684,11 @@
                                     <div class="form-group">
                                         <label>
                                             Order Document
-                                        </label>
-                                        <%-- <span style="color: red;"><b>*</b></span>
-                                        <asp:RequiredFieldValidator ID="RfvCaseDisposeOrderDoc" ValidationGroup="CaseDispose"
-                                            ErrorMessage="Upload Order Document." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="FielUpcaseDisposeOrderDoc" Display="Dynamic" runat="server">
-                                        </asp:RequiredFieldValidator>--%>
+                                        </label>  
                                         <asp:FileUpload ID="FielUpcaseDisposeOrderDoc" runat="server" CssClass="form-control"></asp:FileUpload>
                                         <span style="color: red;">Document Should be 200Kb.</span>
                                     </div>
-                                </div>
-                                <%-- </div>
-                            <div class="row">--%>
-                                <div class="col-md-3" id="ViewDoc_CaseDipose" runat="server" visible="false">
-                                    <div class="form-group">
-                                        <label>View Document</label><br />
-                                        <asp:HyperLink ID="hyPerlinkViewDisposeDoc" runat="server" Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
-                                    </div>
-                                </div>
+                                </div>                               
                                 <div class="col-md-3" id="HearingDtl_CaseDispose" runat="server" visible="false" style="padding-top: 3%;">
                                     <div class="row">
                                         <div class="col-md-3">
