@@ -1,0 +1,96 @@
+-----------Exception Details on  2/6/2023 11:26:16 AM-----------------
+-------------------------------------------------------------------------------------
+
+
+
+Log Written Date: 2/6/2023 11:26:16 AM
+
+Error Line No : line 88
+
+Error Message: HttpException
+
+Exception Type: System.Web.HttpException
+
+Error Location : DataBinding: 'System.Data.DataRowView' does not contain a property with the name 'OfficeLevelName'.
+
+ Error Page Url: http://localhost:50938/Legal/zonetocircle.aspx
+
+User Host IP: 
+
+
+--------------------------------*End*------------------------------------------
+
+
+
+-----------Exception Details on  2/6/2023 11:30:26 AM-----------------
+-------------------------------------------------------------------------------------
+
+
+
+Log Written Date: 2/6/2023 11:30:26 AM
+
+Error Line No : line 88
+
+Error Message: HttpException
+
+Exception Type: System.Web.HttpException
+
+Error Location : DataBinding: 'System.Data.DataRowView' does not contain a property with the name 'HOLocation'.
+
+ Error Page Url: http://localhost:50938/Legal/zonetocircle.aspx
+
+User Host IP: 
+
+
+--------------------------------*End*------------------------------------------
+
+
+
+-----------Exception Details on  2/6/2023 11:59:06 AM-----------------
+-------------------------------------------------------------------------------------
+
+
+
+Log Written Date: 2/6/2023 11:59:06 AM
+
+Error Line No : line 68
+
+Error Message: HttpException
+
+Exception Type: System.Web.HttpException
+
+Error Location : DataBinding: 'System.Data.DataRowView' does not contain a property with the name 'OfficeLevelName'.
+
+ Error Page Url: http://localhost:50938/Legal/DivisionMaster.aspx
+
+User Host IP: 
+
+
+--------------------------------*End*------------------------------------------
+
+
+
+-----------Exception Details on  2/6/2023 12:01:30 PM-----------------
+-------------------------------------------------------------------------------------
+
+
+
+Log Written Date: 2/6/2023 12:01:30 PM
+
+Error Line No : line 68
+
+Error Message: HttpException
+
+Exception Type: System.Web.HttpException
+
+Error Location : DataBinding: 'System.Data.DataRowView' does not contain a property with the name 'HOLocation'.
+
+ Error Page Url: http://localhost:50938/Legal/DivisionMaster.aspx
+
+User Host IP: 
+
+
+--------------------------------*End*------------------------------------------
+
+
+

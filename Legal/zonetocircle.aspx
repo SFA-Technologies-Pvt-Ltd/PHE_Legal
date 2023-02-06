@@ -73,23 +73,41 @@
                                                 <asp:TextBox ID="txtCircleName" runat="server" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" AutoComplete="off" placeholder="Enter Circle Name" MaxLength="80"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" style="display:none;">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Circle Code<span style="color: red;"><b> *</b></span></label>
-                                                <span class="pull-right">
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
-                                                        ErrorMessage="Enter Cirlce Code" Text="<i class='fa fa-exclamation-circle' title='Required'></i>"
-                                                        ControlToValidate="txtCircleCode" ForeColor="Red" Display="Dynamic" runat="server">
-                                                    </asp:RequiredFieldValidator>--%>
-                                                </span>
-                                                <asp:TextBox runat="server" ID="txtCircleCode" CssClass="form-control" MaxLength="8" onkeypress="return NumberOnly();" AutoComplete="off" placeholder="Enter Circle Code"></asp:TextBox>
+                                                <label>Office Level<span style="color: red;"><b>*</b></span> </label>
+                                                <asp:RequiredFieldValidator ID="rfvOfficeLevel" ValidationGroup="Save"
+                                                    ErrorMessage="Select Office Level." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlOfficeLevel" Display="Dynamic" runat="server" InitialValue="0">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlOfficeLevel" runat="server" CssClass="form-control"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Office Type<span style="color: red;"><b>*</b></span></label>
+                                                <asp:RequiredFieldValidator ID="rfvofficetype" ValidationGroup="Save"
+                                                    ErrorMessage="Select Office type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlOfficetype" Display="Dynamic" runat="server" InitialValue="0">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlOfficetype" runat="server" CssClass="form-control"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Location<span style="color: red;"><b>*</b></span></label>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                                    ErrorMessage="Enter location." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="txtlocation" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:TextBox ID="txtlocation" runat="server" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-3 pt-3">
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6" style="margin-top: 1rem;">
-                                                        <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();"/>
+                                                        <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
                                                     </div>
                                                     <div class="col-md-6" style="margin-top: 1rem;">
                                                         <a href="zonetocircle.aspx" class="btn btn-default btn-block">Clear</a>
@@ -104,19 +122,19 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="table-responsive">                                               
+                                            <div class="table-responsive">
                                                 <asp:GridView ID="GrdZoneCircle" AutoGenerateColumns="false" runat="server" DataKeyNames="Circle_ID"
                                                     CssClass="table table-bordered table-hover" PageSize="10" AllowPaging="true" EmptyDataText="NO RECORD FOUND" OnRowCommand="GrdZoneCircle_RowCommand" OnPageIndexChanging="GrdZoneCircle_PageIndexChanging">
                                                     <RowStyle HorizontalAlign="Center" />
                                                     <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />
-                                                   <Columns>
+                                                    <Columns>
                                                         <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                                 <asp:Label ID="lblCircleID" runat="server" Text='<%# Eval("Circle_ID") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                         <asp:TemplateField HeaderText="Zone Name">
+                                                        <asp:TemplateField HeaderText="Zone Name">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblZoneName" runat="server" Text='<%# Eval("ZoneName") %>'></asp:Label>
                                                                 <asp:Label ID="lblZoneID" runat="server" Text='<%# Eval("Zone_ID") %>' Visible="false"></asp:Label>
@@ -132,9 +150,26 @@
                                                                 <asp:Label ID="lblCircleCode" runat="server" Text='<%# Eval("CircleCode") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Office Level Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblofficelevel" Text='<%# Eval("OfficeLevelName") %>' runat="server"></asp:Label>
+                                                                <asp:Label ID="lblofficelevel_ID" Text='<%# Eval("Officelevel_Id") %>' Visible="false" runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Office Type Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblofficetype" Text='<%# Eval("OfficeType_Name") %>' runat="server"></asp:Label>
+                                                                <asp:Label ID="lblofficetype_ID" Text='<%# Eval("Officetype_Id") %>' Visible="false" runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Location">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lbllocation" Text='<%# Eval("HOLocation") %>' runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Circle_ID") %>' CommandName="EditDetails" ToolTip="Edit" ><i class="fa fa-edit"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Circle_ID") %>' CommandName="EditDetails" ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>

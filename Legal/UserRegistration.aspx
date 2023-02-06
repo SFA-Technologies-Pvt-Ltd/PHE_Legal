@@ -144,10 +144,7 @@
                                             ForeColor="Red" ValidationExpression="^([6-9]{1}[0-9]{9})$"></asp:RegularExpressionValidator>
                                         <asp:TextBox ID="txtMobileNo" runat="server" MaxLength="10" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
-                                </div>
-                                <%--</div>
-                                <div class="row">
-                                    <div class="col-md-4"></div>--%>
+                                </div>                             
                                 <div class="col-md-3 col-sm mt-5">
                                     <div class="row">
                                         <div class="col-md-6">

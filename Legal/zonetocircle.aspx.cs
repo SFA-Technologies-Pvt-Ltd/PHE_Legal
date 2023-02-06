@@ -23,11 +23,54 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillZone();
                 FillGrid();
+                FillOfficeLevel();
+                FillOfficeType();
             }
         }
         else
         {
             Response.Redirect("../Login.aspx");
+        }
+    }
+
+    protected void FillOfficeLevel()
+    {
+        try
+        {
+            ddlOfficeLevel.Items.Clear();
+            ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficeLevel.DataTextField = "OfficeLevelName";
+                ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
+                ddlOfficeLevel.DataSource = ds;
+                ddlOfficeLevel.DataBind();
+            }
+            ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void FillOfficeType()
+    {
+        try
+        {
+            ddlOfficetype.Items.Clear();
+            ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficetype.DataTextField = "OfficeType_Name";
+                ddlOfficetype.DataValueField = "OfficeType_Id";
+                ddlOfficetype.DataSource = ds;
+                ddlOfficetype.DataBind();
+            }
+            ddlOfficetype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -52,7 +95,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
@@ -75,7 +118,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
@@ -89,20 +132,13 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-
-
-                    //ds = obj.ByProcedure("USP_Insert_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "CreatedBy", "CreatedByIP", "Office_Id" }
-                    //, new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), txtCircleCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
-                    ds = obj.ByProcedure("USP_Insert_CircleMaster", new string[] { "Zone_ID", "CirlceName",  "CreatedBy", "CreatedByIP", "Office_Id" }
-                                       , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(),  ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CreatedBy", "CreatedByIP", "Office_Id", "Officetype_Id", "Officelevel_Id", "HoLocation" }
+                                       , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ddlOfficetype.SelectedValue, ddlOfficeLevel.SelectedValue, txtlocation.Text.Trim() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["CircleID"].ToString() != "" && ViewState["CircleID"].ToString() != null)
                 {
-                    //ds = obj.ByProcedure("USP_Update_CircleMaster", new string[] { "Zone_ID", "CirlceName", "CircleCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Circle_ID" }
-                    //, new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), txtCircleCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["CircleID"].ToString() }, "dataset");
-
-                    ds = obj.ByProcedure("USP_Update_CircleMaster", new string[] { "Zone_ID", "CirlceName", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Circle_ID" }
-                        , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["CircleID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_CircleMaster", new string[] { "Zone_ID", "CirlceName", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Circle_ID", "Officetype_Id", "Officelevel_Id", "HoLocation" }
+                        , new string[] { ddlzone.SelectedValue, txtCircleName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["CircleID"].ToString(), ddlOfficetype.SelectedValue, ddlOfficeLevel.SelectedValue, txtlocation.Text.Trim() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -111,7 +147,9 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                     {
                         ddlzone.ClearSelection();
                         txtCircleName.Text = "";
-                        txtCircleCode.Text = "";
+                        ddlOfficetype.ClearSelection();
+                        ddlOfficeLevel.ClearSelection();
+                        txtlocation.Text = "";
                         FillGrid();
                         btnSave.Text = "Save";
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
@@ -129,7 +167,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
@@ -146,7 +184,20 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 Label lblZoneID = (Label)row.FindControl("lblZoneID");
                 Label lblCircleName = (Label)row.FindControl("lblCircleName");
                 Label lblCircleCode = (Label)row.FindControl("lblCircleCode");
-               // txtCircleCode.Text = lblCircleCode.Text;
+                Label lblOfficetype = (Label)row.FindControl("lblofficetype_ID");
+                Label lblofficelevel = (Label)row.FindControl("lblofficelevel_ID");
+                Label lbllocation = (Label)row.FindControl("lbllocation");
+                txtlocation.Text = lbllocation.Text;
+                if (lblofficelevel.Text != "")
+                {
+                    ddlOfficeLevel.ClearSelection();
+                    ddlOfficeLevel.Items.FindByValue(lblofficelevel.Text).Selected = true;
+                }
+                if (lblOfficetype.Text != "")
+                {
+                    ddlOfficetype.ClearSelection();
+                    ddlOfficetype.Items.FindByValue(lblOfficetype.Text).Selected = true;
+                }
                 txtCircleName.Text = lblCircleName.Text;
                 ddlzone.ClearSelection();
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
@@ -157,7 +208,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
 
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
@@ -173,7 +224,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion

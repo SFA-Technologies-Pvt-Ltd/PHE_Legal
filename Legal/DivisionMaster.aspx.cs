@@ -23,6 +23,8 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillZone();
                 FillGrid();
+                FillOfficeLevel();
+                FillOfficeType();
             }
         }
         else
@@ -50,11 +52,50 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
-
+    protected void FillOfficeLevel()
+    {
+        try
+        {
+            ddlOfficeLevel.Items.Clear();
+            ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficeLevel.DataTextField = "OfficeLevelName";
+                ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
+                ddlOfficeLevel.DataSource = ds;
+                ddlOfficeLevel.DataBind();
+            }
+            ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void FillOfficeType()
+    {
+        try
+        {
+            ddlOfficetype.Items.Clear();
+            ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficetype.DataTextField = "OfficeType_Name";
+                ddlOfficetype.DataValueField = "OfficeType_Id";
+                ddlOfficetype.DataSource = ds;
+                ddlOfficetype.DataBind();
+            }
+            ddlOfficetype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
     #region Fill GridView
     protected void FillGrid()
     {
@@ -75,7 +116,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     #endregion
@@ -88,19 +129,14 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    //ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
-                    //, new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
-
-                    ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP" }
-                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "CreatedBy", "CreatedByIP", "Officetype_Id", "Officelevel_Id", "HoLocation" }
+                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ddlOfficetype.SelectedValue, ddlOfficeLevel.SelectedValue, txtlocation.Text.Trim() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["DivisionID"].ToString() != "" && ViewState["DivisionID"].ToString() != null)
                 {
-                    //ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Division_Code", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
-                    //, new string[] { txtDivisionName.Text.Trim(), txtDivisionCode.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
 
-                    ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID" }
-                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Upate_DivisionMaster", new string[] { "Division_Name", "Zone_Id", "Circle_Id", "Office_Id", "LastUpdatedBy", "LastUpdatedByIP", "Division_ID", "Officetype_Id", "Officelevel_Id", "HoLocation" }
+                    , new string[] { txtDivisionName.Text.Trim(), ddlzone.SelectedValue, ddlCircleName.SelectedValue, ViewState["Office_Id"].ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["DivisionID"].ToString(), ddlOfficetype.SelectedValue, ddlOfficeLevel.SelectedValue, txtlocation.Text.Trim() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -112,7 +148,9 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                         ddlzone.ClearSelection();
                         ddlCircleName.ClearSelection();
                         txtDivisionName.Text = "";
-                        txtDivisionCode.Text = "";
+                        ddlOfficetype.ClearSelection();
+                        ddlOfficeLevel.ClearSelection();
+                        txtlocation.Text = "";
                         ViewState["DivisionID"] = "";
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
                     }
@@ -125,13 +163,13 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 {
                     lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Warning !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
                 }
-               
-               
+
+
             }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void GrddivisionMst_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -139,7 +177,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         try
         {
             lblMsg.Text = "";
-            if(e.CommandName == "EditDetails")
+            if (e.CommandName == "EditDetails")
             {
                 ViewState["DivisionID"] = "";
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
@@ -147,11 +185,24 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 Label lblCircleID = (Label)row.FindControl("lblCircleID");
                 Label lblDivisionName = (Label)row.FindControl("lblDivisionName");
                 Label lblDivisionCode = (Label)row.FindControl("lblDivisionCode");
+                Label lblOfficetype = (Label)row.FindControl("lblofficetype_ID");
+                Label lblofficelevel = (Label)row.FindControl("lblofficelevel_ID");
+                Label lbllocation = (Label)row.FindControl("lbllocation");
+                txtlocation.Text = lbllocation.Text;
+                if (lblofficelevel.Text != "")
+                {
+                    ddlOfficeLevel.ClearSelection();
+                    ddlOfficeLevel.Items.FindByValue(lblofficelevel.Text).Selected = true;
+                }
+                if (lblOfficetype.Text != "")
+                {
+                    ddlOfficetype.ClearSelection();
+                    ddlOfficetype.Items.FindByValue(lblOfficetype.Text).Selected = true;
+                }
                 txtDivisionName.Text = lblDivisionName.Text;
-                txtDivisionCode.Text = lblDivisionCode.Text;
                 ddlzone.ClearSelection();
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
-                ddlzone_SelectedIndexChanged(sender,  e);
+                ddlzone_SelectedIndexChanged(sender, e);
                 ddlCircleName.ClearSelection();
                 ddlCircleName.Items.FindByValue(lblCircleID.Text).Selected = true;
                 ViewState["DivisionID"] = e.CommandArgument;
@@ -160,7 +211,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void GrddivisionMst_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -173,7 +224,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void ddlzone_SelectedIndexChanged(object sender, EventArgs e)
@@ -195,7 +246,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 }

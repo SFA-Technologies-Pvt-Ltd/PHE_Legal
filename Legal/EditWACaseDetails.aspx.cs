@@ -275,7 +275,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
     {
         List<int> List = new List<int>();
         ddlCaseYear.Items.Clear();
-        for (int i = 2019; i <= 2030; i++)
+        for (int i = 2019; i <= DateTime.Now.Year; i++)
         {
             List.Add(i);
             ddlCaseYear.DataSource = List;
@@ -327,8 +327,8 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 lblWPNOdalOfficerMObile.Text = ds.Tables[0].Rows[0]["NodalOfficerMobileNo"].ToString();
                 lblWPOICNAme.Text = ds.Tables[0].Rows[0]["OICName"].ToString();
                 lblWPOICMobile.Text = ds.Tables[0].Rows[0]["OICMobileNo"].ToString();
-                // lblWPAdvocateName.Text = ds.Tables[0].Rows[0][""].ToString();
-                // lblWPAdvocateMobile.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();
+                lblWPAdvocateName.Text = ds.Tables[0].Rows[0]["petiAdvocateName"].ToString();
+                lblWPAdvocateMobile.Text = ds.Tables[0].Rows[0]["petiAdvocateMobile"].ToString();
                 lblWPCaseSubject.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();
                 lblWPCaseDtl.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();
                 if (ds.Tables[0].Rows[0]["CaseStatus"].ToString() == "Pending")
@@ -378,11 +378,12 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                         lblWACaseStatus.ForeColor = System.Drawing.Color.Green;
                     }
 
-                    if (ds.Tables[3].Rows[0]["CaseDisposalStatus"].ToString() != "")
+                    if (ds.Tables[3].Rows[0]["CaseDisposalStatus"].ToString() == "Yes")
                     {
                         Fieldset_CaseDispose.Visible = true;
                         GrdCaseDispose.DataSource = ds.Tables[3];
                         GrdCaseDispose.DataBind();
+                        CaseDipose_Div.Visible = false;
                     }
                     else { Fieldset_CaseDispose.Visible = false; }
                     GrdHearingDtl_DB.DataSource = ds.Tables[4]; // Hearing Dtl Bind.
@@ -591,8 +592,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                             ddlDisponsType.Items.FindByValue(ds.Tables[0].Rows[0]["CaseDisposalType_Id"].ToString()).Selected = true;
                             ddlDisponsType_SelectedIndexChanged(sender, e);
                             txtCaseDis_OrderTimeline.Text = ds.Tables[0].Rows[0]["CaseDisposal_timeline"].ToString();
-                            ViewDoc_CaseDipose.Visible = true;
-                            hyPerlinkViewDisposeDoc.NavigateUrl = "WACaseDispose/" + ds.Tables[0].Rows[0]["CaseDisposalDoc"].ToString();
+                            
                         }
                     }
                     if (ds.Tables[0].Rows[0]["Casetype_ID"].ToString() != "")
@@ -1382,7 +1382,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
             if (ddlOicName.SelectedIndex > 0)
             {
                 DataSet ds1 = obj.ByDataSet("select OICName, OICMobileNo,OICEmailID from tblOICMaster where OICMaster_ID =" + ddlOicName.SelectedValue);
-                if (ds != null && ds1.Tables[0].Rows.Count > 0)
+                if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
                 {
                     txtOICEmailID.Text = ds1.Tables[0].Rows[0]["OICEmailID"].ToString();
                     txtOicMobileNO.Text = ds1.Tables[0].Rows[0]["OICMobileNo"].ToString();
@@ -1400,7 +1400,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
         {
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
-        finally { ds1.Clear(); }
     }
     protected void ddlCaseSubject_SelectedIndexChanged(object sender, EventArgs e)
     {

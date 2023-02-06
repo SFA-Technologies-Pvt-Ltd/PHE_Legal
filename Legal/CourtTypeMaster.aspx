@@ -3,35 +3,35 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <div class="content-wrapper">
-        <asp:ValidationSummary ID="vs" runat="server" ValidationGroup="a" ShowMessageBox="true" ShowSummary="false" />
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div style="display: table; height: 100%; width: 100%;">
-                <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
-                    <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
-                        <div class="modal-header" style="background-color: #D9D9D9;">
-                            <span class="modal-title" style="float: left" id="myModalLabel">Confirmation</span>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                            </button>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="modal-body">
-                            <p>
-                                <%--<img src="../assets/images/question-circle.png" width="30" />--%>&nbsp;&nbsp;
-                           <i class="fa fa-question-circle"></i>
-                                <asp:Label ID="lblPopupAlert" runat="server"></asp:Label>
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" ID="btnYes" OnClick="btnSave_Click" Style="margin-top: 20px; width: 50px;" />
-                            <asp:Button ID="btnNo" ValidationGroup="no" runat="server" CssClass="btn btn-danger" Text="No" data-dismiss="modal" Style="margin-top: 20px; width: 50px;" />
-                        </div>
-                        <div class="clearfix"></div>
+    <asp:ValidationSummary ID="vs" runat="server" ValidationGroup="Save" ShowMessageBox="true" ShowSummary="false" />
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div style="display: table; height: 100%; width: 100%;">
+            <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
+                <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
+                    <div class="modal-header" style="background-color: #D9D9D9;">
+                        <span class="modal-title" style="float: left" id="myModalLabel">Confirmation</span>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                        </button>
                     </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-body">
+                        <p>
+                            <%--<img src="../assets/images/question-circle.png" width="30" />--%>&nbsp;&nbsp;
+                           <i class="fa fa-question-circle"></i>
+                            <asp:Label ID="lblPopupAlert" runat="server"></asp:Label>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" ID="btnYes" OnClick="btnSave_Click" Style="margin-top: 20px; width: 50px;" />
+                        <asp:Button ID="btnNo" ValidationGroup="no" runat="server" CssClass="btn btn-danger" Text="No" data-dismiss="modal" Style="margin-top: 20px; width: 50px;" />
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
                 <div class="box">
@@ -54,7 +54,7 @@
                                             <div class="form-group">
                                                 <label>Court Type<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="a"
+                                                    <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="Save"
                                                         ErrorMessage="Enter Court Type" Text="<i class='fa fa-exclamation-circle' title='Enter Court Type'></i>"
                                                         ControlToValidate="txtCourtType" ForeColor="Red" Display="Dynamic" runat="server">
                                                     </asp:RequiredFieldValidator>
@@ -69,19 +69,29 @@
                                             <div class="form-group">
                                                 <label>Court Location<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
-                                                    <asp:RequiredFieldValidator ID="rfvCourtLocation" ValidationGroup="a"
+                                                    <asp:RequiredFieldValidator ID="rfvCourtLocation" ValidationGroup="Save"
                                                         ErrorMessage="Select Court Location" Text="<i class='fa fa-exclamation-circle' title='Select Court Location'></i>"
                                                         ControlToValidate="ddlCourtlocation" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
                                                 </span>
-                                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlCourtlocation"></asp:DropDownList>
+                                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlCourtlocation" OnSelectedIndexChanged="ddlCourtlocation_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="otherDiv" runat="server" visible="false">
+                                            <div class="form-group">
+                                                <label>Others</label><span style="color: red;"> *</span>
+                                                <asp:RequiredFieldValidator ID="rfvother" ValidationGroup="Save"
+                                                    ErrorMessage="Enter Other Location" Text="<i class='fa fa-exclamation-circle' title='Select Court Location'></i>"
+                                                    ControlToValidate="txtOther" ForeColor="Red" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:TextBox runat="server" CssClass="form-control select2" ID="txtOther" MaxLength="60" AutoComplete="off" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-3" style="padding-top: 2rem! important;">
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <asp:Button runat="server" ValidationGroup="a" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
+                                                        <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" Text="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <a href="CourtTypeMaster.aspx" class="btn btn-default btn-block">Clear</a>
@@ -117,6 +127,11 @@
                                                         <ItemTemplate>
                                                             <asp:Label ID="lbllocation" runat="server" Text='<%#Eval("District_Name") %>'></asp:Label>
                                                             <asp:HiddenField ID="hdnDistrictID" Value='<%#Eval("District_Id") %>' runat="server" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                     <asp:TemplateField HeaderText="Other Location">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOtherlocation" runat="server" Text='<%#Eval("OtherLocation") %>'></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">

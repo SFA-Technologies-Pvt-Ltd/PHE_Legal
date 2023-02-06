@@ -137,8 +137,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Documents Name </label>
-
-                                        <asp:TextBox ID="txtEditDocumentsName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtEditDocumentsName" runat="server" onkeyup="javascript:capFirst(this);" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -180,7 +179,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Hearing Date </label>
-                                        <asp:TextBox ID="txtEditHearingDate" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtEditHearingDate" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" data-date-start-date="0d"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -198,7 +197,7 @@
                                 <div class="col-md-3" id="EditHearing_InsDiv" runat="server" visible="false">
                                     <div class="form-group">
                                         <label>Instruction</label>
-                                        <asp:TextBox ID="txtEditHearing_Inst" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtEditHearing_Inst" runat="server" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -384,7 +383,7 @@
                                             ControlToValidate="txtDocumentName" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
 
-                                        <asp:TextBox ID="txtDocumentName" runat="server" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtDocumentName" runat="server" onkeyup="javascript:capFirst(this);"  CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -520,7 +519,7 @@
                                                 ErrorMessage="Enter Hearing Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtHearingDate_AddHearing" Display="Dynamic" runat="server">
                                             </asp:RequiredFieldValidator>
-                                            <asp:TextBox ID="txtHearingDate_AddHearing" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
+                                            <asp:TextBox ID="txtHearingDate_AddHearing" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off" data-date-start-date="0d"></asp:TextBox>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -645,7 +644,7 @@
                                 </div>
                             </fieldset>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="CaseDipose_Div" runat="server">
                                     <div class="form-group">
                                         <label>
                                             Case Disposal</label><span style="color: red;"><b> *</b></span><br />
@@ -677,7 +676,7 @@
                                             ErrorMessage="Enter Case Disposal Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtCaseDis_Date" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtCaseDis_Date" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtCaseDis_Date" runat="server" data-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-start-date="0d" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="CaseDisOrderTime_Div" runat="server" visible="false">
@@ -690,7 +689,7 @@
                                             ErrorMessage="Enter Case Disposal Timeline." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtCaseDis_OrderTimeline" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtCaseDis_OrderTimeline" runat="server" CssClass="form-control" onkeypress="return NumberOnly();" AutoComplete="off" MaxLength="3">
+                                        <asp:TextBox ID="txtCaseDis_OrderTimeline" runat="server" CssClass="form-control"  onkeypress="return NumberOnly();" AutoComplete="off" MaxLength="3">
                                         </asp:TextBox>
 
                                     </div>
@@ -711,12 +710,6 @@
                                         <label>Order Document</label>
                                         <asp:FileUpload ID="FielUpcaseDisposeOrderDoc" runat="server" CssClass="form-control"></asp:FileUpload>
                                         <span style="color: red; font-size: 13px; font-weight: 600;">Document Should be 200Kb.</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3" id="ViewDoc_CaseDipose" runat="server" visible="false">
-                                    <div class="form-group">
-                                        <label>View Document</label><br />
-                                        <asp:HyperLink ID="hyPerlinkViewDisposeDoc" runat="server" Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
                                     </div>
                                 </div>
                                 <div class="col-md-3" id="HearingDtl_CaseDispose" runat="server" visible="false" style="padding-top: 3%;">

@@ -85,20 +85,36 @@
                                                 <asp:TextBox ID="txtDivisionName" runat="server" CssClass="form-control" MaxLength="80" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" AutoComplete="off" placeholder="Enter Division Name"></asp:TextBox>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" style="display:none;">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Division Code<span style="color: red;"><b> *</b></span></label>
-                                                <span class="pull-right">
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvCirlceCode" ValidationGroup="Save"
-                                                        ErrorMessage="Enter Division Code" Text="<i class='fa fa-exclamation-circle' title='Required'></i>"
-                                                        ControlToValidate="txtDivisionCode" ForeColor="Red" Display="Dynamic" runat="server">
-                                                    </asp:RequiredFieldValidator>--%>
-                                                </span>
-                                                <asp:TextBox runat="server" ID="txtDivisionCode" CssClass="form-control" MaxLength="8" onkeypress="return NumberOnly();" AutoComplete="off" placeholder="Enter Division Code"></asp:TextBox>
+                                                <label>Office Level<span style="color: red;"><b>*</b></span> </label>
+                                                <asp:RequiredFieldValidator ID="rfvOfficeLevel" ValidationGroup="Save"
+                                                    ErrorMessage="Select Office Level." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlOfficeLevel" Display="Dynamic" runat="server" InitialValue="0">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlOfficeLevel" runat="server" CssClass="form-control"></asp:DropDownList>
                                             </div>
                                         </div>
-                                  <%--  </div>
-                                    <div class="row">--%>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Office Type<span style="color: red;"><b>*</b></span></label>
+                                                <asp:RequiredFieldValidator ID="rfvofficetype" ValidationGroup="Save"
+                                                    ErrorMessage="Select Office type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlOfficetype" Display="Dynamic" runat="server" InitialValue="0">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlOfficetype" runat="server" CssClass="form-control"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Location<span style="color: red;"><b>*</b></span></label>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                                    ErrorMessage="Enter location." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="txtlocation" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:TextBox ID="txtlocation" runat="server" CssClass="form-control" MaxLength="50" AutoComplete="off" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();"></asp:TextBox>
+                                            </div>
+                                        </div>
                                         <div class="col-md-3 pt-3">
                                             <div class="row">
                                                 <div class="col-md-6" style="margin-top: 1rem;">
@@ -113,7 +129,6 @@
                                 </fieldset>
                                 <fieldset>
                                     <legend>Report</legend>
-
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="table-responsive">
@@ -148,6 +163,23 @@
                                                         <asp:TemplateField HeaderText="Division Code">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblDivisionCode" runat="server" Text='<%# Eval("Division_Code") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Office Level Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblofficelevel" Text='<%# Eval("OfficeLevelName") %>' runat="server"></asp:Label>
+                                                                <asp:Label ID="lblofficelevel_ID" Text='<%# Eval("Officelevel_Id") %>' Visible="false" runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Office Type Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblofficetype" Text='<%# Eval("OfficeType_Name") %>' runat="server"></asp:Label>
+                                                                <asp:Label ID="lblofficetype_ID" Text='<%# Eval("Officetype_Id") %>' Visible="false" runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Location">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lbllocation" Text='<%# Eval("HOLocation") %>' runat="server"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
