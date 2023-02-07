@@ -22,6 +22,8 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillGrid();
+                FillOfficeType();
+                FillOfficeLevel();
             }
         }
         else
@@ -29,6 +31,57 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
             Response.Redirect("../Login.aspx");
         }
     }
+
+    protected void FillOfficeType()
+    {
+        try
+        {
+            {
+                ddlOfficeType.ClearSelection();
+                ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlOfficeType.DataValueField = "OfficeType_Id";
+                    ddlOfficeType.DataTextField = "OfficeType_Name";
+                    ddlOfficeType.DataSource = ds;
+                    ddlOfficeType.DataBind();
+                }
+                ddlOfficeType.Items.Insert(0, new ListItem("Select", "0"));
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
+    protected void FillOfficeLevel()
+    {
+        try
+        {
+            {
+                ddlOfficeLevel.ClearSelection();
+                ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
+                    ddlOfficeLevel.DataTextField = "OfficeLevelName";
+                    ddlOfficeLevel.DataSource = ds;
+                    ddlOfficeLevel.DataBind();
+                }
+                ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
+            }
+        }
+        catch (Exception ex)
+        {
+
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
+
     protected void FillGrid()
     {
         try
@@ -61,17 +114,13 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 if (btnSave.Text == "Save")
                 {
-                    //ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "CreatedBy", "CreatedByIP", "Office_Id" }
-                    //, new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
-                    ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "CreatedBy", "CreatedByIP", "Office_Id" }
-                         , new string[] { txtZoneName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_ZoneMaster", new string[] { "ZoneName", "OfficeType_Id", "OfficeLevel_Id", "OfficeLocation", "CreatedBy", "CreatedByIP", "Office_Id" }
+                         , new string[] { txtZoneName.Text.Trim(), ddlOfficeType.SelectedValue, ddlOfficeLevel.SelectedValue, txtZoneOfficeLocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["ZoneID"].ToString() != "" && ViewState["ZoneID"].ToString() != null)
                 {
-                    //ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "ZoneCode", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
-                    //, new string[] { txtZoneName.Text.Trim(), txtZoneCode.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
-                    ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
-                                        , new string[] { txtZoneName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_ZoneMaster", new string[] { "ZoneName", "OfficeType_Id", "OfficeLevel_Id", "OfficeLocation", "LastUpdatedBy", "LastUpdatedByIP", "Office_Id", "Zone_ID" }
+                                        , new string[] { txtZoneName.Text.Trim(), ddlOfficeType.SelectedValue, ddlOfficeLevel.SelectedValue, txtZoneOfficeLocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Office_Id"].ToString(), ViewState["ZoneID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -82,6 +131,9 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                         btnSave.Text = "Save";
                         txtZoneName.Text = "";
                         txtZoneCode.Text = "";
+                        ddlOfficeType.ClearSelection();
+                        ddlOfficeLevel.ClearSelection();
+                        txtZoneOfficeLocation.Text = "";
                         lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
@@ -111,11 +163,39 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblZoneName = (Label)row.FindControl("lblZoneName");
                 Label lblZoneCode = (Label)row.FindControl("lblZoneCode");
+                Label OfficeType_Id = (Label)row.FindControl("lblofficetypeID");
+                Label OfficeLevel_Id = (Label)row.FindControl("lblOfficelevelID");
+                Label OfficeLocation = (Label)row.FindControl("lblLocation");
                 txtZoneName.Text = lblZoneName.Text;
-                //txtZoneCode.Text = lblZoneCode.Text;
-                ViewState["ZoneID"] = e.CommandArgument;
+                if (OfficeType_Id.Text != "")
+                {
+                    ddlOfficeType.ClearSelection();
+                    ddlOfficeType.Items.FindByValue(OfficeType_Id.Text).Selected = true;
+                }
+                if (OfficeLevel_Id.Text != "")
+                {
+                    ddlOfficeLevel.ClearSelection();
+                    ddlOfficeLevel.Items.FindByValue(OfficeLevel_Id.Text).Selected = true;
+                }
+                txtZoneOfficeLocation.Text = OfficeLocation.Text;
+                ViewState["ZoneID"] = e.CommandArgument.ToString();
                 btnSave.Text = "Update";
+
             }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
+    protected void GrdZoneMaster_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            GrdZoneMaster.PageIndex = e.NewPageIndex;
+            FillGrid();
         }
         catch (Exception ex)
         {

@@ -23,6 +23,7 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 BindGrid();
                 FillOfficetypeName();
+                FillOfficeLevel();
             }
         }
         else
@@ -73,6 +74,31 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
     }
+
+    protected void FillOfficeLevel()
+    {
+        try
+        {
+            {
+                ddlOfficeLevel.ClearSelection();
+                ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
+                    ddlOfficeLevel.DataTextField = "OfficeLevelName";
+                    ddlOfficeLevel.DataSource = ds;
+                    ddlOfficeLevel.DataBind();
+                }
+                ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
+            }
+        }
+        catch (Exception ex)
+        {
+
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+        }
+    }
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -82,13 +108,13 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_Insert_DesignationMaster", new string[] { "OfficeType_Id", "Office_Id", "DesignationName", "CreatedBy", "CreatedByIP" }
-                        , new string[] { ddlOfficetypename.SelectedValue, ddlOfficeName.SelectedValue, txtDeDesignation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_DesignationMaster", new string[] { "OfficeType_Id", "Office_Id", "DesignationName", "OfficeLevel_Id",  "CreatedBy", "CreatedByIP" }
+                        , new string[] { ddlOfficetypename.SelectedValue, ddlOfficeName.SelectedValue,txtDeDesignation.Text.Trim(), ddlOfficeLevel.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["ID"].ToString() != "" && ViewState["ID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_Update_Designationmaster", new string[] { "OfficeType_Id", "Office_Id", "DesignationName", "LastUpdatedBy", "LastUpdatedByIp", "DesignationID" }
-                        , new string[] { ddlOfficetypename.SelectedValue, ddlOfficeName.SelectedValue, txtDeDesignation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["ID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_Designationmaster", new string[] { "OfficeType_Id", "Office_Id", "DesignationName", "OfficeLevel_Id", "LastUpdatedBy", "LastUpdatedByIp", "DesignationID" }
+                        , new string[] { ddlOfficetypename.SelectedValue, ddlOfficeName.SelectedValue, txtDeDesignation.Text.Trim(), ddlOfficeLevel.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["ID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -97,6 +123,9 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                     {
                         lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                         txtDeDesignation.Text = "";
+                        ddlOfficetypename.ClearSelection();
+                        ddlOfficeName.ClearSelection();
+                        ddlOfficeLevel.ClearSelection();
                         BindGrid();
                         btnSave.Text = "Save";
                     }
@@ -104,6 +133,9 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                     {
                         lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", ErrMsg);
                         txtDeDesignation.Text = "";
+                        ddlOfficetypename.ClearSelection();
+                        ddlOfficeName.ClearSelection();
+                        ddlOfficeLevel.ClearSelection();
                     }
 
                 }
@@ -140,14 +172,25 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                 Label lblID = (Label)row.FindControl("lblID");
                 Label lblOfficetypeID = (Label)row.FindControl("lblOfficetypeID");
                 Label lblOfficeID = (Label)row.FindControl("lblOfficeID");
-                btnSave.Text = "Update";
-                ViewState["ID"] = e.CommandArgument;
+                Label lblOfficelevelID = (Label)row.FindControl("lblOfficelevelID");
+               
+                
                 txtDeDesignation.Text = lblDesignationName.Text;
-                ddlOfficetypename.ClearSelection();
-                ddlOfficetypename.Items.FindByValue(lblOfficetypeID.Text).Selected = true;
-                ddlOfficetypename_SelectedIndexChanged( sender,  e);
-                ddlOfficeName.ClearSelection();
-                ddlOfficeName.Items.FindByValue(lblOfficetypeID.Text).Selected = true;
+
+                //ddlOfficetypename.ClearSelection();
+                //ddlOfficetypename.Items.FindByValue(lblOfficetypeID.Text).Selected = true;
+                
+                //ddlOfficeName.ClearSelection();
+                //ddlOfficeName.Items.FindByValue(lblOfficetypeID.Text).Selected = true;
+                //ddlOfficetypename_SelectedIndexChanged(sender, e);
+                if (lblOfficelevelID.Text != "")
+                {
+                    ddlOfficeLevel.ClearSelection();
+                    ddlOfficeLevel.Items.FindByValue(lblOfficelevelID.Text).Selected = true;
+                }
+                ViewState["ID"] = e.CommandArgument;
+                btnSave.Text = "Update";
+               
             }
         }
         catch (Exception ex)

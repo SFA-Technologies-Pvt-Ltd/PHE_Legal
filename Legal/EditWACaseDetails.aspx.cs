@@ -349,7 +349,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 // WACase And Petitoner Dtl.
                 if (ds.Tables.Count > 0 && ds.Tables[2].Rows.Count > 0)
                 {
-                    lblRefWPCaseNo.Text = ds.Tables[2].Rows[0]["CaseNo"].ToString();
+                    lblRefWPCaseNo.Text = ds.Tables[2].Rows[0]["ReAppeal_CaseNo"].ToString();
                     lblWaCasetype.Text = ds.Tables[2].Rows[0]["Casetype_Name"].ToString();
                     lblWACaseYear.Text = ds.Tables[2].Rows[0]["CaseYear"].ToString();
                     //lblWACourtType.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();   
@@ -735,8 +735,6 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
     {
         if (Page.IsValid)
         {
-
-
             try
             {
                 lblMsg.Text = "";
@@ -899,14 +897,14 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 CaseDisDoc_Div.Visible = true;
                 HearingDtl_CaseDispose.Visible = true;
                 CaseDisOrderTime_Div.Visible = true;
-                Div_AuthCaseDispose.Visible = true;
+               // Div_AuthCaseDispose.Visible = true;
             }
             else
             {
                 HearingDtl_CaseDispose.Visible = false;
                 CaseDisDate_Div.Visible = false;
                 CaseDisDoc_Div.Visible = false;
-                Div_AuthCaseDispose.Visible = false;
+             //   Div_AuthCaseDispose.Visible = false;
                 CaseDisOrderTime_Div.Visible = false;
             }
         }
@@ -932,7 +930,7 @@ public partial class Legal_EditWACaseDetails : System.Web.UI.Page
                 HearingDtl_CaseDispose.Visible = false;
                 CaseDisDate_Div.Visible = false;
                 CaseDisDoc_Div.Visible = false;
-                Div_AuthCaseDispose.Visible = false;
+                //Div_AuthCaseDispose.Visible = false;
                 CaseDisOrderTime_Div.Visible = false;
             }
         }

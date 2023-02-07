@@ -244,15 +244,22 @@
                                     <table class="table table-bordered table-hover">
                                         <tr>
                                             <th>Particular</th>
-                                            <th>WP Case Detail</th>
-                                            <th>WA/RP/SLP Case Detail</th>
+                                            <th>Prevoius Case Detail</th>
+                                            <th>Current Case Detail</th>
                                         </tr>
                                         <tr>
-                                            <td>Case No.</td>
+                                            <td>Prevoius/Current Case No</td>
                                             <td>
                                                 <asp:Label ID="lblRefCaseNO" runat="server" CssClass=""></asp:Label></td>
                                             <td>
                                                 <asp:Label ID="lblRefWPCaseNo" runat="server" CssClass=""></asp:Label></td>
+                                        </tr>
+                                          <tr style="display:none;">
+                                            <td>Prevoius/Current Case No</td>
+                                            <td>
+                                                <asp:Label ID="lblWPCaseNo" runat="server"></asp:Label></td>
+                                            <td>
+                                                <asp:Label ID="lblWACaseNo" runat="server"></asp:Label></td>
                                         </tr>
                                         <tr>
                                             <td>Case Type</td>
@@ -297,13 +304,6 @@
                                                 <asp:Label ID="lblWAOfficeName" runat="server"></asp:Label></td>
                                         </tr>
                                         <tr>
-                                            <td>WP/WA Case No</td>
-                                            <td>
-                                                <asp:Label ID="lblWPCaseNo" runat="server"></asp:Label></td>
-                                            <td>
-                                                <asp:Label ID="lblWACaseNo" runat="server"></asp:Label></td>
-                                        </tr>
-                                        <tr>
                                             <td>Nodal Officer Name</td>
                                             <td>
                                                 <asp:Label ID="lblWPNOdalOfficerName" runat="server"></asp:Label></td>
@@ -345,7 +345,7 @@
                                             <td>
                                                 <asp:Label ID="lblWAAdvocateMobile" runat="server"></asp:Label></td>
                                         </tr>
-                                        <tr>
+                                        <tr style="display:none;">
                                             <td>Case Subject</td>
                                             <td>
                                                 <asp:Label ID="lblWPCaseSubject" runat="server"></asp:Label></td>
@@ -390,7 +390,7 @@
                                     <div class="form-group">
                                         <label>Document Upload</label>
                                         <asp:FileUpload ID="FileUpload1" runat="server" CssClass="form-control"></asp:FileUpload>
-                                        <span style="color: red;">Document Should be 200Kb.</span>
+                                        <span style="color: red; font-size:13px;font-weight:700;">Document Should be 200Kb.</span>
                                     </div>
                                 </div>
                                 <div class="col-md-3" style="padding-top: 3%;">
@@ -544,7 +544,7 @@
                                         <div class="form-group">
                                             <label>Hearing Document</label>
                                             <asp:FileUpload ID="fileDoc_AddHearing" runat="server" CssClass="form-control" />
-                                            <span style="color: red;">Document Should be 200Kb.</span>
+                                            <span style="color: red; font-size:13px;font-weight:700;">Document Should be 200Kb.</span>
                                         </div>
                                     </div>
                                     <div class="col-md-2" style="padding-top: 2rem! important;">
@@ -694,6 +694,7 @@
 
                                     </div>
                                 </div>
+                                <%--Authority Name Closed Due to Confirmation From Client Side. --%>
                                 <div class="col-md-4" id="Div_AuthCaseDispose" runat="server" visible="false">
                                     <div class="form-group">
                                         <label>Authority Name</label>
