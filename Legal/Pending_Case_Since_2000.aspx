@@ -281,8 +281,10 @@
                                             <ItemTemplate>
                                                 <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                 <asp:Label ID="lblUniqueNo" runat="server" Text='<%# Eval("UniqueNo") %>' Visible="false"></asp:Label>
+                                                 <asp:Label ID="lblFlag" runat="server" Text='<%# Eval("Flag") %>' Visible="false"></asp:Label>
                                             </ItemTemplate>
                                         </asp:TemplateField>
+                                       <%-- <asp:BoundField DataField="OldFilingNo" HeaderText="Old Filing No" ReadOnly="true" />--%>
                                         <asp:BoundField DataField="FilingNo" HeaderText="Filing No" ReadOnly="true" />
                                         <asp:BoundField DataField="Court" HeaderText="Court" ReadOnly="true" />
                                         <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" ReadOnly="true" />
@@ -310,7 +312,8 @@
                                                 <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
-                                                <asp:DropDownList ID="ddlCaseSubject" runat="server"></asp:DropDownList>
+                                                <asp:DropDownList ID="ddlCaseSubject" runat="server">
+                                                </asp:DropDownList>
                                             </EditItemTemplate>
                                         </asp:TemplateField>
                                       

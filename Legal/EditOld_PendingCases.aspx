@@ -76,8 +76,8 @@
                             </legend>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="form-group">   
-                                        <label>Filling No</label>           
+                                    <div class="form-group">
+                                        <label>Filling No</label>
                                         <asp:TextBox ID="txtFilingNo" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
@@ -93,11 +93,17 @@
                                         <asp:TextBox ID="txtPetitioner" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="div_RespondentForOldCase" runat="server" visible="false">
                                     <div class="form-group">
                                         <label>Respondent Office</label>
                                         <asp:ListBox runat="server" ID="ddlRespondentOffice" showcheckbox="true" SelectionMode="Multiple" ClientIDMode="Static" AppendDataBoundItems="true"
                                             CssClass="form-control multiselect"></asp:ListBox>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="div_RespondentForNewCase" runat="server" visible="false">
+                                    <div class="form-group">
+                                        <label>Respondent Type</label>
+                                        <asp:DropDownList runat="server" ID="ddlrespondenttype" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                             </div>
@@ -145,15 +151,25 @@
                                 <%-- </div>
                             <div class="row">--%>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Case Type</label>
-                                        <asp:TextBox ID="txtRespondent" runat="server" CssClass="form-control" ReadOnly="true"/>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Case Type</label>
+                                                <asp:TextBox ID="txtRespondent" runat="server" CssClass="form-control" ReadOnly="true" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>View Doc</label>
+                                                <asp:LinkButton ID="ViewDoc" runat="server" CssClass="btn-sm label label-primary" OnClick="ViewDoc_Click" target="_blank">View</asp:LinkButton>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Remarks</label>
-                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine"  runat="server" CssClass="form-control" />
+                                        <asp:TextBox ID="txtRemarks" TextMode="MultiLine" runat="server" CssClass="form-control" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -162,6 +178,64 @@
                                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-primary btn-block" Text="Update" OnClick="btnUpdate_Click" />
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Case No</label>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtCaseNo" Autocomplete="Off" ValidationGroup="Ent" runat="server" ForeColor="Red" />
+                                        <asp:TextBox ID="txtCaseNo" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Year</label>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ddlYear" ValidationGroup="Ent" runat="server" InitialValue="0" ForeColor="Red" />
+                                        <asp:DropDownList ID="ddlYear" runat="server" CssClass="form-control">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>CaseType</label>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ddlCaseType" ValidationGroup="Ent" runat="server" InitialValue="0" ForeColor="Red" />
+                                        <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Court</label>
+                                        <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ddlCourt" ValidationGroup="Ent" runat="server" InitialValue="0" ForeColor="Red" />
+                                        <asp:DropDownList ID="ddlCourt" runat="server" CssClass="form-control">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>केस का विवरण</label><br />
+                                    <asp:FileUpload ID="FU1" runat="server" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>कार्यवाही का विवरण</label><br />
+                                    <asp:FileUpload ID="FU2" runat="server" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>निर्णय</label><br />
+                                    <asp:FileUpload ID="FU3" runat="server" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>अन्य</label><br />
+                                    <asp:FileUpload ID="FU4" runat="server" />
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <asp:Button Text="Submit" ID="btnSubmit" runat="server" CssClass="btn btn-primary" ValidationGroup="Ent" OnClick="btnSubmit_Click" />
                                 </div>
                             </div>
                         </fieldset>

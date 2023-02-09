@@ -40,7 +40,6 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
         {
             Response.Redirect("~/Login.aspx");
         }
-
     }
 
     //private void GetCourt()
@@ -72,17 +71,10 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     {
         try
         {
-            //select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,RespondertypeName,
-            //OICId,OD.OICMobileNo,OD.CaseSubjectId,CaseSubject,scs.CaseSubSubject,OD.CaseSubSubjectId,Remarks,OICName,
-            //HearingDate,CaseNo 
-            //from tbl_OldCaseDetail OD
-            //left join tbl_LegalResponderType RD on cast(RD.Respondertype_ID as varchar) = cast(OD.RespondentOffice as varchar)
-            //left join tblOICMaster OI on OI.OICMaster_ID = OD.OICId
-            //left join tbl_LegalMstCaseSubject SC on SC.CaseSubjectID = OD.CaseSubjectId
-            //left join tbl_CaseSubSubjectMaster scs on scs.CaseSubjectID = SC.CaseSubjectID and OD.CaseSubSubjectId = scs.CaseSubSubj_Id
-            //where CaseType='CONA'order by HearingDate Desc
-
-            dsCase = obj.ByDataSet("select distinct UniqueNo,FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
+            //dsCase = obj.ByDataSet("select distinct UniqueNo," +
+            //    "IsNUll((select distinct CaseType+'/'+CaseNo+'/'+CAST(year as varchar(4))+'-'+Court from  tbl_OldCaseNewEntry where UniqueNo= a.UniqueNo),'') OldFilingNo," +
+            //    "FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail a where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
+            dsCase = obj.ByProcedure("USP_GetOldNewCaseByCasetype", new string[] { "CaseType" }, new string[] { CaseType }, "dataset");
             if (dsCase.Tables[0].Rows.Count > 0)
             {
                 ViewState["dt"] = null;
@@ -116,8 +108,9 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
         
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblUnique = (Label)row.FindControl("lblUniqueNo");
+                Label lblFlag = (Label)row.FindControl("lblFlag");
                 string ID = lblUnique.Text;
-                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID), false);
+                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text , false);
              }
         }
         catch (Exception ex)

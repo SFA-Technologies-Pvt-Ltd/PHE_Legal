@@ -120,7 +120,7 @@ public partial class Legal_MainMaster : System.Web.UI.MasterPage
 
                 Navigation.InnerHtml = "<ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>"
                                 + "<li class='nav-item'>"
-                                    + "<a href='../Legal/LegalDashboard.aspx' class='nav-link'>"
+                                    + "<a href='../Legal/OldCaseDashBoard.aspx' class='nav-link'>"
                                         + "<i class='nav-icon fas fa-list-ul text-light'></i>"
                                         + "<p class='text-light'>"
                                             + "<span style='color: #e5e5e5; font-size: 16px;'>Dashboard</span>"

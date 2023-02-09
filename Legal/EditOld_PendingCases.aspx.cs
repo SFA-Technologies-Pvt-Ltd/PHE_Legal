@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -20,8 +21,10 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
             if (!IsPostBack)
             {
                 bindDropDowns();
-                string ID = Convert.ToString(Request.QueryString["ID"]);
+                ViewState["ID"] = Convert.ToString(Request.QueryString["ID"]);
+                ViewState["Flag"] = Convert.ToString(Request.QueryString["Flag"]);
                 FindGridData(sender, e);
+                FillRespondentType();
             }
         }
         else
@@ -34,55 +37,103 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "flag", "UniqueNo" },
-                new string[] { "2", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            if (Request.QueryString["Flag"].ToString() == "Old Case")
             {
-                txtFilingNo.Text = ds.Tables[0].Rows[0]["FilingNo"].ToString();
-                txtCourt.Text = ds.Tables[0].Rows[0]["Court"].ToString();
-                txtPetitioner.Text = ds.Tables[0].Rows[0]["Petitioner"].ToString();
-                txtRemarks.Text = ds.Tables[0].Rows[0]["Remarks"].ToString();
-                if (ds.Tables[0].Rows[0]["OICId"].ToString() != "")
+                DataSet ds = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "flag", "UniqueNo", "OldNewCase" },
+                    new string[] { "2", Request.QueryString["ID"].ToString(), Request.QueryString["Flag"].ToString() }, "dataset");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    ddlOICNameOpen.ClearSelection();
-                    ddlOICNameOpen.Items.FindByValue(ds.Tables[0].Rows[0]["OICId"].ToString()).Selected = true;
-                    txtOICMobileNoOpen.Text = ds.Tables[0].Rows[0]["OICMobileNo"].ToString();
-                }
-                if (ds.Tables[0].Rows[0]["CaseSubjectId"].ToString() != "")
-                {
-                    ddlCaseSubject.ClearSelection();
-                    ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubjectId"].ToString()).Selected = true;
-                }
-                if (ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString() != "")
-                {
-                    ddlCaseSubject_SelectedIndexChanged( sender,  e);
-                    ddlCaseSubSubject.ClearSelection();
-                    ddlCaseSubSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString()).Selected = true;
-                }
-                if (ds.Tables[0].Rows[0]["RespondentOffice"].ToString() != "")
-                {
-                    string ROIds = ds.Tables[0].Rows[0]["RespondentOffice"].ToString().Trim();
-                    string[] RespondentOffice = ROIds.Split(',');
-                    if (!string.IsNullOrEmpty(ROIds))
+                    div_RespondentForOldCase.Visible = true;
+                    txtFilingNo.Text = ds.Tables[0].Rows[0]["FilingNo"].ToString();
+                    txtCourt.Text = ds.Tables[0].Rows[0]["Court"].ToString();
+                    txtPetitioner.Text = ds.Tables[0].Rows[0]["Petitioner"].ToString();
+                    txtRemarks.Text = ds.Tables[0].Rows[0]["Remarks"].ToString();
+                    if (ds.Tables[0].Rows[0]["OICId"].ToString() != "")
                     {
-                        for (int i = 0; i < RespondentOffice.Length; i++)
+                        ddlOICNameOpen.ClearSelection();
+                        ddlOICNameOpen.Items.FindByValue(ds.Tables[0].Rows[0]["OICId"].ToString()).Selected = true;
+                        txtOICMobileNoOpen.Text = ds.Tables[0].Rows[0]["OICMobileNo"].ToString();
+                    }
+                    if (ds.Tables[0].Rows[0]["CaseSubjectId"].ToString() != "")
+                    {
+                        ddlCaseSubject.ClearSelection();
+                        ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubjectId"].ToString()).Selected = true;
+                    }
+                    if (ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString() != "")
+                    {
+                        ddlCaseSubject_SelectedIndexChanged(sender, e);
+                        ddlCaseSubSubject.ClearSelection();
+                        ddlCaseSubSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubSubjectId"].ToString()).Selected = true;
+                    }
+                    if (ds.Tables[0].Rows[0]["RespondentOffice"].ToString() != "")
+                    {
+                        string ROIds = ds.Tables[0].Rows[0]["RespondentOffice"].ToString().Trim();
+                        string[] RespondentOffice = ROIds.Split(',');
+                        if (!string.IsNullOrEmpty(ROIds))
                         {
-                            ddlRespondentOffice.Items.FindByValue(RespondentOffice[i]).Selected = true;
+                            for (int i = 0; i < RespondentOffice.Length; i++)
+                            {
+                                ddlRespondentOffice.Items.FindByValue(RespondentOffice[i]).Selected = true;
+                            }
+                        }
+                        else
+                        {
+                            ddlRespondentOffice.SelectedIndex = -1;
                         }
                     }
-                    else
+                    if (ds.Tables[0].Rows[0]["CaseType"].ToString() != "")
                     {
-                        ddlRespondentOffice.SelectedIndex = -1;
+                        txtRespondent.Text = ds.Tables[0].Rows[0]["CaseType"].ToString();
+                    }
+                    if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                    {
+                        ddlIsComplaince.ClearSelection();
+                        ddlIsComplaince.Items.FindByText(ds.Tables[0].Rows[0]["Status"].ToString()).Selected = true;
                     }
                 }
-                if (ds.Tables[0].Rows[0]["CaseType"].ToString() != "")
+            }
+            else if (Request.QueryString["Flag"].ToString() == "New Case")
+            {
+                DataSet ds = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "flag", "UniqueNo", "OldNewCase" },
+                    new string[] { "2", Request.QueryString["ID"].ToString(), Request.QueryString["Flag"].ToString() }, "dataset");
+                if (ds != null && ds.Tables[1].Rows.Count > 0)
+                {
+                    div_RespondentForNewCase.Visible = true;
+                    txtFilingNo.Text = ds.Tables[1].Rows[0]["FilingNo"].ToString();
+                    txtCourt.Text = ds.Tables[1].Rows[0]["Court"].ToString();
+                    txtPetitioner.Text = ds.Tables[1].Rows[0]["Petitioner"].ToString();
+                    txtRemarks.Text = ds.Tables[1].Rows[0]["Remarks"].ToString();
+                    if (ds.Tables[1].Rows[0]["OICId"].ToString() != "")
+                    {
+                        ddlOICNameOpen.ClearSelection();
+                        ddlOICNameOpen.Items.FindByValue(ds.Tables[1].Rows[0]["OICId"].ToString()).Selected = true;
+                        txtOICMobileNoOpen.Text = ds.Tables[1].Rows[0]["OICMobileNo"].ToString();
+                    }
+                    if (ds.Tables[1].Rows[0]["CaseSubjectId"].ToString() != "")
+                    {
+                        ddlCaseSubject.ClearSelection();
+                        ddlCaseSubject.Items.FindByValue(ds.Tables[1].Rows[0]["CaseSubjectId"].ToString()).Selected = true;
+                    }
+                    if (ds.Tables[1].Rows[0]["CaseSubSubj_Id"].ToString() != "")
+                    {
+                        ddlCaseSubject_SelectedIndexChanged(sender, e);
+                        ddlCaseSubSubject.ClearSelection();
+                        ddlCaseSubSubject.Items.FindByValue(ds.Tables[1].Rows[0]["CaseSubSubj_Id"].ToString()).Selected = true;
+                    }
+                    if (ds.Tables[1].Rows[0]["Respondertype_ID"].ToString() != "")
+                    {
+                        ddlrespondenttype.ClearSelection();
+                        ddlrespondenttype.Items.FindByValue(ds.Tables[1].Rows[0]["Respondertype_ID"].ToString()).Selected = true;
+                    }
+                }
+                if (ds.Tables[1].Rows[0]["CaseType"].ToString() != "")
                 {
                     txtRespondent.Text = ds.Tables[0].Rows[0]["CaseType"].ToString();
                 }
-                if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                if (ds.Tables[1].Rows[0]["Status"].ToString() != "")
                 {
                     ddlIsComplaince.ClearSelection();
-                    ddlIsComplaince.Items.FindByText(ds.Tables[0].Rows[0]["Status"].ToString()).Selected = true;
+                    ddlIsComplaince.Items.FindByText(ds.Tables[1].Rows[0]["Status"].ToString()).Selected = true;
                 }
             }
         }
@@ -91,7 +142,26 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    protected void FillRespondentType()
+    {
+        try
+        {
+            ddlrespondenttype.Items.Clear();
+            DataSet DsRes = obj.ByDataSet("select Respondertype_ID, RespondertypeName from tbl_LegalResponderType");
+            if (DsRes.Tables.Count > 0 && DsRes.Tables[0].Rows.Count > 0)
+            {
+                ddlrespondenttype.DataSource = DsRes.Tables[0];
+                ddlrespondenttype.DataTextField = "RespondertypeName";
+                ddlrespondenttype.DataValueField = "Respondertype_ID";
+                ddlrespondenttype.DataBind();
+            }
+            ddlrespondenttype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
     private void bindDropDowns()
     {
         try
@@ -147,22 +217,76 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
                 ddlCaseSubject.Items.Insert(0, new ListItem("Select", "0"));
             }
 
-            //dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubSubj_Id,CaseSubSubject from tbl_CaseSubSubjectMaster");
-            //if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
-            //{
+            dsCase = obj.ByDataSet("select CaseSubjectID,CaseSubSubj_Id,CaseSubSubject from tbl_CaseSubSubjectMaster");
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            {
 
-            //    ddlCaseSubSubject.DataSource = dsCase.Tables[0];
-            //    ddlCaseSubSubject.DataTextField = "CaseSubSubject";
-            //    ddlCaseSubSubject.DataValueField = "CaseSubSubj_Id";
-            //    ddlCaseSubSubject.DataBind();
-            //    ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
-            //}
-            //else
-            //{
-            //    ddlCaseSubSubject.DataSource = null;
-            //    ddlCaseSubSubject.DataBind();
-            //    ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
-            //}
+                ddlCaseSubSubject.DataSource = dsCase.Tables[0];
+                ddlCaseSubSubject.DataTextField = "CaseSubSubject";
+                ddlCaseSubSubject.DataValueField = "CaseSubSubj_Id";
+                ddlCaseSubSubject.DataBind();
+                ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            else
+            {
+                ddlCaseSubSubject.DataSource = null;
+                ddlCaseSubSubject.DataBind();
+                ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
+            }
+
+            #region Extra Dropdown Bind
+
+            dsCase = obj.ByDataSet("with yearlist as (select 1950 as year union all select yl.year + 1 as year from yearlist yl where yl.year + 1 <= YEAR(GetDate())) select year from yearlist order by year");
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            {
+                ddlYear.DataSource = dsCase.Tables[0];
+                ddlYear.DataTextField = "year";
+                ddlYear.DataValueField = "year";
+                ddlYear.DataBind();
+                ddlYear.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            else
+            {
+                ddlYear.DataSource = null;
+                ddlYear.DataBind();
+                ddlYear.Items.Insert(0, new ListItem("Select", "0"));
+            }
+
+            dsCase = obj.ByDataSet("select CourtTypeName,CourtType_ID from tbl_LegalCourtType order by CourtTypeName");
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            {
+                ddlCourt.DataSource = dsCase.Tables[0];
+                ddlCourt.DataTextField = "CourtTypeName";
+                ddlCourt.DataValueField = "CourtType_ID";
+                ddlCourt.DataBind();
+                ddlCourt.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            else
+            {
+                ddlCourt.DataSource = null;
+                ddlCourt.DataBind();
+                ddlCourt.Items.Insert(0, new ListItem("Select", "0"));
+            }
+
+            dsCase = obj.ByDataSet("select Casetype_Name,Casetype_ID from tbl_Legal_Casetype order by Casetype_Name");
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseType.DataSource = dsCase.Tables[0];
+                ddlCaseType.DataTextField = "Casetype_Name";
+                ddlCaseType.DataValueField = "Casetype_ID";
+                ddlCaseType.DataBind();
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            else
+            {
+                ddlCaseType.DataSource = null;
+                ddlCaseType.DataBind();
+                ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
+            }
+
+            #endregion
+
+
         }
         catch (Exception ex)
         {
@@ -233,6 +357,80 @@ public partial class Legal_EditOld_PendingCases : System.Web.UI.Page
         catch (Exception ex)
         {
             ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
+
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string UniqueNo = Convert.ToString(Request.QueryString["ID"]);
+            string filePath = Server.MapPath("~/Legal/OldCaseDocument");
+            string filename1 = string.Empty;
+            string filename2 = string.Empty;
+            string filename3 = string.Empty;
+            string filename4 = string.Empty;
+            if (FU1.HasFile)
+                filename1 = FU1.FileName;
+            if (FU2.HasFile)
+                filename2 = FU2.FileName;
+            if (FU3.HasFile)
+                filename3 = FU3.FileName;
+            if (FU4.HasFile)
+                filename4 = FU4.FileName;
+
+            if (FU1.HasFile)
+            {
+                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "CaseNo", "CaseYear", "CaseType", "Court", "DocName", "DocLink", "flag", "UniqueNo" },
+                    new string[] { txtCaseNo.Text.Trim(), ddlYear.SelectedItem.Text, ddlCaseType.SelectedItem.Text, ddlCourt.SelectedItem.Text, "केस का विवरण", filename1, "3", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
+                string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
+                FU1.SaveAs(filePath + "/" + fname + ext);
+            }
+            if (FU2.HasFile)
+            {
+                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "CaseNo", "CaseYear", "CaseType", "Court", "DocName", "DocLink", "flag", "UniqueNo" },
+                    new string[] { txtCaseNo.Text.Trim(), ddlYear.SelectedItem.Text, ddlCaseType.SelectedItem.Text, ddlCourt.SelectedItem.Text, "कार्यवाही का विवरण", filename2, "3", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
+                string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
+                FU1.SaveAs(filePath + "/" + fname + ext);
+            }
+            if (FU3.HasFile)
+            {
+                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "CaseNo", "CaseYear", "CaseType", "Court", "DocName", "DocLink", "flag", "UniqueNo" },
+                    new string[] { txtCaseNo.Text.Trim(), ddlYear.SelectedItem.Text, ddlCaseType.SelectedItem.Text, ddlCourt.SelectedItem.Text, "निर्णय", filename3, "3", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
+                string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
+                FU1.SaveAs(filePath + "/" + fname + ext);
+            }
+            if (FU4.HasFile)
+            {
+                dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "CaseNo", "CaseYear", "CaseType", "Court", "DocName", "DocLink", "flag", "UniqueNo" },
+                    new string[] { txtCaseNo.Text.Trim(), ddlYear.SelectedItem.Text, ddlCaseType.SelectedItem.Text, ddlCourt.SelectedItem.Text, "अन्य", filename4, "3", Convert.ToString(Request.QueryString["ID"]) }, "dataset");
+                string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
+                FU1.SaveAs(filePath + "/" + fname + ext);
+            }
+            txtCaseNo.Text = "";
+            ddlCaseType.SelectedIndex = 0;
+            ddlCourt.SelectedIndex = 0;
+            ddlYear.SelectedIndex = 0;
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void ViewDoc_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Response.Redirect("../Legal/ViewDocumentByUniqNo.aspx?ID=" + Server.UrlEncode(ViewState["ID"].ToString()) + "&Flag" + ViewState["Flag"].ToString(), false);
+        }
+        catch (Exception ex)
+        {
+             ErrorLogCls.SendErrorToText(ex);
         }
     }
 }
