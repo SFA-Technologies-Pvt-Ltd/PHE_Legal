@@ -35,9 +35,10 @@ public partial class Legal_ViewDocumentByUniqNo : System.Web.UI.Page
     {
         try
         {
-
+            string ID = Request.QueryString["ID"].ToString();
+            string Flag = Request.QueryString["Flag"].ToString();
             dsCase = obj.ByProcedure("USP_Update_OldPendingCase", new string[] { "flag", "UniqueNo", "OldNewCase" },
-                new string[] { "4", Request.QueryString["ID"].ToString(), Request.QueryString["Flag"].ToString() }, "dataset");
+                new string[] { "4", ID, Flag }, "dataset");
             if (dsCase.Tables.Count > 0 && dsCase != null)
             {
                 StringBuilder Sb = new StringBuilder();

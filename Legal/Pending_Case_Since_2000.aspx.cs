@@ -105,16 +105,24 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
             lblMsg.Text = "";
             if (e.CommandName == "EditDetails")
             {
-        
+
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblUnique = (Label)row.FindControl("lblUniqueNo");
                 Label lblFlag = (Label)row.FindControl("lblFlag");
                 string ID = lblUnique.Text;
-                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text , false);
-             }
+                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text, false);
+            }
+            if (e.CommandName == "ViewDoc")
+            {
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+                Label lblUnique = (Label)row.FindControl("lblUniqueNo");
+                Label lblFlag = (Label)row.FindControl("lblFlag");
+                string ID = lblUnique.Text;
+                Response.Redirect("../Legal/ViewDocumentByUniqNo.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text, false);
+            }
         }
         catch (Exception ex)
-        {    
+        {
             throw ex;
         }
     }
