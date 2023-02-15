@@ -83,12 +83,6 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Old Case No</label>
-                                        <asp:TextBox ID="txtOldCaseNo" runat="server" CssClass="form-control"></asp:TextBox>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
                                         <label>Court</label>
                                         <asp:TextBox ID="txtCourt" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
@@ -99,21 +93,15 @@
                                         <asp:TextBox ID="txtPetitioner" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3" id="div_RespondentForOldCase" runat="server" visible="false">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Respondent Office</label>
                                         <asp:ListBox runat="server" ID="ddlRespondentOffice" showcheckbox="true" SelectionMode="Multiple" ClientIDMode="Static" AppendDataBoundItems="true"
                                             CssClass="form-control multiselect"></asp:ListBox>
                                     </div>
                                 </div>
-                              <%--  <div class="col-md-3" id="div_RespondentForNewCase" runat="server" visible="false">
-                                    <div class="form-group">
-                                        <label>Respondent Type</label>
-                                        <asp:DropDownList runat="server" ID="ddlrespondenttype" CssClass="form-control"></asp:DropDownList>
-                                    </div>
-                                </div>--%>
-                            <%--</div>
-                            <div class="row">--%>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>OIC Name</label>
@@ -141,8 +129,8 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                           <%-- </div>
-                            <div class="row">--%>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Status</label>
@@ -159,17 +147,16 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Case Type</label>
-                                        <asp:TextBox ID="txtRespondent" runat="server" CssClass="form-control" />
+                                        <asp:TextBox ID="txtRespondent" runat="server" CssClass="form-control" ReadOnly="true" />
                                     </div>
-
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Remarks</label>
                                         <asp:TextBox ID="txtRemarks" TextMode="MultiLine" runat="server" CssClass="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-md-3 pt-5">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-primary btn-block" Text="Update" OnClick="btnUpdate_Click" />
@@ -182,7 +169,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Old Case No</label>
+                                        <label>Case No</label>
                                         <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtCaseNo" Autocomplete="Off" ValidationGroup="Ent" runat="server" ForeColor="Red" />
                                         <asp:TextBox ID="txtCaseNo" runat="server" CssClass="form-control"></asp:TextBox>
                                     </div>

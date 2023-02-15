@@ -107,37 +107,50 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
 
                     if (btnSave.Text == "Save")
                     {
-                        string password = ConvertText_SHA512_And_Salt(txtPassword.Text.Trim());
+                        string email = txtUserEmail.Text.Trim();
+                        
+                        ds = obj.ByDataSet("select * from tblUserMaster where UserEmail='" + txtUserEmail.Text.Trim() + "'  order by UserId desc");
 
-                        ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "EMPName", "UserEmail", "UserName", "UserPassword" ,"MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
-                            , new string[] { txtEmpployeeName.Text.Trim(),txtUserEmail.Text.Trim(), txtUserName.Text.Trim(),password, txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
-
-                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        if (ds.Tables.Count <= 0)
                         {
-                            string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-                            if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+
+                            string password = ConvertText_SHA512_And_Salt(txtPassword.Text.Trim());
+
+                            ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "EMPName", "UserEmail", "UserName", "UserPassword", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
+                                , new string[] { txtEmpployeeName.Text.Trim(), txtUserEmail.Text.Trim(), txtUserName.Text.Trim(), password, txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
+
+                            if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
-                                lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                                string AdminEmail = Session["UserEmail"].ToString();
-                                sendmail(AdminEmail);
-                                ddlUsertype.ClearSelection();
-                                ddlOfficeName.ClearSelection();
-                                txtEmpployeeName.Text = "";
-                                ddlofficetype.ClearSelection();
-                                txtMobileNo.Text = "";
-                                txtUserEmail.Text = "";
-                                txtUserName.Text = "";
-                                txtPassword.Text = "";
+                                string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                                if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                                {
+                                    lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                                    string AdminEmail = Session["UserEmail"].ToString();
+                                    sendmail(AdminEmail);
+                                    ddlUsertype.ClearSelection();
+                                    ddlOfficeName.ClearSelection();
+                                    txtEmpployeeName.Text = "";
+                                    ddlofficetype.ClearSelection();
+                                    txtMobileNo.Text = "";
+                                    txtUserEmail.Text = "";
+                                    txtUserName.Text = "";
+                                    txtPassword.Text = "";
+                                }
+                                else
+                                {
+                                    lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", ErrMsg);
+                                }
                             }
                             else
                             {
-                                lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", ErrMsg);
+                                lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
                             }
                         }
                         else
                         {
-                            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
+                            lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", "Email Already Existed");
                         }
+
                     }
                     Session["PAGETOKEN"] = Server.UrlEncode(System.DateTime.Now.ToString());
                 }

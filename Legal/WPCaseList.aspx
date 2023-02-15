@@ -115,7 +115,7 @@
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        Case Detail
+                        WP/Conc Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -145,18 +145,6 @@
                                         <asp:TextBox ID="txtEndDate" runat="server" data-provide="datepicker" data-date-end-date="0d" placeholder="DD/MM/YYYY" CssClass="form-control disableFuturedate" data-date-format="dd/mm/yyyy" data-date-autoclose="true" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
-                                  <div class="col-md-3 col-sm">
-                                    <div class="form-group">
-                                        <label>
-                                            Case Type<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="rfvCasetype" ValidationGroup="Save"
-                                                ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                ControlToValidate="ddlCasetype" Display="Dynamic" runat="server" InitialValue="0">
-                                            </asp:RequiredFieldValidator><br />
-                                           प्रकरण का प्रकार</label>
-                                        <asp:DropDownList ID="ddlCasetype" runat="server" CssClass="form-control"></asp:DropDownList>
-                                    </div>
-                                </div>
                                 <div class="col-md-3 col-sm mt-5">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -176,7 +164,7 @@
                                     <div class="table-responsive">
                                         <asp:GridView ID="GrdCaseDetails" runat="server" AutoGenerateColumns="false" DataKeyNames="Case_ID" CssClass="datatable table table-bordered text-center" OnRowCommand="GrdCaseDetails_RowCommand" EmptyDataText="NO RECORD FOUND">
                                             <Columns>
-                                                <asp:TemplateField HeaderText="S.No.<br />स. क्र.">
+                                                <asp:TemplateField HeaderText="S.No.<br />स. क्र." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                         <asp:Label ID="lblCaseID" runat="server" Text='<%# Eval("Case_ID") %>' Visible="false"></asp:Label>
@@ -194,7 +182,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Petitioner Name<br />याचिकाकर्ता का नाम">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitonerName") %>'></asp:Label>
+                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Status<br />स्थिति">
@@ -202,9 +190,9 @@
                                                         <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("CaseStatus") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Action<br />गतिविधि">
+                                                <asp:TemplateField HeaderText="Action<br />गतिविधि" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View" CssClass="btn btn-primary"><i class="fa fa-edit"</asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View" CssClass=""><i class="fa fa-edit"</asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>

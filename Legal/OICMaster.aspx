@@ -128,7 +128,7 @@
                                                     <asp:RegularExpressionValidator runat="server" ID="Rev_mobno" Display="Dynamic" ForeColor="Red" ControlToValidate="txtmobileno" SetFocusOnError="true"
                                                         Text="<i class='fa fa-exclamation-circle' title='Mobile No. is Not Valid'></i>"
                                                         ValidationExpression="[6-9]{1}[0-9]{5}[0-9]{4}" ErrorMessage="Mobile No. is Not Valid"
-                                                        ValidationGroup="Save"></asp:RegularExpressionValidator>
+                                                        ValidationGroup="save"></asp:RegularExpressionValidator>
                                                 </span>
                                                 <asp:TextBox runat="server" ID="txtmobileno" CssClass="form-control" onkeypress="return NumberOnly();" MaxLength="10" placeholder="Enter Mobile No" AutoComplete="off"></asp:TextBox>
                                             </div>
@@ -167,7 +167,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="table-responsive">
-                                                <asp:GridView ID="gridoicmaster" AutoGenerateColumns="false" runat="server" DataKeyNames="OICMaster_ID" OnPageIndexChanging="gridoicmaster_PageIndexChanging" EmptyDataText="NO RECORD FOUND" OnRowCommand="gridoicmaster_RowCommand"
+                                                <asp:GridView ID="gridoicmaster" AutoGenerateColumns="false" runat="server" DataKeyNames="OICMaster_ID" OnPageIndexChanging="gridoicmaster_PageIndexChanging" OnRowCommand="gridoicmaster_RowCommand" EmptyDataText="NO RECORD FOUND"
                                                     CssClass="table table-bordered table-hover" PageSize="10" AllowPaging="true">
                                                     <RowStyle HorizontalAlign="Center" />
                                                     <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />

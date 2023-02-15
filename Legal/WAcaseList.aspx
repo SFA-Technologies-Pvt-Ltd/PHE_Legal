@@ -78,7 +78,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Petitioner Name<br />आवेदक का नाम">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitonerName") %>'></asp:Label>
+                                                        <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("Petitoner_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="WP Case Status<br />डब्लू पी केस स्थिति">
@@ -88,7 +88,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Action<br />गतिविधि" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View" CssClass="fa fa-edit"></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View"><i class="fa fa-edit"</asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>

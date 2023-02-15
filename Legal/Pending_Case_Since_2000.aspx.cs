@@ -71,10 +71,9 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     {
         try
         {
-            //dsCase = obj.ByDataSet("select distinct UniqueNo," +
-            //    "IsNUll((select distinct CaseType+'/'+CaseNo+'/'+CAST(year as varchar(4))+'-'+Court from  tbl_OldCaseNewEntry where UniqueNo= a.UniqueNo),'') OldFilingNo," +
-            //    "FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail a where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
-            dsCase = obj.ByProcedure("USP_GetOldNewCaseByCasetype", new string[] { "CaseType" }, new string[] { CaseType }, "dataset");
+            dsCase = obj.ByDataSet("select distinct UniqueNo," +
+                "IsNUll((select distinct CaseType+'/'+CaseNo+'/'+CAST(year as varchar(4))+'-'+Court from  tbl_OldCaseNewEntry where UniqueNo= a.UniqueNo),'') OldFilingNo," +
+                "FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail a where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
             if (dsCase.Tables[0].Rows.Count > 0)
             {
                 ViewState["dt"] = null;
@@ -105,24 +104,15 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
             lblMsg.Text = "";
             if (e.CommandName == "EditDetails")
             {
-
+        
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblUnique = (Label)row.FindControl("lblUniqueNo");
-                Label lblFlag = (Label)row.FindControl("lblFlag");
                 string ID = lblUnique.Text;
-                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text, false);
-            }
-            if (e.CommandName == "ViewDoc")
-            {
-                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-                Label lblUnique = (Label)row.FindControl("lblUniqueNo");
-                Label lblFlag = (Label)row.FindControl("lblFlag");
-                string ID = lblUnique.Text;
-                Response.Redirect("../Legal/ViewDocumentByUniqNo.aspx?ID=" + Server.UrlEncode(ID) + "&Flag=" + lblFlag.Text, false);
-            }
+                Response.Redirect("../Legal/EditOld_PendingCases.aspx?ID=" + Server.UrlEncode(ID), false);
+             }
         }
         catch (Exception ex)
-        {
+        {    
             throw ex;
         }
     }

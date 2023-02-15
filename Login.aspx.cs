@@ -43,7 +43,6 @@ public partial class Legal_Login : System.Web.UI.Page
 
     private bool CompaireHashCode(string DataBasePassword, string ClientPasswordWithHashing)
     {
-
         bool i;
         // if (ConvertText_SHA512_And_Salt(txtPassword.Text.Trim()).Equals(DataBasePassword))
         //if (obj.SHA512_HASH(String.Concat(DataBasePassword, ViewState["RandomText"].ToString())).Equals(ClientPasswordWithHashing))
@@ -65,7 +64,7 @@ public partial class Legal_Login : System.Web.UI.Page
                     ds = obj.ByProcedure("SpLogin", new string[] { "UserName", "flag" }, new string[] { txtUserName.Text.Trim(), "0" }, "dataset");
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
-                       if (CompaireHashCode(ds.Tables[0].Rows[0]["Password"].ToString(), txtPassword.Text))
+                        if (CompaireHashCode(ds.Tables[0].Rows[0]["Password"].ToString(), txtPassword.Text))
                         {
                             Session["Emp_Id"] = ds.Tables[0].Rows[0]["Emp_Id"].ToString();
                             Session["UserName"] = ds.Tables[0].Rows[0]["UserName"].ToString();
@@ -79,7 +78,8 @@ public partial class Legal_Login : System.Web.UI.Page
                             Session["UserEmail"] = ds.Tables[0].Rows[0]["UserEmail"].ToString();
                             Session["AccessModule"] = ds.Tables[1];
                             Session["AccessForm"] = ds.Tables[2];
-                            Response.Redirect("~/Legal/OldCaseDashBoard.aspx", false);
+                            //Response.Redirect("~/Legal/LegalDashboard.aspx", false);
+							Response.Redirect("~/Legal/OldCaseDashBoard.aspx", false);
                         }
                         else
                         {

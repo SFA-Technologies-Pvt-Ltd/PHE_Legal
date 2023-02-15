@@ -368,7 +368,7 @@
                                 <div class="boxshape" style="background-color: yellow; border: 2px solid black;">
                                     <div class="circle" style="">
                                         <div class="insideBox" style="border: 2px solid yellow;">
-                                            <span>DO<br />
+                                            <span>DIVISION<br />
                                                 CASES</span>
                                         </div>
                                     </div>

@@ -60,10 +60,8 @@
                                             ErrorMessage="Enter Case Sub Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtSubsubject" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtSubsubject" runat="server" CssClass="form-control" AutoComplete="off" placeholder="Enter Sub Subject" MaxLength="200" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-                                        <asp:RegularExpressionValidator runat="server" ID="revDesignationName" Display="Dynamic" ControlToValidate="txtSubsubject"
-                                            ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Save" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                        </asp:RegularExpressionValidator>
+                                        <asp:TextBox ID="txtSubsubject" runat="server" CssClass="form-control" AutoComplete="off" placeholder="Enter Sub Subject" MaxLength="200" onkeypress="return chcode()();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
+                                       
                                     </div>
                                 </div>
                                 <div class="col-md-3" style="padding-top: 2rem! important">
