@@ -26,7 +26,7 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx" , false);
         }
     }
 
@@ -49,7 +49,8 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
     }
 
@@ -75,6 +76,7 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
+                        txtDisposaltype.Text = "";
                         lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
@@ -89,7 +91,8 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
     }
     protected void GrdCaseDipose_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -106,10 +109,19 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
                 ViewState["DesignationID"] = e.CommandArgument;
                 btnSave.Text = "Update";
             }
+            if (e.CommandName == "DeleteDetails")
+            {
+                ViewState["DesignationID"] = "";
+                ViewState["DesignationID"] = e.CommandArgument;
+                int CaseDisposeType_Id = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tbl_LegalCaseDisposeType where CaseDisposeType_Id=" + CaseDisposeType_Id);
+                BindGrid();
+            }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
     }
     protected void GrdCaseDipose_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -122,7 +134,8 @@ public partial class Legal_CaseDisposaltypeMst : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
     }
 }

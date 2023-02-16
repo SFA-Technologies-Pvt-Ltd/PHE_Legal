@@ -26,6 +26,9 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
                 BIndOfficeType();
                 BindUserDetails();
                 Session["PAGETOKEN"] = Server.UrlEncode(System.DateTime.Now.ToString());
+                FillOIC();
+                OICName_Div.Visible = false;
+                ddlOICYesOrNot.SelectedIndex = 2;
             }
         }
         else
@@ -39,6 +42,26 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
     }
 
+    protected void FillOIC()
+    {
+        try
+        {
+            ddlOICList.Items.Clear();
+            ds = obj.ByDataSet("select OICMaster_ID, OICName from tblOICMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOICList.DataTextField = "OICName";
+                ddlOICList.DataValueField = "OICMaster_ID";
+                ddlOICList.DataSource = ds;
+                ddlOICList.DataBind();
+            }
+            ddlOICList.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
     protected void BindUserDetails()
     {
         try
@@ -59,7 +82,8 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void BIndOfficeType()
@@ -79,7 +103,8 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     public void GetRandomText()
@@ -108,16 +133,18 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
                     if (btnSave.Text == "Save")
                     {
                         string email = txtUserEmail.Text.Trim();
-                        
+
                         ds = obj.ByDataSet("select * from tblUserMaster where UserEmail='" + txtUserEmail.Text.Trim() + "'  order by UserId desc");
 
-                        if (ds.Tables.Count <= 0)
+                        if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count == 0)
                         {
 
                             string password = ConvertText_SHA512_And_Salt(txtPassword.Text.Trim());
+                            string EMPName = ddlOICYesOrNot.SelectedIndex == 1 ? ddlOICList.SelectedItem.Text.Trim() : txtEmpployeeName.Text.Trim();
+                            string OIc_ID = ddlOICYesOrNot.SelectedIndex == 1 ? ddlOICList.SelectedValue : null;
 
-                            ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "EMPName", "UserEmail", "UserName", "UserPassword", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
-                                , new string[] { txtEmpployeeName.Text.Trim(), txtUserEmail.Text.Trim(), txtUserName.Text.Trim(), password, txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
+                            ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "OICMaster_ID", "EMPName", "UserEmail", "UserName", "UserPassword", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
+                                , new string[] { OIc_ID, EMPName, txtUserEmail.Text.Trim(), txtUserName.Text.Trim(), password, txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
 
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
@@ -160,7 +187,8 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void ddlofficetype_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,7 +219,8 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -328,7 +357,50 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
+    protected void checkOic_CheckedChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            if (ddlOICYesOrNot.SelectedValue == "1")
+            {
+                EmpName_Div.Visible = false;
+                OICName_Div.Visible = true;
+
+            }
+            else
+            {
+                EmpName_Div.Visible = true;
+                OICName_Div.Visible = false;
+                txtMobileNo.Text = "";
+                txtMobileNo.ReadOnly = false;
+                ddlOICList.SelectedIndex = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void ddlOICList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            DataSet DsOIC = obj.ByDataSet("select OICName, OICEmailID, OICMobileNo from tblOICMaster where OICMaster_ID =" + ddlOICList.SelectedValue);
+            if (DsOIC != null && DsOIC.Tables[0].Rows.Count > 0)
+            {
+                txtMobileNo.Text = DsOIC.Tables[0].Rows[0]["OICMobileNo"].ToString();
+                txtMobileNo.ReadOnly = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
 }

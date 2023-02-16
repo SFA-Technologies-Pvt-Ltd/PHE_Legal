@@ -8,6 +8,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
+
     <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
     <div class="content-wrapper">
         <section class="content">
@@ -21,16 +22,16 @@
                     <div class="card-body">
                         <fieldset>
                             <legend>Fill Details</legend>
+
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
                                             Office Type<span style="color: red;"><b> *</b></span>
                                             <asp:RequiredFieldValidator ID="rfvofficetype" ValidationGroup="Save"
-                                                ErrorMessage="Select Office Name." InitialValue="0" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                ControlToValidate="ddlOfficeName" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            कार्यालय का प्रकार</label>
+                                                ErrorMessage="Select Office Type." InitialValue="0" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="ddlofficetype" Display="Dynamic" runat="server">
+                                            </asp:RequiredFieldValidator></label>
                                         <asp:DropDownList ID="ddlofficetype" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlofficetype_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                     </div>
                                 </div>
@@ -41,9 +42,9 @@
                                             <asp:RequiredFieldValidator ID="RfvOfficeName" ValidationGroup="Save"
                                                 ErrorMessage="Select Office Name." InitialValue="0" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="ddlOfficeName" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            कार्यालय का नाम</label>
-                                        <asp:DropDownList ID="ddlOfficeName" runat="server" CssClass="form-control select2"></asp:DropDownList>
+                                            </asp:RequiredFieldValidator></label>
+                                        <asp:DropDownList ID="ddlOfficeName" runat="server" CssClass="form-control select2">
+                                        </asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -53,26 +54,45 @@
                                             <asp:RequiredFieldValidator ID="RfvUsertype" ValidationGroup="Save"
                                                 ErrorMessage="Select Designation." InitialValue="0" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="ddlUsertype" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            पद का नाम</label>
+                                            </asp:RequiredFieldValidator>
+                                        </label>
                                         <asp:DropDownList ID="ddlUsertype" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>OIC</label><br />
+                                        <asp:DropDownList ID="ddlOICYesOrNot" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="checkOic_CheckedChanged">
+                                            <asp:ListItem Value="0">Select</asp:ListItem>
+                                            <asp:ListItem Value="1">Yes</asp:ListItem>
+                                            <asp:ListItem Value="2">No</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3" id="EmpName_Div" runat="server">
                                     <div class="form-group">
                                         <label>
                                             Employee Name<span style="color: red;"><b> *</b></span>
                                             <asp:RequiredFieldValidator ID="RfvEmpName" ValidationGroup="Save"
                                                 ErrorMessage="Enter Employee Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtEmpployeeName" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            कर्मचारी का नाम</label>
+                                            </asp:RequiredFieldValidator></label>
                                         <asp:TextBox ID="txtEmpployeeName" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" runat="server" AutoComplete="off" MaxLength="70" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-
+                                <div class="col-md-3" id="OICName_Div" runat="server">
+                                    <div class="form-group">
+                                        <label>
+                                            OIC<span style="color: red;"><b> *</b></span>
+                                            <asp:RequiredFieldValidator ID="rfvOicName" ValidationGroup="Save"
+                                                ErrorMessage="Select OIC Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="ddlOICList" Display="Dynamic" runat="server" InitialValue="0">
+                                            </asp:RequiredFieldValidator></label>
+                                        <asp:DropDownList ID="ddlOICList" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlOICList_SelectedIndexChanged"></asp:DropDownList>
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
@@ -80,8 +100,7 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                                 ErrorMessage="Enter User Email" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtUserEmail" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            उपयोगकर्ता ईमेल
+                                            </asp:RequiredFieldValidator>
                                         </label>
                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" ValidationGroup="Save" runat="server" Display="Dynamic" ControlToValidate="txtUserEmail"
                                             ErrorMessage="Invalid User Email" SetFocusOnError="true"
@@ -92,17 +111,31 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
+                                            Mobile No.<span style="color: red;"><b> *</b></span>
+                                            <asp:RequiredFieldValidator ID="RfvMobileno" ValidationGroup="Save"
+                                                ErrorMessage="Enter Mobile No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ControlToValidate="txtMobileNo" Display="Dynamic" runat="server">
+                                            </asp:RequiredFieldValidator></label>
+                                        <asp:RegularExpressionValidator ID="revMobileNo" ValidationGroup="Save" runat="server" Display="Dynamic" ControlToValidate="txtMobileNo"
+                                            ErrorMessage="Invalid Mobile No." SetFocusOnError="true"
+                                            ForeColor="Red" ValidationExpression="^([6-9]{1}[0-9]{9})$"></asp:RegularExpressionValidator>
+                                        <asp:TextBox ID="txtMobileNo" runat="server" MaxLength="10" AutoComplete="off" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                                 <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>
                                             User Name<span style="color: red;"><b> *</b></span>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
-                                                ErrorMessage="Enter User Email" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                ErrorMessage="Enter User Name" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtUserName" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            उपयोगकर्ता का नाम
+                                            </asp:RequiredFieldValidator>
                                         </label>
-
                                         <asp:TextBox ID="txtUserName" runat="server" MaxLength="10" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
@@ -110,8 +143,7 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
                                                 ErrorMessage="Enter Password" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtPassword" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            पासवर्ड
+                                            </asp:RequiredFieldValidator>
                                         </label>
                                         <asp:TextBox ID="txtPassword" TextMode="Password" runat="server" min="6" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
@@ -119,44 +151,31 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
-                                            Password<span style="color: red;"><b> *</b></span>
+                                            Confirm Password<span style="color: red;"><b> *</b></span>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="Save"
                                                 ErrorMessage="Enter Confirm Password" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtConfirmPassword" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            पासवर्ड पुष्टि
+                                            </asp:RequiredFieldValidator>
+                                            <asp:CompareValidator ErrorMessage="Confirm Password Not Matched" ForeColor="Red" Font-Bold="true" Display="None" ValidationGroup="Save" ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword" runat="server" />
                                         </label>
-                                        <asp:CompareValidator ErrorMessage="Confirm Password Not Machted" ValidationGroup="Save" ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword" runat="server" />
                                         <asp:TextBox ID="txtConfirmPassword" TextMode="Password" runat="server" min="6" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>
-                                            Mobile No.<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="RfvMobileno" ValidationGroup="Save"
-                                                ErrorMessage="Enter Mobile No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                ControlToValidate="txtMobileNo" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator><br />
-                                            मोबाइल नंबर</label>
-                                        <asp:RegularExpressionValidator ID="revMobileNo" ValidationGroup="Save" runat="server" Display="Dynamic" ControlToValidate="txtMobileNo"
-                                            ErrorMessage="Invalid Mobile No." SetFocusOnError="true"
-                                            ForeColor="Red" ValidationExpression="^([6-9]{1}[0-9]{9})$"></asp:RegularExpressionValidator>
-                                        <asp:TextBox ID="txtMobileNo" runat="server" MaxLength="10" AutoComplete="off" CssClass="form-control"></asp:TextBox>
-                                    </div>
-                                </div>                             
-                                <div class="col-md-3 col-sm mt-5">
+
+                                <div class="col-md-3 pt-3">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 pt-3">
                                             <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="Save" Text="Save" OnClick="btnSave_Click" />
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 pt-3">
                                             <a href="UserRegistration.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </fieldset>
+
                         <fieldset>
                             <legend>Details</legend>
                             <div class="row">
@@ -203,11 +222,11 @@
                                                         <asp:Label ID="lblUserName" runat="server" Text='<%# Eval("UserName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Password<br />पासवर्ड">
+                                                <%-- <asp:TemplateField HeaderText="Password<br />पासवर्ड">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPassword" runat="server" Text='<%# Eval("UserPassword") %>'></asp:Label>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                             </Columns>
                                         </asp:GridView>
                                     </div>

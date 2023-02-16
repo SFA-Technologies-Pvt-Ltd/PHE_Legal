@@ -51,17 +51,17 @@
                                 <div class="col-md-3 col-sm"  style="display:none;">
                                     <div class="form-group">
                                         <label>Office Type Name</label><span style="color: red;"><b> *</b></span>
-                                       <%-- <asp:RequiredFieldValidator ID="rfvofficetype" ValidationGroup="Save"
-                                            ErrorMessage="Select Office type Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlOfficetypename" Display="Dynamic" runat="server">
-                                        </asp:RequiredFieldValidator>--%>
+                                        <asp:requiredfieldvalidator id="rfvofficetype" validationgroup="save"
+                                            errormessage="select office type name." forecolor="red" text="<i class='fa fa-exclamation-circle' title='required !'></i>"
+                                            controltovalidate="ddlofficetypename" display="dynamic" runat="server">
+                                        </asp:requiredfieldvalidator>
                                         <asp:DropDownList ID="ddlOfficetypename" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlOfficetypename_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm" style="display:none;">
                                     <div class="form-group">
                                         <label>Office Name</label><span style="color: red;"><b> *</b></span>
-                                        <%--<asp:RequiredFieldValidator ID="rfvofficeName" ValidationGroup="Save"
+                                       <%-- <asp:RequiredFieldValidator ID="rfvofficeName" ValidationGroup="Save"
                                             ErrorMessage="Select Office Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlOfficeName" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>--%>
@@ -88,7 +88,7 @@
                                          <span style="color: red;"><b>*</b></span></label>
                                         <asp:RequiredFieldValidator ID="RfvOfficeLevel" ValidationGroup="Save"
                                             ErrorMessage="Enter Office Level." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlOfficeLevel" Display="Dynamic" runat="server">
+                                            ControlToValidate="ddlOfficeLevel" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList runat="server" ID="ddlOfficeLevel" CssClass="form-control"></asp:DropDownList>
                                     </div>
@@ -130,12 +130,12 @@
                                                         <asp:Label ID="lblOfficeID" runat="server" Text='<%# Eval("Office_Id") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Designation Name">
+                                                <asp:TemplateField HeaderText="Designation Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblDesignationName" runat="server" Text='<%# Eval("Designation_Name") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Office Level">
+                                                <asp:TemplateField HeaderText="Office Level" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                       <asp:Label ID="lblOfficelevelID" runat="server" Text='<%# Eval("OfficeLevel_Id") %>' Visible="false"></asp:Label>
                                                         <asp:Label ID="lblOfficelevelName" runat="server" Text='<%# Eval("OfficeLevelName") %>'></asp:Label>
@@ -144,7 +144,8 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Designation_Id") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Designation_Id") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Designation_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>

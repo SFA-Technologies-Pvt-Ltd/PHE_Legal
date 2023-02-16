@@ -29,7 +29,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
     }
 
@@ -152,7 +152,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                         txtlocation.Text = "";
                         FillGrid();
                         btnSave.Text = "Save";
-                        lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
                     {
@@ -203,6 +203,14 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
                 ViewState["CircleID"] = e.CommandArgument;
                 btnSave.Text = "Update";
+            }
+            if (e.CommandName == "DeleteDetails")
+            {
+                ViewState["CircleID"] = "";
+                ViewState["CircleID"] = e.CommandArgument;
+                int Circle_ID = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tblCircleMaster where Circle_ID=" + Circle_ID);
+                FillGrid();
             }
         }
 

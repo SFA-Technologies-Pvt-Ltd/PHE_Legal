@@ -114,6 +114,12 @@ public partial class Legal_CaseSubjectMaster : System.Web.UI.Page
                 btnSave.Text = "Update";
                 ViewState["EditID"] = e.CommandArgument;
             }
+            if (e.CommandName == "DeleteDetails")
+            {
+                int SubjectID = Convert.ToInt32(e.CommandArgument);
+                objdb.ByTextQuery("delete from tbl_LegalMstCaseSubject where CaseSubjectID=" + SubjectID);
+                BindGridCaseSubject();
+            }
         }
         catch (Exception ex)
         {

@@ -56,11 +56,11 @@
                                                         <label>Office Type Name<span style="color: red;"> *</span></label>
                                                         <span class="pull-right">
                                                             <asp:RequiredFieldValidator ID="Rfv_OfficeTypeName" ValidationGroup="Save"
-                                                                ErrorMessage="Enter Office Type Name" Text="<i class='fa fa-exclamation-circle' title='Select Zone'></i>"
-                                                                ControlToValidate="txtOfficeTypeName" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
+                                                                ErrorMessage="Enter Office Type Name" Text="<i class='fa fa-exclamation-circle' title='Enter Office Type Name'></i>"
+                                                                ControlToValidate="txtOfficeTypeName" ForeColor="Red" Display="Dynamic" runat="server">
                                                             </asp:RequiredFieldValidator>
                                                             <asp:RegularExpressionValidator ID="rexOfficetypeName" runat="server" ErrorMessage="Only Characters Allow" ValidationExpression="^[a-zA-Z ]*$" ControlToValidate="txtOfficeTypeName" Font-Bold="true" ForeColor="Red"
-                                                                Text="<i class='fa fa-exclamation-circle' title='Mobile No. is Not Valid'></i>" ValidationGroup="Save" SetFocusOnError="true"></asp:RegularExpressionValidator>
+                                                                Text="<i class='fa fa-exclamation-circle' title=''></i>" ValidationGroup="Save" SetFocusOnError="true"></asp:RegularExpressionValidator>
                                                         </span>
                                                         <asp:TextBox runat="server" ID="txtOfficeTypeName" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                                     </div>
@@ -101,7 +101,8 @@
                                                                 </asp:TemplateField>
                                                                 <asp:TemplateField HeaderText="Action"  ItemStyle-Width="5%">
                                                                     <ItemTemplate>
-                                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OfficeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
+                                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OfficeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
+                                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("OfficeType_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
                                                             </Columns>

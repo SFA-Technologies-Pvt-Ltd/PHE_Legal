@@ -29,7 +29,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
     }
 
@@ -152,7 +152,7 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                         ddlOfficeLevel.ClearSelection();
                         txtlocation.Text = "";
                         ViewState["DivisionID"] = "";
-                        lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
                     {
@@ -207,6 +207,14 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 ddlCircleName.Items.FindByValue(lblCircleID.Text).Selected = true;
                 ViewState["DivisionID"] = e.CommandArgument;
                 btnSave.Text = "Update";
+            }
+            if (e.CommandName == "DeleteDetails")
+            {
+                ViewState["DivisionID"] = "";
+                ViewState["DivisionID"] = e.CommandArgument;
+                int Division_ID = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tblDivisionMaster where Division_ID=" + Division_ID);
+                FillGrid();
             }
         }
         catch (Exception ex)

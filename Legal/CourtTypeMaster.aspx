@@ -67,17 +67,17 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Court Location<span style="color: red;"> *</span></label>
+                                                <label>Location<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="rfvCourtLocation" ValidationGroup="Save"
-                                                        ErrorMessage="Select Court Location" Text="<i class='fa fa-exclamation-circle' title='Select Court Location'></i>"
+                                                        ErrorMessage="Select Location" Text="<i class='fa fa-exclamation-circle' title='Select Court Location'></i>"
                                                         ControlToValidate="ddlCourtlocation" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
                                                 </span>
-                                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlCourtlocation" OnSelectedIndexChanged="ddlCourtlocation_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlCourtlocation"></asp:DropDownList>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" id="otherDiv" runat="server" visible="false">
+                                     <%--   <div class="col-md-3" id="otherDiv" runat="server" visible="false">
                                             <div class="form-group">
                                                 <label>Others</label><span style="color: red;"> *</span>
                                                 <asp:RequiredFieldValidator ID="rfvother" ValidationGroup="Save"
@@ -86,7 +86,7 @@
                                                 </asp:RequiredFieldValidator>
                                                 <asp:TextBox runat="server" CssClass="form-control select2" ID="txtOther" MaxLength="60" AutoComplete="off" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
                                             </div>
-                                        </div>
+                                        </div>--%>
                                         <div class="col-md-3" style="padding-top: 2rem! important;">
                                             <div class="form-group">
                                                 <div class="row">
@@ -129,14 +129,15 @@
                                                             <asp:HiddenField ID="hdnDistrictID" Value='<%#Eval("District_Id") %>' runat="server" />
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                     <asp:TemplateField HeaderText="Other Location">
+                                                   <%--  <asp:TemplateField HeaderText="Other Location">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblOtherlocation" runat="server" Text='<%#Eval("OtherLocation") %>'></asp:Label>
                                                         </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                    </asp:TemplateField>--%>
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="btnEdit" runat="server" CommandArgument='<%#Eval("CourtType_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
+                                                            <asp:LinkButton ID="btnEdit" runat="server" CommandArgument='<%#Eval("CourtType_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
+                                                            <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CourtType_ID") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>

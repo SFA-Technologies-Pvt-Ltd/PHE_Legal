@@ -26,7 +26,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx",false);
         }
     }
 
@@ -51,7 +51,8 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 
@@ -78,7 +79,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
                         txtOfficeTypeName.Text = "";
-                        lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrMsg);
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                     }
                     else
                     {
@@ -95,7 +96,8 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     protected void grdOfficetypeMst_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -108,7 +110,8 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 
@@ -127,10 +130,18 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
                 ViewState["OfficeTypeID"] = e.CommandArgument;
                 btnSave.Text = "Update";
             }
+            if (e.CommandName == "DeleteDetails")
+            {
+                int OfficetypeID = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tblOfficeTypeMaster where OfficeType_Id=" + OfficetypeID);
+                FillGrid();
+            }
+            lblMsg.Text = "";
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 }
