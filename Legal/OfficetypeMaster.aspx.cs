@@ -132,11 +132,10 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
             }
             if (e.CommandName == "DeleteDetails")
             {
-                int OfficetypeID = Convert.ToInt32(e.CommandArgument);
-                obj.ByTextQuery("delete from tblOfficeTypeMaster where OfficeType_Id=" + OfficetypeID);
+                int OfficeType_Id = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tblOfficeTypeMaster where OfficeType_Id=" + OfficeType_Id);
                 FillGrid();
             }
-            lblMsg.Text = "";
         }
         catch (Exception ex)
         {

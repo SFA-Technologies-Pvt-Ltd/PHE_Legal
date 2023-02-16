@@ -169,7 +169,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Case No</label>
+                                        <label>Old Case No</label>
                                         <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtCaseNo" Autocomplete="Off" ValidationGroup="Ent" runat="server" ForeColor="Red" />
                                         <asp:TextBox ID="txtCaseNo" runat="server" CssClass="form-control"></asp:TextBox>
                                     </div>

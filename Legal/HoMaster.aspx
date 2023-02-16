@@ -84,7 +84,7 @@
                                             ErrorMessage="Enter location." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtlocation" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtlocation" runat="server" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtlocation" runat="server" CssClass="form-control" MaxLength="50" AutoComplete="off" onkeyup="javascript:capFirst(this);"></asp:TextBox>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                 <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" OnClick="btnSave_Click" Text="Save" />
+                                            <asp:Button runat="server" ValidationGroup="Save" CssClass="btn btn-primary btn-block" ID="btnSave" OnClientClick="return ValidatePage();" OnClick="btnSave_Click" Text="Save" />
                                         </div>
                                         <div class="col-md-6">
                                             <a href="HoMaster.aspx" class="btn btn-default btn-block">Clear</a>
@@ -109,30 +109,30 @@
                                         <asp:GridView ID="GridView1" PageSize="50" runat="server" DataKeyNames="Ho_Id" AutoGenerateColumns="False" CssClass="table table-bordered table-striped" OnRowCommand="GridView1_RowCommand" OnPageIndexChanging="GridView1_PageIndexChanging" AllowPaging="true" EmptyDataText="NO RECORD FOUND">
                                             <PagerStyle HorizontalAlign="Left" CssClass="GridPager" />
                                             <Columns>
-                                                <asp:TemplateField HeaderText="Sr.No." ItemStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label runat="server" ID="lblSno" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                         <asp:Label ID="lblHoId" runat="server" Visible="false" Text='<%#Eval("Ho_Id").ToString() %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Ho Name">
+                                                <asp:TemplateField HeaderText="Ho Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblHoName" Text='<%# Eval("HoName") %>' runat="server"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Office Level Name">
+                                                 <asp:TemplateField HeaderText="Office Level Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblofficelevel" Text='<%# Eval("OfficeLevelName") %>' runat="server"></asp:Label>
                                                         <asp:Label ID="lblofficelevel_ID" Text='<%# Eval("Officelevel_Id") %>' Visible="false" runat="server"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Office Type Name">
+                                                 <asp:TemplateField HeaderText="Office Type Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblofficetype" Text='<%# Eval("OfficeType_Name") %>' runat="server"></asp:Label>
                                                         <asp:Label ID="lblofficetype_ID" Text='<%# Eval("Officetype_Id") %>' Visible="false" runat="server"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Location">
+                                                 <asp:TemplateField HeaderText="Location" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lbllocation" Text='<%# Eval("HOLocation") %>' runat="server"></asp:Label>
                                                     </ItemTemplate>
@@ -140,6 +140,7 @@
                                                 <asp:TemplateField HeaderText="Action" HeaderStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Ho_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Ho_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
@@ -163,6 +164,29 @@
                 return false
             else if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
                 return true
+        }
+        function capFirst(cpt) { //only Capital First.
+            cpt.value = cpt.value[0].toUpperCase() + cpt.value.substring(1);
+        }
+
+    </script>
+    <script>
+        function ValidatePage() {
+            if (typeof (Page_ClientValidate) == 'function') {
+                Page_ClientValidate('Save');
+            }
+            if (Page_IsValid) {
+                if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Update") {
+                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Update this record?";
+                    $('#myModal').modal('show');
+                    return false;
+                }
+                if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Save") {
+                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Save this record?";
+                    $('#myModal').modal('show');
+                    return false;
+                }
+            }
         }
     </script>
 </asp:Content>

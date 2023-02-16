@@ -1,9 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="Case_SubSubjectMaster.aspx.cs" Inherits="Legal_Case_SubSubjectMaster" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="PartyMaster.aspx.cs" Inherits="Legal_PartyMaster" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <asp:ValidationSummary ID="vs" runat="server" ValidationGroup="Save" ShowMessageBox="true" ShowSummary="false" />
+    <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
@@ -23,7 +23,7 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" ID="btnYes" OnClick="btnSave_Click" Style="margin-top: 20px; width: 50px;" />
+                        <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" OnClick="btnSave_Click" ID="btnYes" Style="margin-top: 20px; width: 50px;" />
                         <asp:Button ID="btnNo" ValidationGroup="no" runat="server" CssClass="btn btn-danger" Text="No" data-dismiss="modal" Style="margin-top: 20px; width: 50px;" />
                     </div>
                     <div class="clearfix"></div>
@@ -32,45 +32,44 @@
         </div>
     </div>
     <div class="content-wrapper">
-        <section class="content">
+        <div class="content">
             <div class="container-fluid">
-                <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
+                <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                        Sub Subject Master
+                        Party Master
                     </div>
                     <div class="card-body">
                         <fieldset>
                             <legend>Enter Details</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3 col-sm">
                                     <div class="form-group">
-                                        <label>Case Subject</label><span style="color: red;"><b> * </b></span>
-                                        <asp:RequiredFieldValidator ID="Rfvdate" ValidationGroup="Save"
-                                            ErrorMessage="Selct Case Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlcaseSubject" Display="Dynamic" runat="server" InitialValue="0">
+                                        <label>Party Name</label><span style="color: red;"><b> *</b></span>
+                                        <asp:RequiredFieldValidator ID="rfvPartyName" ValidationGroup="Save"
+                                            ErrorMessage="Enter Party name." ForeColor="red" Text="<i class='fa fa-exclamation-circle' title='required !'></i>"
+                                            ControlToValidate="txtPartyName" Display="dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlcaseSubject" runat="server" CssClass="form-control select2"></asp:DropDownList>
+                                        <asp:TextBox runat="server" ID="txtPartyName" AutoComplete="off" CssClass="form-control" placeholder="Enter Party Name" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3 col-sm">
                                     <div class="form-group">
-                                        <label>Sub Subject</label><span style="color: red;"><b> * </b></span>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
-                                            ErrorMessage="Enter Case Sub Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="txtSubsubject" Display="Dynamic" runat="server">
+                                        <label>Designation</label><span style="color: red;"><b> *</b></span>
+                                        <asp:RequiredFieldValidator ID="rfvDesignationName" ValidationGroup="Save"
+                                            ErrorMessage="Select Designation." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlDesignationName" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtSubsubject" runat="server" CssClass="form-control" AutoComplete="off" placeholder="Enter Sub Subject" MaxLength="200" onkeypress="return chcode()();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-                                       
+                                        <asp:DropDownList ID="ddlDesignationName" runat="server" CssClass="form-control select2"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3" style="padding-top: 2rem! important">
+                                <div class="col-md-3" style="margin-top: 3.4%">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" OnClick="btnSave_Click" ValidationGroup="Save" OnClientClick="return ValidatePage();" />
+                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" OnClientClick="return ValidatePage();" OnClick="btnSave_Click" ValidationGroup="Save" />
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="Case_SubSubjectMaster.aspx" class="btn btn-default btn-block">Clear</a>
+                                            <a href="PartyMaster.aspx" class="btn btn-default btn-block">Clear</a>
                                         </div>
                                     </div>
                                 </div>
@@ -81,29 +80,31 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdSub_Subect" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="grdSub_Subect_PageIndexChanging" OnRowCommand="grdSub_Subect_RowCommand" DataKeyNames="CaseSubSubj_Id" EmptyDataText="NO RECORD FOUND">
+                                        <asp:GridView ID="GrdPartyName" runat="server" CssClass="table table-bordered table-hover" AutoGenerateColumns="false" AllowPaging="true" EmptyDataText="No records Found"
+                                             PageSize="10" OnPageIndexChanging="GrdPartyName_PageIndexChanging" OnRowCommand="GrdPartyName_RowCommand" DataKeyNames="Party_ID">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
-                                                        <asp:Label ID="lblId" runat="server" Text='<%# Eval("CaseSubSubj_Id") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblsrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
+                                                        <asp:Label ID="lblID" runat="server" Text='<%# Eval("Party_ID") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case Subject">
+                                                <asp:TemplateField HeaderText="Party Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblSunjectName" runat="server" Text='<%# Eval("caseSubject") %>'></asp:Label>
-                                                        <asp:Label ID="lblSubjectID" runat="server" Text='<%# Eval("CaseSubjectID") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblPartyName" runat="server" Text='<%# Eval("PartyName") %>'></asp:Label>
+
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case Sub Subject">
+                                                <asp:TemplateField HeaderText="Designation Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblSub_CaseSubject" runat="server" Text='<%# Eval("CaseSubSubject") %>'></asp:Label>
+                                                        <asp:Label ID="lblDesignationName" runat="server" Text='<%# Eval("Designation_Name") %>'></asp:Label>
+                                                        <asp:Label ID="lblDesignationId" runat="server" Text='<%# Eval("Designation_Id") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Update" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="btnEdit" runat="server" CssClass="fa fa-edit" CommandName="EditDetails" ToolTip="Edit" CommandArgument='<%# Eval("CaseSubSubj_Id") %>'></asp:LinkButton>&nbsp;
-                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CaseSubSubj_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Party_ID") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Party_ID") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
@@ -115,8 +116,11 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
+
+
+
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">
     <script type="text/javascript">
@@ -137,13 +141,6 @@
                 return false
             else if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
                 return true
-        }
-        function lettersOnly() { // Only English Letter Allow.
-            var charCode = event.keyCode;
-            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
-                return true;
-            else
-                return false;
         }
     </script>
     <script>

@@ -28,7 +28,7 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("~/Login.aspx");
+            Response.Redirect("~/Login.aspx",false);
         }
     }
 
@@ -46,7 +46,8 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 
@@ -91,7 +92,8 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     #region FillCaseSubject
@@ -127,7 +129,8 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     protected void grdSub_Subect_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -147,10 +150,17 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
                 ddlcaseSubject.ClearSelection();
                 ddlcaseSubject.Items.FindByValue(lblCaseSubjectID.Text).Selected = true;
             }
+            if (e.CommandName == "DeleteDetails")
+            {
+                int CaseSubSubj_Id = Convert.ToInt32(e.CommandArgument);
+                objdb.ByTextQuery("delete from tbl_CaseSubSubjectMaster where CaseSubSubj_Id=" + CaseSubSubj_Id);
+                BindGrid();
+            }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 }

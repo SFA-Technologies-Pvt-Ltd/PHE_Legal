@@ -91,7 +91,7 @@ public partial class Legal_HoMaster : System.Web.UI.Page
                     string ErrorMsg = ds.Tables[0].Rows[0]["ErrorMsg"].ToString();
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
-                        lblMsg.Text = obj.Alert("fa-ban", "alert-success", "Thanks !", ErrorMsg);
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrorMsg);
                         FillGrid();
                         btnSave.Text = "Save";
                         ClearData();
@@ -165,6 +165,12 @@ public partial class Legal_HoMaster : System.Web.UI.Page
                     }
                     ViewState["Ho_Id"] = e.CommandArgument;
                     btnSave.Text = "Edit";
+                }
+                if (e.CommandName == "DeleteDetails")
+                {
+                    int Ho_Id = Convert.ToInt32(e.CommandArgument);
+                    obj.ByTextQuery("delete from tblHoMaster where Ho_Id=" + Ho_Id);
+                    FillGrid();
                 }
 
             }

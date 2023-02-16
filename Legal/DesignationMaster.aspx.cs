@@ -133,7 +133,7 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                     }
                     else
                     {
-                        lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", ErrMsg);
+                        lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
                         txtDeDesignation.Text = "";
                         ddlOfficetypename.ClearSelection();
                         ddlOfficeName.ClearSelection();

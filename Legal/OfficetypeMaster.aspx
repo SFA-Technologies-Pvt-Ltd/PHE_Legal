@@ -70,7 +70,7 @@
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-3">
-                                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" OnClick="btnSave_Click" ValidationGroup="Save" />
+                                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" OnClick="btnSave_Click" ValidationGroup="Save" OnClientClick="return ValidatePage();" />
                                                         </div>
                                                         <div class="col-md-3">
                                                             <a href="OfficetypeMaster.aspx" class="btn btn-default btn-block">Clear</a>
@@ -133,6 +133,25 @@
             else
                 return false;
         } 
+    </script>
+     <script>
+         function ValidatePage() {
+             if (typeof (Page_ClientValidate) == 'function') {
+                 Page_ClientValidate('Save');
+             }
+             if (Page_IsValid) {
+                 if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Update") {
+                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Update this record?";
+                    $('#myModal').modal('show');
+                    return false;
+                }
+                if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Save") {
+                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Save this record?";
+                    $('#myModal').modal('show');
+                    return false;
+                }
+            }
+        }
     </script>
 </asp:Content>
 

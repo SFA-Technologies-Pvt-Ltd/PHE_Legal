@@ -29,7 +29,7 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx",false);
         }
     }
     #region Fill FridView
@@ -51,7 +51,8 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
     #endregion
@@ -124,17 +125,18 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
                     }
                     if (ds != null && ds.Tables.Count > 0)
                     {
+                        string msg = ds.Tables[0].Rows[0]["msg"].ToString();
                         if (ds != null && ds.Tables[0].Rows[0]["stat"].ToString() == "OK")
                         {
                             btnSave.Text = "Save";
                             FillGrid();
                             ClearData();
-                            lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ds.Tables[0].Rows[0]["msg"].ToString());
+                            lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", msg);
                         }
                     }
                     else
                     {
-                        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["msg"].ToString());
+                        lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["ErrorMsg"].ToString());
                     }
                 }
                 else
@@ -146,7 +148,8 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
     #endregion
@@ -161,8 +164,8 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
     }
     protected void gridview_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -187,11 +190,17 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
                 ViewState["FileUploadDOC1"] = lblFileUpload.Text;
                 btnSave.Text = "Update";
             }
+            if (e.CommandName == "DeleteDetails")
+            {
+                int CabinetId = Convert.ToInt32(e.CommandArgument);
+                objdb.ByTextQuery("delete from tblCabintMeetingMaster where CabinetId=" + CabinetId);
+                FillGrid();
+            }
         }
         catch (Exception ex)
         {
-
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
         }
         finally { if (ds != null) { ds.Dispose(); } }
     }
@@ -200,8 +209,6 @@ public partial class Legal_CabinetMeetingMaster : System.Web.UI.Page
         txtMeetingdate.Text = "";
         txtDetail.Text = "";
         btnSave.Text = "Save";
-
-
     }
 }
 
