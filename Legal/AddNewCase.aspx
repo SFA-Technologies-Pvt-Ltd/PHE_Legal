@@ -163,14 +163,14 @@
 
                                     </div>
                                 </div>
-
-                                <div runat="server" visible="false" class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            <label>
-                                                Old Case No.</label>
-                                            <asp:TextBox ID="txtCaseOldRefNo" runat="server" placeholder="Old Case No." AutoComplete="off" class="form-control" MaxLength="50" onkeypress="return validatenum(event);"></asp:TextBox>
-                                        </div>
+                                        <label>Case Year</label><span style="color: red;"><b>*</b></span>
+                                        <asp:RequiredFieldValidator ID="rfvCaseyear" ValidationGroup="Save"
+                                            ErrorMessage="Select Case year." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ControlToValidate="ddlCaseYear" Display="Dynamic" runat="server" InitialValue="0">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -186,21 +186,9 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Case Year</label><span style="color: red;"><b>*</b></span>
-                                        <asp:RequiredFieldValidator ID="rfvCaseyear" ValidationGroup="Save"
-                                            ErrorMessage="Select Case year." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlCaseYear" Display="Dynamic" runat="server" InitialValue="0">
-                                        </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
-                                    </div>
-                                </div>
-                                <%--</div>--%>
-                                <%--<div class="row">--%>
-                                <div class="col-md-3">
-                                    <div class="form-group">
                                         <div class="form-group">
                                             <label>
-                                                Court Type<span style="color: red;">*</span></label>
+                                                Court<span style="color: red;">*</span></label>
                                             <asp:RequiredFieldValidator ID="RfvCourttype" ValidationGroup="Save"
                                                 ErrorMessage="Select Court type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="ddlCourtType" Display="Dynamic" runat="server" InitialValue="0">
@@ -365,10 +353,42 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <asp:Button ID="btnAdvocate" runat="server" CssClass="btn btn-primary btn-block" Text="Add" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <asp:GridView ID="grdDeptAdvocate" runat="server" CssClass="table table-bordered " AutoGenerateColumns="false">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="Sr#">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="Advoate Name">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblAdvocatename" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="Mobile No.">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblMobileno" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                    </asp:GridView>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </fieldset>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="box-body">
                                     <fieldset>
                                         <legend>Petitioner / Applicant Details</legend>
@@ -397,7 +417,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>
                                                         Mobile No.<span style="color: red"><b>*</b></span></label>
@@ -411,7 +431,7 @@
                                                         ForeColor="Red" ValidationExpression="^([6-9]{1}[0-9]{9})$"></asp:RegularExpressionValidator>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-7">
                                                 <div class="form-group">
                                                     <label>
                                                         Address<span style="color: red"><b>*</b></span></label>
@@ -420,26 +440,66 @@
                                                         Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                                     </asp:RequiredFieldValidator>
                                                     <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2" style="margin-top: 2rem!important">
+                                                <asp:Button ID="btnPetitioner" runat="server" CssClass="btn btn-primary btn-block" Text="Add" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <asp:GridView ID="GrdPetitionerDtl" runat="server" CssClass="table table-bordered " AutoGenerateColumns="false">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="Sr#">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="Petitioner Name">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblPetitionername" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                             <asp:TemplateField HeaderText="Designation">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblDesignationname" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                     <asp:Label ID="lblDesignation_ID" runat="server" Text='<%# Eval("") %>' Visible="false"></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="Mobile No.">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblMobileno" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                               <asp:TemplateField HeaderText="Address">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblAddress" runat="server" Text='<%# Eval("") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                    </asp:GridView>
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="box-body">
                                     <fieldset>
                                         <legend>Petitioner Advocate Details</legend>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
                                                         Name</label>
                                                     <asp:TextBox ID="txtPetiAdvocateName" runat="server" placeholder="Name" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
                                                         Mobile No.</label>
@@ -588,8 +648,8 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Next Hearing Date</label>
-                                                    <asp:TextBox ID="txtNextHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control" ClientIDMode="Static"  AutoComplete="off"></asp:TextBox>
-                                                   
+                                                    <asp:TextBox ID="txtNextHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control" ClientIDMode="Static" AutoComplete="off"></asp:TextBox>
+
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
