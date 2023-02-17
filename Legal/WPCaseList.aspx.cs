@@ -21,7 +21,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             {
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
-               
+                FillCasetype();
             }
         }
         else
@@ -29,30 +29,56 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             Response.Redirect("../Login.aspx");
         }
     }
+
+
+    protected void FillCasetype()
+    {
+        try
+        {
+            Helper HP = new Helper();
+            DataTable dt = HP.GetCasetype() as DataTable;
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                ddlCaseType.DataValueField = "Casetype_ID";
+                ddlCaseType.DataTextField = "Casetype_Name";
+                ddlCaseType.DataSource = dt;
+                ddlCaseType.DataBind();
+            }
+            ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
-            
-                lblMsg.Text = "";
+
+            lblMsg.Text = "";
+            GrdCaseDetails.DataSource = null;
+            GrdCaseDetails.DataBind();
+            if (txtFromDate.Text != "" && txtEndDate.Text != "")
+            {
+                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "FromDate", "EndDate", "Casetype_ID" }
+                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd"), ddlCaseType.SelectedValue }, "dataset");
+
+            }
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                GrdCaseDetails.DataSource = ds;
+                GrdCaseDetails.DataBind();
+                GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdCaseDetails.UseAccessibleHeader = true;
+            }
+            else
+            {
                 GrdCaseDetails.DataSource = null;
                 GrdCaseDetails.DataBind();
+            }
 
-                ds = obj.ByProcedure("USP_Legal_SelectWP_CaseList", new string[] { "Fromdate", "Todate" }
-                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd") }, "dataset");
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    GrdCaseDetails.DataSource = ds;
-                    GrdCaseDetails.DataBind();
-                    GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
-                    GrdCaseDetails.UseAccessibleHeader = true;
-                }
-                else
-                {
-                    GrdCaseDetails.DataSource = null;
-                    GrdCaseDetails.DataBind();
-                }
-            
         }
         catch (Exception ex)
         {
