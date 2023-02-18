@@ -205,11 +205,11 @@
                                                         <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("CaseStatus") %>' ForeColor='<%# Eval("CaseStatus") == "Pending" ?  System.Drawing.Color.Green :System.Drawing.Color.Red %>' Font-Bold="true"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                              <%--  <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View" CssClass=""><i class="fa fa-edit"</asp:LinkButton>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                             </Columns>
                                         </asp:GridView>
                                     </div>

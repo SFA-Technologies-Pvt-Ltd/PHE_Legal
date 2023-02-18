@@ -16,6 +16,7 @@
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Responder" />
     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Petitioner" />
     <asp:ValidationSummary ID="ValidationSummary3" runat="server" ValidationGroup="DeptADV" ShowMessageBox="true" ShowSummary="false" />
+    <asp:ValidationSummary ID="ValidationSummary4" runat="server" ValidationGroup="Hearing" ShowMessageBox="true" ShowSummary="false" />
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div style="display: table; height: 100%; width: 100%;">
             <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
@@ -63,7 +64,7 @@
                                             ErrorMessage="Enter Case No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtCaseNo" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtCaseNo" runat="server" placeholder="Case No." class="form-control" AutoComplete="off" MaxLength="50" onkeypress="return validatenum(event);"></asp:TextBox>
+                                        <asp:TextBox ID="txtCaseNo" runat="server" placeholder="Case No." class="form-control" AutoComplete="off" MaxLength="10" onkeypress="return NumberOnly();"></asp:TextBox>
 
                                     </div>
                                 </div>
@@ -134,7 +135,7 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3" style="display:none;">
+                                <div class="col-md-3" style="display: none;">
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label>Case Registration Date</label>
@@ -163,7 +164,7 @@
                                     <div class="form-group">
                                         <label>
                                             Party Name</label>
-                                       <%-- <span style="color: red;"><b>*</b></span>
+                                        <%-- <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="rfvParty" ValidationGroup="Save"
                                             ErrorMessage="Select Party Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlParty" Display="Dynamic" runat="server" InitialValue="0">
@@ -172,12 +173,19 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>
+                                            Last Hearing Date</label>
+                                        <asp:TextBox ID="txtDateOfLastHearing" runat="server" date-provide="datepicker" AutoComplete="off" data-date-end-date="0d" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static"></asp:TextBox>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>
-                                            Case Detail<span style="color: red;">*</span></label>
+                                            Case Detail/Remarks<span style="color: red;">*</span></label>
                                         <asp:RequiredFieldValidator ID="rfvCasedetail" ValidationGroup="Save"
                                             ErrorMessage="Enter Case Detail." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtCaseDetail" Display="Dynamic" runat="server">
@@ -240,7 +248,7 @@
                                                         ControlToValidate="txtDeptAdvocateName" ValidationGroup="DeptADV" ErrorMessage="Enter Name."
                                                         Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                                     </asp:RequiredFieldValidator>
-                                                    <asp:TextBox ID="txtDeptAdvocateName" runat="server" AutoComplete="off" placeholder="Advocate Name" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                                                    <asp:TextBox ID="txtDeptAdvocateName" runat="server" AutoComplete="off" placeholder="Advocate Name" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" CssClass="form-control" MaxLength="70"></asp:TextBox>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -302,7 +310,7 @@
                                             SetFocusOnError="true" ControlToValidate="txtPetiName" ValidationGroup="Petitioner" ErrorMessage="Enter Name"
                                             Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtPetiName" runat="server" placeholder="Name" AutoComplete="off" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);" CssClass="form-control" MaxLength="70"></asp:TextBox>
+                                        <asp:TextBox ID="txtPetiName" runat="server" placeholder="Name" AutoComplete="off" onkeypress="return Chcode();" onkeyup="javascript:capFirst(this);" CssClass="form-control" MaxLength="70"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -338,7 +346,7 @@
                                             ControlToValidate="txtPetiAddRess" ValidationGroup="Petitioner" ErrorMessage="Enter Petitioner Address"
                                             Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                         </asp:RequiredFieldValidator>
-                                        <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeypress="return lettersOnly();" onkeyup="javascript:capFirst(this);"></asp:TextBox>
+                                        <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeyup="javascript:capFirst(this);"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -390,7 +398,7 @@
                                     <div class="form-group">
                                         <label>
                                             Name</label>
-                                        <asp:TextBox ID="txtPetiAdvocateName" runat="server" placeholder="Name" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
+                                        <asp:TextBox ID="txtPetiAdvocateName" runat="server" placeholder="Name" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -452,7 +460,7 @@
                                                     ErrorMessage="Enter Responder Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtResponderName" Display="Dynamic" runat="server">
                                                 </asp:RequiredFieldValidator>
-                                                <asp:TextBox ID="txtResponderName" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                                <asp:TextBox ID="txtResponderName" runat="server" CssClass="form-control" onkeypress="return chcode();" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -476,7 +484,7 @@
                                                     ErrorMessage="Enter Department Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtDepartment" Display="Dynamic" runat="server">
                                                 </asp:RequiredFieldValidator>
-                                                <asp:TextBox ID="txtDepartment" runat="server" CssClass="form-control" AutoComplete="off" MaxLength="70"></asp:TextBox>
+                                                <asp:TextBox ID="txtDepartment" runat="server" CssClass="form-control" onkeypress="return chcode();" AutoComplete="off" MaxLength="70"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -550,18 +558,18 @@
                                 <fieldset>
                                     <legend>New Case Document</legend>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>Document Name</label>
                                                         <asp:RequiredFieldValidator runat="server" ID="rfvDocumentName" ForeColor="Red" Display="Dynamic"
                                                             ControlToValidate="txtDocName" ValidationGroup="Add" ErrorMessage="Enter Document Name." Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                                         </asp:RequiredFieldValidator>
-                                                        <asp:TextBox ID="txtDocName" placeholder="Enter Document Name" onkeyup="javascript:capFirst(this);" runat="server" MaxLength="50" AutoComplete="off" CssClass="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtDocName" placeholder="Enter Document Name" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" runat="server" MaxLength="50" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>Documents</label>&nbsp;&nbsp;&nbsp;<asp:HyperLink ID="HyperLink4" Visible="false" CssClass="label label-default" runat="server" Text="View"></asp:HyperLink>
                                                         <asp:RequiredFieldValidator runat="server" ID="rfvDocument" ForeColor="Red" Display="Dynamic"
@@ -570,44 +578,42 @@
                                                         <asp:FileUpload ID="FileUpload10" runat="server" CssClass="form-control" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <asp:Button ID="btnAddDoc" runat="server" Text="Add" ValidationGroup="Add" CssClass="btn btn-primary btn-block" OnClick="btnAddDoc_Click" />
+                                                <div class="col-md-2 mt-3">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mt-3">
+                                                            <asp:Button ID="btnAddDoc" runat="server" Text="Add" ValidationGroup="Add" CssClass="btn btn-primary btn-block" OnClick="btnAddDoc_Click" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <fieldset>
-                                                <legend>View Doc</legend>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="">
-                                                            <asp:GridView ID="GrdViewDoc" runat="server" CssClass="table table-bordered" AutoGenerateColumns="false">
-                                                                <Columns>
-                                                                    <asp:TemplateField HeaderText="SNo.">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblSrnO" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="Document Name">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("DocName") %>'></asp:Label>
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="View">
-                                                                        <ItemTemplate>
-                                                                            <asp:HyperLink ID="lblDocName" runat="server" NavigateUrl='<%# "../Legal/AddNewCaseCourtDoc/" +  Eval("Document") %>' Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                </Columns>
-                                                            </asp:GridView>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <div class="table-responsive">
+                                                <asp:GridView ID="GrdViewDoc" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND">
+                                                    <Columns>
+                                                        <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblSrnO" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Document Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblDocName" runat="server" Text='<%# Eval("DocName") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:HyperLink ID="lblDocName" runat="server" NavigateUrl='<%# "../Legal/AddNewCaseCourtDoc/" +  Eval("Document") %>' Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                    </Columns>
+                                                </asp:GridView>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </fieldset>
 
                                 <fieldset>
@@ -615,34 +621,66 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>
-                                                    Last Hearing Date</label>
-                                                <asp:TextBox ID="txtDateOfLastHearing" runat="server" date-provide="datepicker" AutoComplete="off" data-date-end-date="0d" placeholder="DD/MM/YYYY" class="form-control" ClientIDMode="Static"></asp:TextBox>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Next Hearing Date</label>
+                                                <label>Next Hearing Date</label><span style="color: red;"><b>*</b></span>
+                                                <asp:RequiredFieldValidator ID="rfvHearingDate" ValidationGroup="Hearing"
+                                                    ErrorMessage="Enter Next Hearing Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="txtNextHearingDate" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
                                                 <asp:TextBox ID="txtNextHearingDate" runat="server" date-provide="datepicker" placeholder="DD/MM/YYYY" CssClass="form-control" ClientIDMode="Static" AutoComplete="off"></asp:TextBox>
-
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Hearing Document</label>
+                                                <label>Hearing Document</label><span style="color: red;"><b>*</b></span>
+                                                <asp:RequiredFieldValidator ID="rfvhearingFile" ValidationGroup="Hearing"
+                                                    ErrorMessage="Upload Hearing Document." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="FileHearingDoc" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
                                                 <asp:FileUpload ID="FileHearingDoc" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 mt-3">
+                                            <div class="row">
+                                                <div class="col-md-6 mt-3">
+                                                    <asp:Button ID="btnAddHeairng" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="Hearing" Text="Add" OnClick="btnAddHeairng_Click" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="table-responsive">
+                                                <asp:GridView ID="grdHeairngDtl" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND">
+                                                    <Columns>
+                                                        <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblSrnO" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Hearing Date">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblHearingDate" runat="server" Text='<%# Eval("HearingDate") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl='<%# "../Legal/HearingDoc/" +  Eval("HearingDoc") %>' Target="_blank" CssClass="btn-sm label label-primary">View</asp:HyperLink>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                    </Columns>
+                                                </asp:GridView>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <fieldset>
-                                    <legend>Old Case Detail/Remarks</legend>
+                                    <legend>Old Case Detail</legend>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Old Case No</label>
                                                 <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="txtCaseNo" Autocomplete="Off" ValidationGroup="Ent" runat="server" ForeColor="Red" />
-                                                <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control"></asp:TextBox>
+                                                <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control" MaxLength="10" AutoComplete="off" onkeypress="return NumberOnly();"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">

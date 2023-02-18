@@ -195,7 +195,7 @@
                         <li class="nav-item ">
                             <h5 class="brand-text font-weight-bold text-light float-left" style="font-weight: bold;">Welcome :</h5>
                             &nbsp;
-                            <span id="spnUsername" runat="server" style="text-transform: uppercase; font-weight: bold;" class="brand-text h6 text-light"></span>
+                            <span id="spnUsername" runat="server" style="text-transform: uppercase; font-weight: bold; font-size:x-large" class="brand-text h6 text-light"></span>
 
                         </li>
                     </ul>
@@ -213,7 +213,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <asp:Button Text="Logout !" Font-Bold="true" ForeColor="Red" ID="btnlogout" OnClick="btnlogout_Click" runat="server" CssClass="fa fa-sign-out-alt btn" />
+                            <%--<asp:Button Text="Logout !" Font-Bold="true" ForeColor="Red" ID="btnlogout" OnClick="btnlogout_Click" runat="server" CssClass="fa fa-sign-out-alt btn" />--%>
+                            <asp:LinkButton Font-Bold="true" ID="btnlogout"  ForeColor="White" Font-Size="Larger" OnClick="btnlogout_Click" runat="server" CssClass="btn"><i class="fas fa-sign-out-alt"></i></asp:LinkButton>
                             <%--  <a class="nav-link" href="../Home.aspx">
                                 <i class="fa fa-sign-out-alt text-light">Logout</i>
                             </a>--%>
