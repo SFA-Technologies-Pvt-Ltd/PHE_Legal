@@ -104,7 +104,7 @@
                                                 <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkbtnEdit" runat="server" CommandName="EditDetails" CommandArgument='<%# Eval("Party_ID") %>' ToolTip="Edit"><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
-                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Party_ID") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Party_ID") %>' ToolTip="Delete"  CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
@@ -130,7 +130,7 @@
                 return true
             return false
         }
-
+        
         function capFirst(cpt) { //only Capital First.
             cpt.value = cpt.value[0].toUpperCase() + cpt.value.substring(1);
         }
@@ -159,6 +159,7 @@
                     $('#myModal').modal('show');
                     return false;
                 }
+                
             }
         }
     </script>

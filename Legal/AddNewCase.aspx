@@ -621,7 +621,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Next Hearing Date</label><span style="color: red;"><b>*</b></span>
+                                                <label>Next Hearing Date</label>
                                                 <asp:RequiredFieldValidator ID="rfvHearingDate" ValidationGroup="Hearing"
                                                     ErrorMessage="Enter Next Hearing Date." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtNextHearingDate" Display="Dynamic" runat="server">
@@ -631,7 +631,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Hearing Document</label><span style="color: red;"><b>*</b></span>
+                                                <label>Hearing Document</label>
                                                 <asp:RequiredFieldValidator ID="rfvhearingFile" ValidationGroup="Hearing"
                                                     ErrorMessage="Upload Hearing Document." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="FileHearingDoc" Display="Dynamic" runat="server">

@@ -22,6 +22,9 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillCasetype();
+                FillCaseNo();
+                FillCourt();
+                FillYear();
             }
         }
         else
@@ -30,6 +33,70 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         }
     }
 
+    protected void FillCourt()
+    {
+        try
+        {
+            ddlCourt.Items.Clear();
+            Helper court = new Helper();
+            DataTable dtCourt = court.GetCourt() as DataTable;
+            if (dtCourt != null && dtCourt.Rows.Count > 0)
+            {
+                ddlCourt.DataValueField = "CourtType_ID";
+                ddlCourt.DataTextField = "CourtTypeName";
+                ddlCourt.DataSource = dtCourt;
+                ddlCourt.DataBind();
+            }
+            ddlCourt.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
+    protected void FillYear()
+    {
+        try
+        {
+            ddlCaseYear.Items.Clear();
+            DataSet dsCase = obj.ByDataSet("with yearlist as (select 1950 as year union all select yl.year + 1 as year from yearlist yl where yl.year + 1 <= YEAR(GetDate())) select year from yearlist order by year");
+            if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+            {
+                ddlCaseYear.DataSource = dsCase.Tables[0];
+                ddlCaseYear.DataTextField = "year";
+                ddlCaseYear.DataValueField = "year";
+                ddlCaseYear.DataBind();
+            }
+            ddlCaseYear.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+
+    protected void FillCaseNo()
+    {
+        try
+        {
+            ddlCaseNo.Items.Clear();
+            Helper CaseNo = new Helper();
+            DataTable dtCN = CaseNo.GetCaseNo() as DataTable;
+            if (dtCN != null && dtCN.Rows.Count > 0)
+            {
+                ddlCaseNo.DataValueField = "Case_ID";
+                ddlCaseNo.DataTextField = "CaseNo";
+                ddlCaseNo.DataSource = dtCN;
+                ddlCaseNo.DataBind();
+            }
+            ddlCaseNo.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
 
     protected void FillCasetype()
     {
@@ -62,8 +129,9 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             GrdCaseDetails.DataBind();
             if (txtFromDate.Text != "" && txtEndDate.Text != "")
             {
-                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "FromDate", "EndDate", "Casetype_ID" }
-                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd"), ddlCaseType.SelectedValue }, "dataset");
+                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "FromDate", "EndDate", "Casetype_ID", "CourtID", "CaseNo", "Year" }
+                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), 
+                        Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd"), ddlCaseType.SelectedValue,ddlCourt.SelectedValue,ddlCaseNo.SelectedItem.Text,ddlCaseYear.SelectedItem.Text }, "dataset");
 
             }
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -93,7 +161,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
 
             string ID = e.CommandArgument.ToString();
-            Response.Redirect("../Legal/EditWPCases.aspx?ID=" + Server.UrlEncode(ID));
+            Response.Redirect("../Legal/EditCaseDetail.aspx?ID=" + Server.UrlEncode(ID));
         }
         catch (Exception ex)
         {

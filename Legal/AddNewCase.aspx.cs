@@ -116,7 +116,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         }
         ViewState["hearingdt"] = hearingdt;
     }
-
+   
     #region Fill Designation
     protected void FillDesignation()
     {
@@ -299,7 +299,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         }
     }
     #endregion
-    #region Fill CaseStatus
+    #region Fill CaseSubject
     protected void BindCaseSubject()
     {
         try
@@ -329,7 +329,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         {
             if (Page.IsValid)
             {
-                string UniqueNo = "0125";
+                
                 string filePath = Server.MapPath("~/Legal/OldCaseDocument");
                 string filename1 = string.Empty;
                 string filename2 = string.Empty;
@@ -380,8 +380,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                                 {
                                     DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
                                           new string[] { ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "केस का विवरण", filename1, ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCaseCourt.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
-                                    string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
+                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + dsCase.Tables[0].Rows[0][2].ToString() + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                                    string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);  //NOte= HEre dsCase.Tables[0].Rows[0][2].ToString() is Unique No
                                     FU1.SaveAs(filePath + "/" + fname + ext);
 
                                 }
@@ -389,7 +389,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                                 {
                                     DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
                                         new string[] { ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "कार्यवाही का विवरण", filename2, ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCaseCourt.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + dsCase.Tables[0].Rows[0][2].ToString() + "_" + dsCase.Tables[0].Rows[0][0].ToString();
                                     string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
                                     FU1.SaveAs(filePath + "/" + fname + ext);
 
@@ -399,7 +399,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                                 {
                                     DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
                                         new string[] { ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "निर्णय", filename3, ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCaseCourt.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + dsCase.Tables[0].Rows[0][2].ToString() + "_" + dsCase.Tables[0].Rows[0][0].ToString();
                                     string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
                                     FU1.SaveAs(filePath + "/" + fname + ext);
 
@@ -408,7 +408,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                                 {
                                     DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
                                         new string[] { ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "अन्य", filename4, ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCaseCourt.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + UniqueNo + "_" + dsCase.Tables[0].Rows[0][0].ToString();
+                                    string fname = Path.GetFileNameWithoutExtension(FU1.PostedFile.FileName) + "_" + dsCase.Tables[0].Rows[0][2].ToString() + "_" + dsCase.Tables[0].Rows[0][0].ToString();
                                     string ext = System.IO.Path.GetExtension(FU1.PostedFile.FileName);
                                     FU1.SaveAs(filePath + "/" + fname + ext);
 
@@ -725,7 +725,6 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-
             ErrorLogCls.SendErrorToText(ex);
         }
     }

@@ -115,7 +115,7 @@
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                 <div class="card">
                     <div class="card-header">
-                       Case Detail
+                        Case Detail
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -145,14 +145,33 @@
                                 </div>
                                 <div class="col-md-3 col-sm">
                                     <div class="form-group">
-                                        <label>
-                                            Case type<span style="color: red;"><b> *</b></span>
+                                        <label>Case type </label>
+                                        <%--<span style="color: red;"><b> *</b></span>
                                             <asp:RequiredFieldValidator ID="rfvcasetype" ValidationGroup="Save"
                                                 ErrorMessage="Select Case type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="ddlCaseType" Display="Dynamic" runat="server" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
-                                        </label>
-                                        <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control  select2"></asp:DropDownList>
+                                            </asp:RequiredFieldValidator>--%>
+                                        <asp:DropDownList ID="ddlCaseType" runat="server" CssClass="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Court</label>
+                                        <asp:DropDownList ID="ddlCourt" runat="server" CssClass="form-control select2"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Case No.</label>
+                                        <asp:DropDownList ID="ddlCaseNo" runat="server" CssClass="form-control select2"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                 <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Year</label>
+                                        <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm mt-3">
@@ -205,11 +224,11 @@
                                                         <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("CaseStatus") %>' ForeColor='<%# Eval("CaseStatus") == "Pending" ?  System.Drawing.Color.Green :System.Drawing.Color.Red %>' Font-Bold="true"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                              <%--  <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditView" ToolTip="Edit/View" CssClass=""><i class="fa fa-edit"</asp:LinkButton>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>--%>
+                                                </asp:TemplateField>
                                             </Columns>
                                         </asp:GridView>
                                     </div>
