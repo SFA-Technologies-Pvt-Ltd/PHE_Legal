@@ -46,4 +46,26 @@ public  class Helper
         else
             return null;
     }
+
+    public DataTable GetCaseNo()
+    {
+        obj = new APIProcedure();
+        DataSet DsCaseNo = obj.ByDataSet("select Case_ID, CaseNo from tblLegalCaseRegistration");
+        if (DsCaseNo != null && DsCaseNo.Tables[0].Rows.Count > 0)
+            return DsCaseNo.Tables[0];
+
+        else
+            return null;
+    }
+
+    public DataTable GetCourt()
+    {
+        obj = new APIProcedure();
+        DataSet DsCourt = obj.ByProcedure("USP_Legal_Select_CourtType", new string[]{}, new string[]{},"datatset");
+        if (DsCourt != null && DsCourt.Tables[0].Rows.Count > 0)
+            return DsCourt.Tables[0];
+
+        else
+            return null;
+    }
 }
