@@ -31,33 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div style="display: table; height: 100%; width: 100%;">
-            <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
-                <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
-                    <div class="modal-header" style="background-color: #D9D9D9;">
-                        <span class="modal-title" style="float: left" id="myModalLabel2">Confirmation</span>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="modal-body">
-                        <p>
-                            <%--<img src="../assets/images/question-circle.png" width="30" />--%>&nbsp;&nbsp;
-                           <i class="fa fa-question-circle"></i>
-                            <asp:Label ID="lblPopupAlert2" runat="server"></asp:Label>
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" ID="btn" Style="margin-top: 20px; width: 50px;" />
-                        <asp:Button ID="Button2" ValidationGroup="no" runat="server" CssClass="btn btn-danger" Text="No" data-dismiss="modal" Style="margin-top: 20px; width: 50px;" />
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -71,16 +45,6 @@
                         <fieldset>
                             <legend>Enter Details</legend>
                             <div class="row">
-                                 <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Office Level<span style="color: red;"><b>*</b></span> </label>
-                                                <asp:RequiredFieldValidator ID="rfvOfficeLevel" ValidationGroup="Save"
-                                                    ErrorMessage="Select Office Level." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddlOfficeLevel" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddlOfficeLevel" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlOfficeLevel_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
-                                            </div>
-                                        </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
@@ -94,7 +58,7 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>
                                             Office Name
@@ -109,7 +73,7 @@
                                         </asp:RegularExpressionValidator>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5">
                                     <div class="form-group">
                                         <label>
                                             Office Loaction
@@ -152,12 +116,6 @@
                                                         <asp:Label ID="lblOfficeID" runat="server" Text='<%# Eval("Office_Id") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Office Level" ItemStyle-HorizontalAlign="Center">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblofficelevel" Text='<%# Eval("OfficeLevelName") %>' runat="server"></asp:Label>
-                                                        <asp:Label ID="lblofficelevel_ID" Text='<%# Eval("Officelevel_Id") %>' Visible="false" runat="server"></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Office Type" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblOfficeType" runat="server" Text='<%# Eval("OfficeType_Name") %>'></asp:Label>
@@ -177,7 +135,7 @@
                                                 <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Office_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
-                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Office_Id") %>' ToolTip="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Office_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
@@ -220,18 +178,6 @@
                     return false;
                 }
             }
-        }
-    </script>
-
-    <script>
-        function validatedelete() {
-            debugger;
-            if (typeof (Page_ClientValidate) == 'function') {
-                Page_ClientValidate();
-            }
-            document.getElementById('<%=lblPopupAlert2.ClientID%>').textContent = "Are you sure you want to Save this record?";
-            $('#myModal2').modal('show');
-            return true;
         }
     </script>
     <script lang="javascript" type="text/javascript"> // First Letter's Capital

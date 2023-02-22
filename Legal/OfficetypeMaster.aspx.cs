@@ -22,7 +22,6 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 FillGrid();
-                FillOfficeLevel();
             }
         }
         else
@@ -31,27 +30,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         }
     }
 
-    protected void FillOfficeLevel()
-    {
-        try
-        {
-            lblMsg.Text = "";
-            ddlOfficeLevel.Items.Clear();
-            ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                ddlOfficeLevel.DataTextField = "OfficeLevelName";
-                ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
-                ddlOfficeLevel.DataSource = ds;
-                ddlOfficeLevel.DataBind();
-            }
-            ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
-        }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
-    }
+
     protected void FillGrid()
     {
         try
@@ -86,20 +65,19 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_InsertOfficetypeMaster", new string[] { "OfficeLevel_Id", "OfficeType_Name", "CreatedBy", "CreatedByIP" }
-                    , new string[] { ddlOfficeLevel.SelectedValue, txtOfficeTypeName.Text.Trim(),  ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress()}, "dataset");
+                    ds = obj.ByProcedure("USP_InsertOfficetypeMaster", new string[] { "OfficeType_Name", "CreatedBy", "CreatedByIP" }
+                    , new string[] { txtOfficeTypeName.Text.Trim(),  ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress()}, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["OfficeTypeID"].ToString() != "" && ViewState["OfficeTypeID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_UpdateOfficetypeMaster", new string[] { "OfficeLevel_Id", "OfficeType_Name", "LastupdatedBy", "LastupdatedByIP", "OfficeType_Id" }
-                    , new string[] {ddlOfficeLevel.SelectedValue , txtOfficeTypeName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OfficeTypeID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_UpdateOfficetypeMaster", new string[] { "OfficeType_Name", "LastupdatedBy", "LastupdatedByIP", "OfficeType_Id" }
+                    , new string[] { txtOfficeTypeName.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OfficeTypeID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
                     if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                     {
-                        ddlOfficeLevel.ClearSelection();
                         txtOfficeTypeName.Text = "";
                         lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                     }
@@ -148,13 +126,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblOfficetypeName = (Label)row.FindControl("lblOfficetypeName");
                 Label lblOfficetypeID = (Label)row.FindControl("lblOfficetypeID");
-                Label lblOfficelevel = (Label)row.FindControl("lblOfficelevelID");
                 txtOfficeTypeName.Text = lblOfficetypeName.Text;
-                if (lblOfficelevel.Text != "")
-                {
-                    ddlOfficeLevel.ClearSelection();
-                    ddlOfficeLevel.Items.FindByValue(lblOfficelevel.Text).Selected = true;
-                }
                 ViewState["OfficeTypeID"] = e.CommandArgument;
                 btnSave.Text = "Update";
             }
@@ -168,6 +140,7 @@ public partial class Legal_OfficetypeMaster : System.Web.UI.Page
         catch (Exception ex)
         {
             ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 }

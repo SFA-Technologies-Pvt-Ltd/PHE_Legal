@@ -21,35 +21,13 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             {
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
-                //FillOfficetypeName();
-                FillOfficeLevel();
+                FillOfficetypeName();
                 FillGrid();
             }
         }
         else
         {
             Response.Redirect("../Login.aspx", false);
-        }
-    }
-
-    protected void FillOfficeLevel()
-    {
-        try
-        {
-            ddlOfficeLevel.Items.Clear();
-            ds = obj.ByDataSet("select OfficeLevel_Id, OfficeLevelName from tblOfficeLevelMaster");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                ddlOfficeLevel.DataTextField = "OfficeLevelName";
-                ddlOfficeLevel.DataValueField = "OfficeLevel_Id";
-                ddlOfficeLevel.DataSource = ds;
-                ddlOfficeLevel.DataBind();
-            }
-            ddlOfficeLevel.Items.Insert(0, new ListItem("Select", "0"));
-        }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -76,27 +54,27 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
         }
     }
 
-    //protected void FillOfficetypeName()
-    //{
-    //    try
-    //    {
-    //        ddlOfficeType.Items.Clear();
-    //        ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name from tblOfficeTypeMaster");
-    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
-    //        {
-    //            ddlOfficeType.DataTextField = "OfficeType_Name";
-    //            ddlOfficeType.DataValueField = "OfficeType_Id";
-    //            ddlOfficeType.DataSource = ds;
-    //            ddlOfficeType.DataBind();
-    //        }
-    //        ddlOfficeType.Items.Insert(0, new ListItem("Select", "0"));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        ErrorLogCls.SendErrorToText(ex);
-    //        //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
-    //    }
-    //}
+    protected void FillOfficetypeName()
+    {
+        try
+        {
+            ddlOfficeType.Items.Clear();
+            ds = obj.ByDataSet("select OfficeType_Id,OfficeType_Name from tblOfficeTypeMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficeType.DataTextField = "OfficeType_Name";
+                ddlOfficeType.DataValueField = "OfficeType_Id";
+                ddlOfficeType.DataSource = ds;
+                ddlOfficeType.DataBind();
+            }
+            ddlOfficeType.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
+        }
+    }
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -106,13 +84,13 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = obj.ByProcedure("USP_Insert_OfficeMaster", new string[] { "OfficeType_Id", "OfficeLevel_Id", "OfficeName", "Officelocation", "CreatedBy", "CreatedByIP" }
-                        , new string[] { ddlOfficeType.SelectedValue, ddlOfficeLevel.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    ds = obj.ByProcedure("USP_Insert_OfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "CreatedBy", "CreatedByIP" }
+                        , new string[] { ddlOfficeType.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["OfficeID"].ToString() != "" && ViewState["OfficeID"].ToString() != null)
                 {
-                    ds = obj.ByProcedure("USP_Update_OfficeMaster", new string[] { "OfficeLevel_Id", "OfficeType_Id", "OfficeName", "Officelocation", "LastupdatedBy", "LastupdatedByIP", "Office_Id" }
-                        , new string[] { ddlOfficeLevel.SelectedValue, ddlOfficeType.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OfficeID"].ToString() }, "dataset");
+                    ds = obj.ByProcedure("USP_Update_OfficeMaster", new string[] { "OfficeType_Id", "OfficeName", "Officelocation", "LastupdatedBy", "LastupdatedByIP", "Office_Id" }
+                        , new string[] { ddlOfficeType.SelectedValue, txtOfficeName.Text.Trim(), txtOfficelocation.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["OfficeID"].ToString() }, "dataset");
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -122,7 +100,6 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
                         lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                         txtOfficeName.Text = "";
                         txtOfficelocation.Text = "";
-                        ddlOfficeLevel.ClearSelection();
                         ddlOfficeType.ClearSelection();
                         FillGrid();
                         btnSave.Text = "Save";
@@ -164,29 +141,16 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             {
                 ViewState["OfficeID"] = "";
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-                Label lblofficelevel = (Label)row.FindControl("lblofficelevel_ID");
                 Label lblOfficeTypeID = (Label)row.FindControl("lblOfficeTypeID");
                 Label lblOficeName = (Label)row.FindControl("lblOficeName");
                 Label lblOficelocation = (Label)row.FindControl("lblOficelocation");
 
                 btnSave.Text = "Update";
                 ViewState["OfficeID"] = e.CommandArgument;
-                if (lblofficelevel.Text != "")
-                {
-                    ddlOfficeLevel.ClearSelection();
-                    ddlOfficeLevel.Items.FindByValue(lblofficelevel.Text).Selected = true;
-                }
-
-                if (lblOficeName.Text != "")
-                    txtOfficeName.Text = lblOficeName.Text;
-                if (lblOficelocation.Text != "")
-                    txtOfficelocation.Text = lblOficelocation.Text;
-                if (lblOfficeTypeID.Text != "")
-                {
-                    ddlOfficeLevel_SelectedIndexChanged(sender, e);
-                    ddlOfficeType.ClearSelection();
-                    ddlOfficeType.Items.FindByValue(lblOfficeTypeID.Text).Selected = true;
-                }
+                ddlOfficeType.ClearSelection();
+                ddlOfficeType.Items.FindByValue(lblOfficeTypeID.Text).Selected = true;
+                txtOfficeName.Text = lblOficeName.Text;
+                txtOfficelocation.Text = lblOficelocation.Text;
             }
             if (e.CommandName == "DeleteDetails")
             {
@@ -201,40 +165,5 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
             //lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ex.Message.ToString());
         }
-    }
-    protected void ddlOfficeLevel_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            lblMsg.Text = "";
-            ddlOfficeType.Items.Clear();
-            ds = obj.ByProcedure("USP_Select_OfficeTypeName", new string[] { "OfficeLevel_Id" }
-                , new string[] { ddlOfficeLevel.SelectedValue }, "dataset");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                ddlOfficeType.DataValueField = "OfficeType_Id";
-                ddlOfficeType.DataTextField = "OfficeType_Name";
-                ddlOfficeType.DataSource = ds;
-                ddlOfficeType.DataBind();
-            }
-            ddlOfficeType.Items.Insert(0, new ListItem("Select", "0"));
-        }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
-    }
-    protected void lnkbtndelete_Click(object sender, EventArgs e, GridViewCommandEventArgs er)
-    {
-        if (er.CommandName == "DeleteDetails")
-        {
-            int Office_Id = Convert.ToInt32(er.CommandArgument);
-            obj.ByTextQuery("delete from tblOfficeMaster where Office_Id=" + Office_Id);
-            FillGrid();
-        }
-    }
-    protected void lnkbtndelete_Click1(object sender, EventArgs e)
-    {
-
     }
 }
