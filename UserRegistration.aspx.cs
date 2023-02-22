@@ -23,17 +23,15 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
+                ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 BIndOfficeType();
                 BindUserDetails();
                 Session["PAGETOKEN"] = Server.UrlEncode(System.DateTime.Now.ToString());
-                FillOIC();
-                OICName_Div.Visible = false;
-                ddlOICYesOrNot.SelectedIndex = 2;
             }
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
     }
 
@@ -42,26 +40,6 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
     }
 
-    protected void FillOIC()
-    {
-        try
-        {
-            ddlOICList.Items.Clear();
-            ds = obj.ByDataSet("select OICMaster_ID, OICName from tblOICMaster");
-            if(ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                ddlOICList.DataTextField = "OICName";
-                ddlOICList.DataValueField = "OICMaster_ID";
-                ddlOICList.DataSource = ds;
-                ddlOICList.DataBind();
-            }
-            ddlOICList.Items.Insert(0, new ListItem("Select", "0"));
-        }
-        catch (Exception  ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
-    }
     protected void BindUserDetails()
     {
         try
@@ -82,8 +60,8 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
             ErrorLogCls.SendErrorToText(ex);
+            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     protected void BIndOfficeType()
@@ -103,8 +81,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
-            ErrorLogCls.SendErrorToText(ex);
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     public void GetRandomText()
@@ -133,52 +110,50 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
                     if (btnSave.Text == "Save")
                     {
                         string email = txtUserEmail.Text.Trim();
-                        
-                        ds = obj.ByDataSet("select * from tblUserMaster where UserEmail='" + txtUserEmail.Text.Trim() + "'  order by UserId desc");
 
-                        if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count == 0)
+                        //ds = obj.ByDataSet("select * from tblUserMaster where UserEmail='" + txtUserEmail.Text.Trim() + "'  order by UserId desc");
+
+                        string password = ConvertText_SHA512_And_Salt(txtPassword.Text.Trim());
+
+                        ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "EMPName", "UserEmail", "UserName", "UserPassword", "MobileNo", "OfficeType_Id", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
+                            , new string[] { txtEmpployeeName.Text.Trim(), txtUserEmail.Text.Trim(), txtUserName.Text.Trim(), password, txtMobileNo.Text.Trim(), ddlofficetype.SelectedValue, ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
+
+                    }
+                    else if (btnSave.Text == "Update" && ViewState["UserId"].ToString() != "" && ViewState["UserId"].ToString() != null)
+                    {
+                        ds = obj.ByProcedure("USP_Update_UserMaster", new string[] { "EMPName", "Designation_Id", "MobileNo", "OfficeType_Id", "Office_Id", "LastupdatedBy", "LastUpdatedByIP", "UserId" }
+                        , new string[] { txtEmpployeeName.Text.Trim(), ddlUsertype.SelectedValue, txtMobileNo.Text.Trim(), ddlofficetype.SelectedValue, ddlOfficeName.SelectedValue, ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["UserId"].ToString() }, "dataset");
+                    }
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                        if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                         {
-
-                            string password = ConvertText_SHA512_And_Salt(txtPassword.Text.Trim());
-                            string EMPName = ddlOICYesOrNot.SelectedIndex == 1 ? ddlOICList.SelectedItem.Text.Trim() : txtEmpployeeName.Text.Trim();
-                            string OIc_ID = ddlOICYesOrNot.SelectedIndex == 1 ? ddlOICList.SelectedValue : null;
-
-                            ds = obj.ByProcedure("USP_Insert_UserMaster", new string[] { "OICMaster_ID", "EMPName", "UserEmail", "UserName", "UserPassword", "MobileNo", "Office_Id", "UserType_Id", "CreatedBy", "CreatedByIP" }
-                                , new string[] { OIc_ID,EMPName, txtUserEmail.Text.Trim(), txtUserName.Text.Trim(), password, txtMobileNo.Text.Trim(), ddlOfficeName.SelectedValue, ddlUsertype.SelectedValue, "1", obj.GetLocalIPAddress() }, "dataset");
-
-                            if (ds != null && ds.Tables[0].Rows.Count > 0)
-                            {
-                                string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-                                if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
-                                {
-                                    lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                                    string AdminEmail = Session["UserEmail"].ToString();
-                                    sendmail(AdminEmail);
-                                    ddlUsertype.ClearSelection();
-                                    ddlOfficeName.ClearSelection();
-                                    txtEmpployeeName.Text = "";
-                                    ddlofficetype.ClearSelection();
-                                    txtMobileNo.Text = "";
-                                    txtUserEmail.Text = "";
-                                    txtUserName.Text = "";
-                                    txtPassword.Text = "";
-                                }
-                                else
-                                {
-                                    lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", ErrMsg);
-                                }
-                            }
-                            else
-                            {
-                                lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
-                            }
+                            lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                            string AdminEmail = Session["UserEmail"].ToString();
+                            sendmail(AdminEmail);
+                            ddlUsertype.ClearSelection();
+                            ddlOfficeName.ClearSelection();
+                            txtEmpployeeName.Text = "";
+                            ddlofficetype.ClearSelection();
+                            txtMobileNo.Text = "";
+                            txtUserEmail.Text = "";
+                            txtUserName.Text = "";
+                            txtPassword.Text = "";
+                            UsrConfirmPass_Div.Visible = true;
+                            UsrPassword_Div.Visible = true;
                         }
                         else
                         {
-                            lblMsg.Text = obj.Alert("fa-check", "alert-warning", "Warning !", "Email Already Existed");
+                            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
                         }
-
                     }
+                    else
+                    {
+                        lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ds.Tables[0].Rows[0]["ErrMsg"].ToString());
+                    }
+
                     Session["PAGETOKEN"] = Server.UrlEncode(System.DateTime.Now.ToString());
                 }
                 btnSave.Text = "Save";
@@ -187,8 +162,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
-            ErrorLogCls.SendErrorToText(ex);
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
     protected void ddlofficetype_SelectedIndexChanged(object sender, EventArgs e)
@@ -219,8 +193,7 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            //lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
-            ErrorLogCls.SendErrorToText(ex);
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 
@@ -357,51 +330,72 @@ public partial class Legal_UserRegistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
-    protected void checkOic_CheckedChanged(object sender, EventArgs e)
+    protected void grdUserDetails_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
         {
             lblMsg.Text = "";
-            if(ddlOICYesOrNot.SelectedValue == "1")
+            if (e.CommandName == "EditDetails")
             {
-                EmpName_Div.Visible = false;
-                OICName_Div.Visible = true;
-   
+                ViewState["UserId"] = "";
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+                Label lblOfficetypeId = (Label)row.FindControl("lblOfficetypeId");
+                Label lblOfficeId = (Label)row.FindControl("lblOfficeId");
+                Label lblDesignationType_ID = (Label)row.FindControl("lblDesignationType_ID");
+                Label lblEmployeeNameID = (Label)row.FindControl("lblEmployeeNameID");
+                Label lblMobileNoID = (Label)row.FindControl("lblMobileNoID");
+                Label lblUserNameID = (Label)row.FindControl("lblUserNameID");
+                Label lblEmailID = (Label)row.FindControl("lblEmailID");
+                Label lbluserPass = (Label)row.FindControl("lbluserPass");
+
+
+                ViewState["UserId"] = e.CommandArgument;
+                btnSave.Text = "Update";
+                txtEmpployeeName.Text = lblEmployeeNameID.Text;
+                txtMobileNo.Text = lblMobileNoID.Text;
+                txtUserName.Text = lblUserNameID.Text;
+                txtUserEmail.Text = lblEmailID.Text;
+                txtPassword.Text = lbluserPass.Text;
+
+                ddlofficetype.ClearSelection();
+                ddlofficetype.Items.FindByValue(lblOfficetypeId.Text).Selected = true;
+                ddlofficetype_SelectedIndexChanged(sender, e);
+                ddlOfficeName.ClearSelection();
+                //ddlOfficeName.Items.FindByValue(lblOfficeId.Text).Selected = true;
+                ddlOfficeName.SelectedValue = lblOfficeId.Text;
+
+                ddlofficetype_SelectedIndexChanged(sender, e);
+                ddlUsertype.ClearSelection();
+                ddlUsertype.Items.FindByValue(lblDesignationType_ID.Text).Selected = true;
+                txtUserEmail.Enabled = false;
+                txtUserName.Enabled = false;
+                txtPassword.Enabled = false;
+                txtConfirmPassword.Enabled = false;
+                txtConfirmPassword.Enabled = false;
+                rfvEmailID.Enabled = false;
+                rfvUserName.Enabled = false;
+                rfvPassword.Enabled = false;
+                rfvpasswordCon.Enabled = false;
+                cvdPasscon.Enabled = false;
+
+                // on Selection Keep Visible False;
+                UsrConfirmPass_Div.Visible = false;
+                UsrPassword_Div.Visible = false;
+               
             }
-            else
+            if (e.CommandName == "DeleteDetails")
             {
-                EmpName_Div.Visible = true;
-                OICName_Div.Visible = false;
-                txtMobileNo.Text = "";
-                txtMobileNo.ReadOnly = false;
-                ddlOICList.SelectedIndex = 0;
+                int UserId = Convert.ToInt32(e.CommandArgument);
+                obj.ByTextQuery("delete from tblUserMaster where UserId=" + UserId);
+                BindUserDetails();
             }
         }
         catch (Exception ex)
         {
             ErrorLogCls.SendErrorToText(ex);
-        }
-    }
-    protected void ddlOICList_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            lblMsg.Text = "";
-            DataSet DsOIC = obj.ByDataSet("select OICName, OICEmailID, OICMobileNo from tblOICMaster where OICMaster_ID =" + ddlOICList.SelectedValue);
-            if(DsOIC != null && DsOIC.Tables[0].Rows.Count > 0)
-            {
-                txtMobileNo.Text = DsOIC.Tables[0].Rows[0]["OICMobileNo"].ToString();
-                txtMobileNo.ReadOnly = true;
-            }
-        }
-        catch (Exception ex)
-        {
-            
-            throw;
         }
     }
 }

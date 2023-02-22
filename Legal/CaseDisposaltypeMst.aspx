@@ -52,7 +52,7 @@
                                                     ErrorMessage="Enter Case Disposal Type." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtDisposaltype" Display="Dynamic" runat="server">
                                                 </asp:RequiredFieldValidator>
-                                                <asp:TextBox ID="txtDisposaltype" runat="server" CssClass="form-control" MaxLength="80" AutoComplete="off"></asp:TextBox>
+                                                <asp:TextBox ID="txtDisposaltype" placeholder="Enter disposal type" runat="server" CssClass="form-control" MaxLength="80" AutoComplete="off"></asp:TextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                                         <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("CaseDisposeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
-                                                                <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CaseDisposeType_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CaseDisposeType_Id") %>' ToolTip="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"></i></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>

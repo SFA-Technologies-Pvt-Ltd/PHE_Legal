@@ -24,7 +24,7 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 FillZone();
                 FillGrid();
                 FillOfficeLevel();
-                FillOfficeType();
+                //FillOfficeType();
             }
         }
         else
@@ -53,26 +53,26 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-    protected void FillOfficeType()
-    {
-        try
-        {
-            ddlOfficetype.Items.Clear();
-            ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                ddlOfficetype.DataTextField = "OfficeType_Name";
-                ddlOfficetype.DataValueField = "OfficeType_Id";
-                ddlOfficetype.DataSource = ds;
-                ddlOfficetype.DataBind();
-            }
-            ddlOfficetype.Items.Insert(0, new ListItem("Select", "0"));
-        }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
-    }
+    //protected void FillOfficeType()
+    //{
+    //    try
+    //    {
+    //        ddlOfficetype.Items.Clear();
+    //        ds = obj.ByDataSet("select OfficeType_Id, OfficeType_Name from tblOfficeTypeMaster");
+    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
+    //        {
+    //            ddlOfficetype.DataTextField = "OfficeType_Name";
+    //            ddlOfficetype.DataValueField = "OfficeType_Id";
+    //            ddlOfficetype.DataSource = ds;
+    //            ddlOfficetype.DataBind();
+    //        }
+    //        ddlOfficetype.Items.Insert(0, new ListItem("Select", "0"));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        ErrorLogCls.SendErrorToText(ex);
+    //    }
+    //}
 
     #region Fill GridView
     protected void FillGrid()
@@ -188,11 +188,19 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 Label lblofficelevel = (Label)row.FindControl("lblofficelevel_ID");
                 Label lbllocation = (Label)row.FindControl("lbllocation");
                 txtlocation.Text = lbllocation.Text;
+                txtCircleName.Text = lblCircleName.Text;
+                if (lblZoneID.Text !="")
+                {
+                    ddlzone.ClearSelection();
+                    ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
+                }
+               
                 if (lblofficelevel.Text != "")
                 {
                     ddlOfficeLevel.ClearSelection();
                     ddlOfficeLevel.Items.FindByValue(lblofficelevel.Text).Selected = true;
                 }
+                ddlOfficeLevel_SelectedIndexChanged(sender, e);
                 if (lblOfficetype.Text != "")
                 {
                     ddlOfficetype.ClearSelection();
@@ -206,8 +214,6 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
             }
             if (e.CommandName == "DeleteDetails")
             {
-                ViewState["CircleID"] = "";
-                ViewState["CircleID"] = e.CommandArgument;
                 int Circle_ID = Convert.ToInt32(e.CommandArgument);
                 obj.ByTextQuery("delete from tblCircleMaster where Circle_ID=" + Circle_ID);
                 FillGrid();
@@ -236,4 +242,26 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
         }
     }
     #endregion
+    protected void ddlOfficeLevel_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            ddlOfficetype.Items.Clear();
+            ds = obj.ByProcedure("USP_Select_OfficeTypeName", new string[] { "OfficeLevel_Id" }
+                , new string[] { ddlOfficeLevel.SelectedValue }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlOfficetype.DataValueField = "OfficeType_Id";
+                ddlOfficetype.DataTextField = "OfficeType_Name";
+                ddlOfficetype.DataSource = ds;
+                ddlOfficetype.DataBind();
+            }
+            ddlOfficetype.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
 }

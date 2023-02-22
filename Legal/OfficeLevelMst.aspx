@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="OfficetypeMaster.aspx.cs" Inherits="Legal_OfficetypeMaster" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="OfficeLevelMst.aspx.cs" Inherits="Legal_OfficeLevelMst" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
@@ -43,7 +43,7 @@
                     <div class="box-body">
                         <div class="card">
                             <div class="card-header">
-                                Office Type Master
+                                Office Level Master
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -51,40 +51,26 @@
                                         <fieldset>
                                             <legend>Enter Details</legend>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-10">
                                                     <div class="form-group">
-                                                        <label>Office Level<span style="color:red">*</span></label>
+                                                        <label>Office Level<span style="color: red;"> *</span></label>
                                                         <span class="pull-right">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
-                                                                ErrorMessage="Enter Office Type Name" Text="<i class='fa fa-exclamation-circle' title='Enter Office Type Name'></i>"
-                                                                ControlToValidate="txtOfficeTypeName" ForeColor="Red" Display="Dynamic" runat="server">
+                                                            <asp:RequiredFieldValidator ID="Rfv_OfficeLevel" ValidationGroup="Save"
+                                                                ErrorMessage="Enter Office Level" Text="<i class='fa fa-exclamation-circle' title='Enter Office Level'></i>"
+                                                                ControlToValidate="txtOfficeLevel" ForeColor="Red" Display="Dynamic" runat="server">
                                                             </asp:RequiredFieldValidator>
+                                                            <asp:RegularExpressionValidator ID="rexOfficeLevel" runat="server" ErrorMessage="Only Characters Allow" ValidationExpression="^[a-zA-Z ]*$" ControlToValidate="txtOfficeLevel" Font-Bold="true" ForeColor="Red"
+                                                                Text="<i class='fa fa-exclamation-circle' title='Only Characters Allow'></i>" ValidationGroup="Save" SetFocusOnError="true"></asp:RegularExpressionValidator>
                                                         </span>
-                                                        <asp:DropDownList ID="ddlOfficeLevel" runat="server" CssClass="form-control">
-
-                                                        </asp:DropDownList>
+                                                        <asp:TextBox runat="server" ID="txtOfficeLevel" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" placeholder="Enter Office level" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Office Type<span style="color: red;"> *</span></label>
-                                                        <span class="pull-right">
-                                                            <asp:RequiredFieldValidator ID="Rfv_OfficeTypeName" ValidationGroup="Save"
-                                                                ErrorMessage="Enter Office Type Name" Text="<i class='fa fa-exclamation-circle' title='Enter Office Type Name'></i>"
-                                                                ControlToValidate="txtOfficeTypeName" ForeColor="Red" Display="Dynamic" runat="server">
-                                                            </asp:RequiredFieldValidator>
-                                                            <asp:RegularExpressionValidator ID="rexOfficetypeName" runat="server" ErrorMessage="Only Characters Allow" ValidationExpression="^[a-zA-Z ]*$" ControlToValidate="txtOfficeTypeName" Font-Bold="true" ForeColor="Red"
-                                                                Text="<i class='fa fa-exclamation-circle' title=''></i>" ValidationGroup="Save" SetFocusOnError="true"></asp:RegularExpressionValidator>
-                                                        </span>
-                                                        <asp:TextBox runat="server" ID="txtOfficeTypeName" onkeyup="javascript:capFirst(this);" onkeypress="return lettersOnly();" placeholder="Enter Office Type Name" CssClass="form-control" MaxLength="50" AutoComplete="off"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-3">
-                                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" OnClick="btnSave_Click" ValidationGroup="Save" OnClientClick="return ValidatePage();" />
+                                                            <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Text="Save" ValidationGroup="Save" OnClick="btnSave_Click" OnClientClick="return ValidatePage();" />
                                                         </div>
                                                         <div class="col-md-3">
                                                             <a href="OfficetypeMaster.aspx" class="btn btn-default btn-block">Clear</a>
@@ -100,30 +86,23 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="table-responsive">
-                                                        <asp:GridView ID="grdOfficetypeMst" runat="server" CssClass="table table-bordered table-hover" DataKeyNames="OfficeType_Id" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="grdOfficetypeMst_PageIndexChanging" OnRowCommand="grdOfficetypeMst_RowCommand">
+                                                         <asp:GridView ID="grdOfficelevelMst" runat="server" CssClass="table table-bordered table-hover" DataKeyNames="OfficeLevel_Id" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanging="grdOfficelevelMst_PageIndexChanging" OnRowCommand="grdOfficelevelMst_RowCommand">
                                                             <Columns>
-                                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
+                                                                <asp:TemplateField HeaderText="Sr#" ItemStyle-Width="5%">
                                                                     <ItemTemplate>
                                                                         <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
-                                                                        <asp:Label ID="lblOfficetypeID" runat="server" Text='<%# Eval("OfficeType_Id") %>' Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblOfficelevelID" runat="server" Text='<%# Eval("OfficeLevel_Id") %>' Visible="false"></asp:Label>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
-                                                                  <asp:TemplateField HeaderText="Office Level" ItemStyle-HorizontalAlign="Center">
+                                                                <asp:TemplateField HeaderText="Office Level">
                                                                     <ItemTemplate>
                                                                         <asp:Label ID="lblOfficelevelName" runat="server" Text='<%# Eval("OfficeLevelName") %>'></asp:Label>
-                                                                         <asp:Label ID="lblOfficelevelID" runat="server" Text='<%# Eval("OfficeLevel_Id") %>' Visible="false"></asp:Label>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
-                                                                <asp:TemplateField HeaderText="Office Type" ItemStyle-HorizontalAlign="Center">
+                                                                <asp:TemplateField HeaderText="Action" ItemStyle-Width="5%">
                                                                     <ItemTemplate>
-                                                                        <asp:Label ID="lblOfficetypeName" runat="server" Text='<%# Eval("OfficeType_Name") %>'></asp:Label>
-                                                                    </ItemTemplate>
-                                                                </asp:TemplateField>
-                                                                <asp:TemplateField HeaderText="Action"  ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
-                                                                    <ItemTemplate>
-                                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OfficeType_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
-                                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("OfficeType_Id") %>'
-                                                                            OnClientClick="return confirm('Are you sure you want to delete this record?');" ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OfficeLevel_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
+                                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("OfficeLevel_Id") %>' ToolTip="Delete" CssClass="" OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"></i></asp:LinkButton>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
                                                             </Columns>
@@ -143,17 +122,17 @@
     </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Fotter" runat="Server">
-    <script type="text/javascript">
-        function capFirst(cpt) { //only Capital First.
-            cpt.value = cpt.value[0].toUpperCase() + cpt.value.substring(1);
-        }
-        function lettersOnly() { // Only English Letter Allow.
-            var charCode = event.keyCode;
-            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
-                return true;
-            else
-                return false;
-        } 
+     <script type="text/javascript">
+         function capFirst(cpt) { //only Capital First.
+             cpt.value = cpt.value[0].toUpperCase() + cpt.value.substring(1);
+         }
+         function lettersOnly() { // Only English Letter Allow.
+             var charCode = event.keyCode;
+             if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 32)
+                 return true;
+             else
+                 return false;
+         }
     </script>
      <script>
          function ValidatePage() {
@@ -162,12 +141,12 @@
              }
              if (Page_IsValid) {
                  if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Update") {
-                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Update this record?";
-                    $('#myModal').modal('show');
-                    return false;
-                }
-                if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Save") {
-                    document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Save this record?";
+                     document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Update this record?";
+                     $('#myModal').modal('show');
+                     return false;
+                 }
+                 if (document.getElementById('<%=btnSave.ClientID%>').value.trim() == "Save") {
+                     document.getElementById('<%=lblPopupAlert.ClientID%>').textContent = "Are you sure you want to Save this record?";
                     $('#myModal').modal('show');
                     return false;
                 }

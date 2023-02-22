@@ -143,7 +143,7 @@
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" HeaderStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnView" runat="server" CssClass="" CommandName="ViewDtl" CommandArgument='<%# Eval("CabinetId") %>' ToolTip="View"><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
-                                                            <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CabinetId") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CabinetId") %>' ToolTip="Delete" CssClass=""  OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"  ></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
