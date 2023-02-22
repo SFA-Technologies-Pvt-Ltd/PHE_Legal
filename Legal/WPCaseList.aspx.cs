@@ -159,9 +159,10 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         {
             lblMsg.Text = "";
             GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
-
+            Label lblUniqueNo = (Label)row.FindControl("lblUniqueNo");
+            string UniqueNO = lblUniqueNo.Text;
             string ID = e.CommandArgument.ToString();
-            Response.Redirect("../Legal/EditCaseDetail.aspx?ID=" + Server.UrlEncode(ID));
+            Response.Redirect("../Legal/EditCaseDetail.aspx?ID=" + Server.UrlEncode(ID) + "&UniqueNO=" + UniqueNO, false);
         }
         catch (Exception ex)
         {

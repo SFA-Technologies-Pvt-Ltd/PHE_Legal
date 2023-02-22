@@ -140,7 +140,7 @@
                                                 <asp:TemplateField HeaderText="Action" HeaderStyle-Width="1%" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("Ho_Id") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
-                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Ho_Id") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("Ho_Id") %>' ToolTip="Delete" CssClass="" OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
