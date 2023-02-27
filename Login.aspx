@@ -23,7 +23,6 @@
             min-height: 100vh;
             background-size: 120%;
         }
-
         .bgright_login {
             min-height: 100vh;
             padding: 30px;

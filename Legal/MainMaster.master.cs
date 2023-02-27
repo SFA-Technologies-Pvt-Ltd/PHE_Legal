@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -117,15 +117,24 @@ public partial class Legal_MainMaster : System.Web.UI.MasterPage
                 #endregion
 
                 #region Rebind Menues
-
-                Navigation.InnerHtml = "<ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>"
+                if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null)
+                    Navigation.InnerHtml = "<ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>"
                                 + "<li class='nav-item'>"
-                                    + "<a href='../Legal/OldCaseDashBoard.aspx' class='nav-link'>"
+                                    + "<a href='../Legal/OICWiseOldCaseDashBoard.aspx' class='nav-link'>"
                                         + "<i class='nav-icon fas fa-list-ul text-light'></i>"
                                         + "<p class='text-light'>"
                                             + "<span style='color: #e5e5e5; font-size: 16px;'>Dashboard</span>"
                                             //  + "<i class='fas fa-angle-left right'></i>" 
                                             + "</p></a></li>'";
+                else
+                    Navigation.InnerHtml = "<ul class='nav nav-pills nav-sidebar flex-column' data-widget='treeview' role='menu' data-accordion='false'>"
+                                    + "<li class='nav-item'>"
+                                        + "<a href='../Legal/OldCaseDashBoard.aspx' class='nav-link'>"
+                                            + "<i class='nav-icon fas fa-list-ul text-light'></i>"
+                                            + "<p class='text-light'>"
+                                                + "<span style='color: #e5e5e5; font-size: 16px;'>Dashboard</span>"
+                                                //  + "<i class='fas fa-angle-left right'></i>" 
+                                                + "</p></a></li>'";
                 //  DataTable dtAccess = Session["AccessModule"] as DataTable;
                 DataTable dtAccessForm = Session["AccessForm"] as DataTable;
                 string menuname = string.Empty;

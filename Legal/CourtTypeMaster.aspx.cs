@@ -23,6 +23,7 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
                     BindGrid();
                     lblMsg.Text = "";
                     FillDistrict();
+                    FillCourtName();
                 }
         }
         else
@@ -71,6 +72,26 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
         }
     }
     #endregion
+    protected void FillCourtName()
+    {
+        try
+        {
+            ddlCourtType.Items.Clear();
+            ds = objdb.ByDataSet("select CourtName,CourtName_ID from tbl_LegalCourtMaster");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlCourtType.DataValueField = "CourtName_ID";
+                ddlCourtType.DataTextField = "CourtName";
+                ddlCourtType.DataSource = ds;
+                ddlCourtType.DataBind();
+            }
+            ddlCourtType.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -79,13 +100,13 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
             {
                 if (btnSave.Text == "Save")
                 {
-                    ds = objdb.ByProcedure("Sp_CourtType", new string[] { "flag", "CourtTypeName", "District_Id", "CreatedBy", "CreatedByIP"}, new string[] {
-                        "1",txtCourtType.Text,ddlCourtlocation.SelectedValue,ViewState["Emp_Id"].ToString(),objdb.GetLocalIPAddress() }, "dataset");
+                    ds = objdb.ByProcedure("Sp_CourtType", new string[] { "flag", "CourtTypeName", "CourtName_ID", "District_Id", "CreatedBy", "CreatedByIP" }, new string[] {
+                        "1",ddlCourtType.SelectedItem.Text,ddlCourtType.SelectedValue,ddlCourtlocation.SelectedValue,ViewState["Emp_Id"].ToString(),objdb.GetLocalIPAddress() }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["CourtId"] != "" && ViewState["CourtId"] != null)
                 {
-                    ds = objdb.ByProcedure("Sp_CourtType", new string[] { "flag", "CourtTypeName", "District_Id", "LastupdatedBy", "LastupdatedByIP", "CourtTypeID"}, new string[] {
-                        "3",txtCourtType.Text,ddlCourtlocation.SelectedValue,ViewState["Emp_Id"].ToString(),objdb.GetLocalIPAddress(), ViewState["CourtId"].ToString() }, "dataset");
+                    ds = objdb.ByProcedure("Sp_CourtType", new string[] { "flag", "CourtTypeName", "CourtName_ID", "District_Id", "LastupdatedBy", "LastupdatedByIP", "CourtTypeID" }, new string[] {
+                        "3",ddlCourtType.SelectedItem.Text,ddlCourtType.SelectedValue,ddlCourtlocation.SelectedValue,ViewState["Emp_Id"].ToString(),objdb.GetLocalIPAddress(), ViewState["CourtId"].ToString() }, "dataset");
                 }
             }
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -94,8 +115,8 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
                 if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                 {
                     lblMsg.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                    txtCourtType.Text = "";
-                    ddlCourtlocation.ClearSelection();       
+                    ddlCourtType.ClearSelection();
+                    ddlCourtlocation.ClearSelection();
                     BindGrid();
                     btnSave.Text = "Save";
                 }
@@ -109,7 +130,6 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
         catch (Exception ex)
         {
             ErrorLogCls.SendErrorToText(ex);
-            //lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
 
@@ -129,21 +149,25 @@ public partial class Legal_CourtTypeMaster : System.Web.UI.Page
                 lblMsg.Text = "";
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 HiddenField lblDistrictID = (HiddenField)row.FindControl("hdnDistrictID");
-                Label lblCourName = (Label)row.FindControl("lblCourName");
+                Label lblCourtNameID = (Label)row.FindControl("lblCourtNameID");
                 Label lblOtherlocation = (Label)row.FindControl("lblOtherlocation");
                 btnSave.Text = "Update";
                 ViewState["CourtId"] = e.CommandArgument;
-                txtCourtType.Text = lblCourName.Text;
+                if (!string.IsNullOrEmpty(lblCourtNameID.Text))
+                {
+                    ddlCourtType.ClearSelection();
+                    ddlCourtType.Items.FindByValue(lblCourtNameID.Text).Selected = true;
+                }
+              
                 ddlCourtlocation.ClearSelection();
                 ddlCourtlocation.Items.FindByValue(lblDistrictID.Value).Selected = true;
             }
             if (e.CommandName == "DeleteDetails")
             {
-                int CourtypiID = Convert.ToInt32(e.CommandArgument);
-                objdb.ByTextQuery("delete from tbl_LegalCourtType where CourtType_ID=" + CourtypiID);
+                int CourtType_ID = Convert.ToInt32(e.CommandArgument);
+                objdb.ByTextQuery("delete from tbl_LegalCourtType where CourtType_ID=" + CourtType_ID);
                 BindGrid();
             }
-            lblMsg.Text = "";
         }
         catch (Exception ex)
         {

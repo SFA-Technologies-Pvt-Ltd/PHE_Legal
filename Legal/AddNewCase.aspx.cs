@@ -135,6 +135,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         DataTable OldDt = new DataTable();
         if (OldDt.Columns.Count == 0)
         {
+            OldDt.Columns.Add("OldFillingNo", typeof(string));
             OldDt.Columns.Add("OldCaseNo", typeof(string));
             OldDt.Columns.Add("CaseYear", typeof(string));
             OldDt.Columns.Add("Casetype_ID", typeof(int));
@@ -361,234 +362,50 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         {
             if (Page.IsValid)
             {
-
-                //string filePath = Server.MapPath("~/Legal/OldCaseDocument");
-                //string filename1 = string.Empty;
-                //string filename2 = string.Empty;
-                //string filename3 = string.Empty;
-                //string filename4 = string.Empty;
-                //if (FU1.HasFile)
-                //    filename1 = FU1.FileName;
-                //if (FU2.HasFile)
-                //    filename2 = FU2.FileName;
-                //if (FU3.HasFile)
-                //    filename3 = FU3.FileName;
-                //if (FU4.HasFile)
-                //    filename4 = FU4.FileName;
                 lblMsg.Text = "";
-                ViewState["FU1"] = "";
-                ViewState["FU2"] = "";
-                ViewState["FU3"] = "";
-                ViewState["FU4"] = "";
-                int DocFailedCntExt = 0;
-                int DocFailedCntSize = 0;
-                string strFileName = "";
-                string strExtension = "";
-                string strTimeStamp = "";
-                if (FU1.HasFile)     // CHECK IF ANY FILE HAS BEEN SELECTED.
+                if (btnSubmit.Text == "Save")
                 {
-
-                    string fileExt = System.IO.Path.GetExtension(FU1.FileName).Substring(1);
-                    string[] supportedTypes = { "PDF", "pdf" };
-                    if (!supportedTypes.Contains(fileExt))
+                    DataTable dtDoc = ViewState["DocData"] as DataTable;
+                    DataTable dtresponder = ViewState["dt"] as DataTable;
+                    DataTable dtPetitioner = ViewState["Petitioner"] as DataTable;
+                    DataTable dtDeptAdv = ViewState["AdvData"] as DataTable;
+                    DataTable Hdt = ViewState["NextHearingDtl"] as DataTable;
+                    DataTable dt6 = ViewState["Dt5"] as DataTable;
+                    DataTable dt8 = ViewState["dt7"] as DataTable;
+                    if (GrdViewDoc.Rows.Count > 0 && GrdRespondent.Rows.Count > 0)
                     {
-                        DocFailedCntExt += 1;
-                    }
-                    else if (FU1.PostedFile.ContentLength > 204800) // 200 KB = 1024 * 200
-                    {
-                        DocFailedCntSize += 1;
-                    }
-                    else
-                    {
-                        strFileName = FU1.FileName.ToString();
-                        strExtension = Path.GetExtension(strFileName);
-                        strTimeStamp = DateTime.Now.ToString();
-                        strTimeStamp = strTimeStamp.Replace("/", "-");
-                        strTimeStamp = strTimeStamp.Replace(" ", "-");
-                        strTimeStamp = strTimeStamp.Replace(":", "-");
-                        string strName = Path.GetFileNameWithoutExtension(strFileName);
-                        strFileName = strName + "OldCaseDoc-" + strTimeStamp + strExtension;
-                        string path = Path.Combine(Server.MapPath("~/Legal/OldCaseDocument"), strFileName);
-                        FU1.SaveAs(path);
-
-                        ViewState["FU1"] = strFileName;
-                        path = "";
-                        strFileName = "";
-                        strName = "";
-                    }
-                }
-                if (FU2.HasFile)
-                {
-                    string fileExt = System.IO.Path.GetExtension(FU2.FileName).Substring(1);
-                    string[] supportedTypes = { "PDF", "pdf" };
-                    if (!supportedTypes.Contains(fileExt))
-                    {
-                        DocFailedCntExt += 1;
-                    }
-                    else if (FU2.PostedFile.ContentLength > 204800) // 200 KB = 1024 * 200
-                    {
-                        DocFailedCntSize += 1;
-                    }
-                    else
-                    {
-                        strFileName = FU2.FileName.ToString();
-                        strExtension = Path.GetExtension(strFileName);
-                        strTimeStamp = DateTime.Now.ToString();
-                        strTimeStamp = strTimeStamp.Replace("/", "-");
-                        strTimeStamp = strTimeStamp.Replace(" ", "-");
-                        strTimeStamp = strTimeStamp.Replace(":", "-");
-                        string strName = Path.GetFileNameWithoutExtension(strFileName);
-                        strFileName = strName + "OldCaseDoc-" + strTimeStamp + strExtension;
-                        string path = Path.Combine(Server.MapPath("~/Legal/OldCaseDocument"), strFileName);
-                        FU2.SaveAs(path);
-
-                        ViewState["FU2"] = strFileName;
-                        path = "";
-                        strFileName = "";
-                        strName = "";
-                    }
-                }
-                if (FU3.HasFile)
-                {
-                    string fileExt = System.IO.Path.GetExtension(FU3.FileName).Substring(1);
-                    string[] supportedTypes = { "PDF", "pdf" };
-                    if (!supportedTypes.Contains(fileExt))
-                    {
-                        DocFailedCntExt += 1;
-                    }
-                    else if (FU3.PostedFile.ContentLength > 204800) // 200 KB = 1024 * 200
-                    {
-                        DocFailedCntSize += 1;
-                    }
-                    else
-                    {
-                        strFileName = FU3.FileName.ToString();
-                        strExtension = Path.GetExtension(strFileName);
-                        strTimeStamp = DateTime.Now.ToString();
-                        strTimeStamp = strTimeStamp.Replace("/", "-");
-                        strTimeStamp = strTimeStamp.Replace(" ", "-");
-                        strTimeStamp = strTimeStamp.Replace(":", "-");
-                        string strName = Path.GetFileNameWithoutExtension(strFileName);
-                        strFileName = strName + "OldCaseDoc-" + strTimeStamp + strExtension;
-                        string path = Path.Combine(Server.MapPath("~/Legal/OldCaseDocument"), strFileName);
-                        FU3.SaveAs(path);
-
-                        ViewState["FU3"] = strFileName;
-                        path = "";
-                        strFileName = "";
-                        strName = "";
-                    }
-                }
-                if (FU4.HasFile)
-                {
-                    string fileExt = System.IO.Path.GetExtension(FU4.FileName).Substring(1);
-                    string[] supportedTypes = { "PDF", "pdf" };
-                    if (!supportedTypes.Contains(fileExt))
-                    {
-                        DocFailedCntExt += 1;
-                    }
-                    else if (FU4.PostedFile.ContentLength > 204800) // 200 KB = 1024 * 200
-                    {
-                        DocFailedCntSize += 1;
-                    }
-                    else
-                    {
-                        strFileName = FU4.FileName.ToString();
-                        strExtension = Path.GetExtension(strFileName);
-                        strTimeStamp = DateTime.Now.ToString();
-                        strTimeStamp = strTimeStamp.Replace("/", "-");
-                        strTimeStamp = strTimeStamp.Replace(" ", "-");
-                        strTimeStamp = strTimeStamp.Replace(":", "-");
-                        string strName = Path.GetFileNameWithoutExtension(strFileName);
-                        strFileName = strName + "Hearing-" + strTimeStamp + strExtension;
-                        string path = Path.Combine(Server.MapPath("~/Legal/OldCaseDocument"), strFileName);
-                        FU4.SaveAs(path);
-
-                        ViewState["FU4"] = strFileName;
-                        path = "";
-                        strFileName = "";
-                        strName = "";
-                    }
-                }
-                string errormsg = "";
-                if (DocFailedCntExt > 0) { errormsg += "Only upload Document in( PDF) Formate.\\n"; }
-                if (DocFailedCntSize > 0) { errormsg += "Uploaded Document size should be less than 200 KB \\n"; }
-
-                if (errormsg == "")
-                {
-                    if (btnSubmit.Text == "Save")
-                    {
-                        DataTable dtDoc = ViewState["DocData"] as DataTable;
-                        DataTable dtresponder = ViewState["dt"] as DataTable;
-                        DataTable dtPetitioner = ViewState["Petitioner"] as DataTable;
-                        DataTable dtDeptAdv = ViewState["AdvData"] as DataTable;
-                        DataTable Hdt = ViewState["NextHearingDtl"] as DataTable;
-                        DataTable dt6 = ViewState["Dt5"] as DataTable;
-                        if (GrdViewDoc.Rows.Count > 0 && GrdRespondent.Rows.Count > 0)
+                        if (GrdPetitionerDtl.Rows.Count > 0 && grdDeptAdvocate.Rows.Count > 0)
                         {
-                            if (GrdPetitionerDtl.Rows.Count > 0 && grdDeptAdvocate.Rows.Count > 0)
-                            {
-                                string PartyMaster = ddlParty.SelectedIndex > 0 ? ddlParty.SelectedValue : "";
-                                string HighPriorityCase = ddlHighprioritycase.SelectedIndex > 0 ? ddlHighprioritycase.SelectedItem.Text : "";
-                                string RegDate = txtDateOfCaseReg.Text != "" ? Convert.ToDateTime(txtDateOfCaseReg.Text, cult).ToString("yyyy/MM/dd") : "";
-                                string LastHearingDate = txtDateOfLastHearing.Text != "" ? Convert.ToDateTime(txtDateOfLastHearing.Text, cult).ToString("yyyy/MM/dd") : "";
+                            string PartyMaster = ddlParty.SelectedIndex > 0 ? ddlParty.SelectedValue : "";
+                            string HighPriorityCase = ddlHighprioritycase.SelectedIndex > 0 ? ddlHighprioritycase.SelectedItem.Text : "";
+                            string RegDate = txtDateOfCaseReg.Text != "" ? Convert.ToDateTime(txtDateOfCaseReg.Text, cult).ToString("yyyy/MM/dd") : "";
+                            string LastHearingDate = txtDateOfLastHearing.Text != "" ? Convert.ToDateTime(txtDateOfLastHearing.Text, cult).ToString("yyyy/MM/dd") : "";
 
-                                // Insert data into Main table
-                                ds = objdb.ByProcedure("USP_Insert_NewCaseReg", new string[] {"CaseNo", "Casetype_ID","CasetypeName", "CaseYear", "CourtType_Id", "CourtName",
+                            // Insert data into Main table
+                            ds = objdb.ByProcedure("USP_Insert_NewCaseReg", new string[] {"CaseNo", "Casetype_ID","CasetypeName", "CaseYear", "CourtType_Id", "CourtName",
                                 "CourtLocation_Id", "CaseSubject_Id", 
                                 "CaseSubSubj_Id", "CaseRegDate", "lastHearingDate", "HighPriorityCase_Status", "PetitonerName", "Designation_Id", "PetitionerMobileNo", 
                                 "PetitionerAddress", "PetiAdvocateName", "PetiAdvocateMobile", "OICMaster_Id", "Party_Id", "DeptAdvocateName", 
                                 "DeptAdvocateMobileNo", "Office_Id","CaseDetail", "CreatedBy", "CreatedByIP" },
-                                    new string[] {txtCaseNo.Text.Trim(),ddlCasetype.SelectedValue,ddlCasetype.SelectedItem.Text.Trim(),ddlCaseYear.SelectedItem.Text.Trim(),ddlCourtType.SelectedValue,ddlCourtType.SelectedItem.Text.Trim(),ddlCourtLocation.SelectedValue,
+                                new string[] {txtCaseNo.Text.Trim(),ddlCasetype.SelectedValue,ddlCasetype.SelectedItem.Text.Trim(),ddlCaseYear.SelectedItem.Text.Trim(),ddlCourtType.SelectedValue,ddlCourtType.SelectedItem.Text.Trim(),ddlCourtLocation.SelectedValue,
                                     ddlCaseSubject.SelectedValue,
                                 ddlSubSubject.SelectedValue,RegDate,LastHearingDate,HighPriorityCase,txtPetiName.Text.Trim(),ddlPetiDesigNation.SelectedValue,txtPetiMobileNo.Text.Trim(),
                                 txtPetiAddRess.Text.Trim(),txtPetiAdvocateName.Text.Trim(),txtPetiAdvocateMobileNo.Text.Trim(),ddlOicName.SelectedValue, PartyMaster,txtDeptAdvocateName.Text.Trim(),
                                 txtDeptAdvocateMobileNo.Text.Trim(),ViewState["Office_ID"].ToString(),txtCaseDetail.Text.Trim(),ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress()},
-                                    new string[] { "type_RespondentDtl", "type_DocumentDtl", "type_PetitionerForCaseRegis", "type_DeptAdvForCaseRegis", "type_NextHearingForCaseRegis", "type_PetitiAdvocateForCaseRegis" }
-                                    , new DataTable[] { dtresponder, dtDoc, dtPetitioner, dtDeptAdv, Hdt, dt6 }, "dataset");
-
-                                if (txtoldCaseNo.Text != "" && ds.Tables[0].Rows[0]["Case_ID"].ToString() != "")
-                                {
-                                    if (FU1.HasFile)// Insert data into oldCase Record table
-                                    {
-                                        DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "flag", "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
-                                              new string[] { "1", ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "केस का विवरण", ViewState["FU1"].ToString(), ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCasetype.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    }
-                                    if (FU2.HasFile)
-                                    {
-                                        DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "flag", "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
-                                            new string[] { "1", ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "कार्यवाही का विवरण", ViewState["FU2"].ToString(), ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCasetype.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    }
-                                    if (FU3.HasFile)
-                                    {
-                                        DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "flag", "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
-                                            new string[] { "1", ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "निर्णय", ViewState["FU3"].ToString(), ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCasetype.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-                                    }
-                                    if (FU4.HasFile)
-                                    {
-                                        DataSet dsCase = objdb.ByProcedure("USP_Insert_OldCaseEntry", new string[] { "flag", "Case_Id", "oldCaseNo", "oldCaseYear", "OldCasetype", "OldCourt_Id", "OldCaseDocName", "DocLink", "CourtDistLoca_Id", "CourtType_Id", "Casetype_Id", "CreatedBy", "CreatedByIP" },
-                                            new string[] { "1", ds.Tables[0].Rows[0]["Case_ID"].ToString(), txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, "अन्य", ViewState["FU4"].ToString(), ddloldCourtLoca_Id.SelectedValue, ddloldCaseCourt.SelectedValue, ddloldCasetype.SelectedValue, ViewState["Emp_ID"].ToString(), objdb.GetLocalIPAddress() }, "dataset");
-
-                                    }
-
-                                }
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('please Add Dept Advocate Detail & Petitioner Detail');", true);
-                            }
+                                new string[] { "type_RespondentDtl", "type_DocumentDtl", "type_PetitionerForCaseRegis", "type_DeptAdvForCaseRegis", "type_NextHearingForCaseRegis", "type_PetitiAdvocateForCaseRegis", "type_OldCaseDtlForCaseRegis" }
+                                , new DataTable[] { dtresponder, dtDoc, dtPetitioner, dtDeptAdv, Hdt, dt6, dt8 }, "dataset");
                         }
                         else
                         {
-                            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('please Add Document & Respondent Detail');", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('please Add Dept Advocate Detail & Petitioner Detail');", true);
                         }
                     }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('please Add Document & Respondent Detail');", true);
+                    }
                 }
-                else
-                {
-                    ViewState["FU1"] = ""; ViewState["FU2"] = ""; ViewState["FU3"] = ""; ViewState["FU4"] = "";
-                    ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
-                }
+
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
@@ -661,6 +478,8 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
         GrdViewDoc.DataBind();
         grdHeairngDtl.DataSource = null;
         grdHeairngDtl.DataBind();
+        GrdOldCaseDtl.DataSource = null;
+        GrdOldCaseDtl.DataBind();
         txtoldCaseNo.Text = "";
         ddloldCaseCourt.ClearSelection();
         ddloldCasetype.ClearSelection();
@@ -839,8 +658,19 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     DataTable dt = ViewState["Responder"] as DataTable;
                     if (dt.Columns.Count > 0)
                     {
-                        dt.Rows.Add(ddlOfficetypeName.SelectedValue, ddlOfficeName.SelectedValue, ddlDesignation.SelectedValue, ddlDesignation.SelectedItem.Text, txtResponderName.Text.Trim(),
-                            txtMobileNo.Text.Trim(), txtDepartment.Text.Trim(), txtAddress.Text.Trim(), ddlOfficetypeName.SelectedItem.Text.Trim(), ddlOfficeName.SelectedItem.Text.Trim());
+
+
+
+                        dt.Rows.Add(ddlOfficetypeName.SelectedValue,
+                            ddlOfficeName.SelectedValue,
+                            ddlDesignation.SelectedValue,
+                            ddlDesignation.SelectedItem.Text,
+                            txtResponderName.Text.Trim(),
+                            txtMobileNo.Text.Trim(),
+                            txtDepartment.Text.Trim(),
+                            txtAddress.Text.Trim(),
+                            ddlOfficetypeName.SelectedItem.Text.Trim(),
+                            ddlOfficeName.SelectedItem.Text.Trim());
                     }
                     if (dt != null && dt.Rows.Count > 0)
                     {
@@ -1115,6 +945,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
             if (Page.IsValid)
             {
                 DataTable dt7 = ViewState["OldDt"] as DataTable;
+                string OldFillingNo = "";
                 ViewState["FU1"] = "";
                 ViewState["FU2"] = "";
                 ViewState["FU3"] = "";
@@ -1258,26 +1089,28 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                     if (btnSaveOldCase.Text == "Add")
                     {
                         if (dt7.Columns.Count > 0)
-                        {          
+                        {
+                            OldFillingNo = ddloldCasetype.SelectedItem.Text + "/" + txtoldCaseNo.Text.Trim() + "/" + ddloldCaseYear.SelectedItem.Text + "/" + ddloldCaseCourt.SelectedItem.Text;
+
                             if (FU1.HasFile)
                             {
-                                dt7.Rows.Add(txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
-                                   ddloldCourtLoca_Id.SelectedValue,"", ViewState["FU1"].ToString(), ddloldCasetype.SelectedItem.Text, ddlCourtType.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
+                                dt7.Rows.Add(OldFillingNo, txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
+                                   ddloldCourtLoca_Id.SelectedValue, "केस का विवरण", ViewState["FU1"].ToString(), ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
                             }
                             if (FU2.HasFile)
                             {
-                                dt7.Rows.Add(txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
-                                   ddloldCourtLoca_Id.SelectedValue,"", ViewState["FU2"].ToString(), ddloldCasetype.SelectedItem.Text, ddlCourtType.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
+                                dt7.Rows.Add(OldFillingNo, txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
+                                   ddloldCourtLoca_Id.SelectedValue, "कार्यवाही का विवरण", ViewState["FU2"].ToString(), ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
                             }
                             if (FU3.HasFile)
                             {
-                                dt7.Rows.Add(txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
-                                   ddloldCourtLoca_Id.SelectedValue,"", ViewState["FU3"].ToString(), ddloldCasetype.SelectedItem.Text, ddlCourtType.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
+                                dt7.Rows.Add(OldFillingNo, txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
+                                   ddloldCourtLoca_Id.SelectedValue, "निर्णय", ViewState["FU3"].ToString(), ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
                             }
                             if (FU4.HasFile)
                             {
-                                dt7.Rows.Add(txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
-                                   ddloldCourtLoca_Id.SelectedValue,"", ViewState["FU4"].ToString(), ddloldCasetype.SelectedItem.Text, ddlCourtType.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
+                                dt7.Rows.Add(OldFillingNo, txtoldCaseNo.Text.Trim(), ddloldCaseYear.SelectedItem.Text, ddloldCasetype.SelectedValue, ddloldCaseCourt.SelectedValue,
+                                   ddloldCourtLoca_Id.SelectedValue, "अन्य", ViewState["FU4"].ToString(), ddloldCasetype.SelectedItem.Text, ddloldCaseCourt.SelectedItem.Text, ddloldCourtLoca_Id.SelectedItem.Text);
                             }
                         }
                     }
@@ -1289,6 +1122,10 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
                         ddloldCasetype.ClearSelection();
                         ddloldCaseCourt.ClearSelection();
                         ddloldCourtLoca_Id.ClearSelection();
+                        GrdOldCaseDtl.DataSource = dt7;
+                        GrdOldCaseDtl.DataBind();
+                        ViewState["dt7"] = dt7;
+                        OldFillingNo = "";
                     }
                 }
                 else

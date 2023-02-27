@@ -97,7 +97,7 @@
                                     <div class="form-group">
                                         <label>
                                             User Email<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
+                                            <asp:RequiredFieldValidator ID="rfvEmailID" ValidationGroup="Save"
                                                 ErrorMessage="Enter User Email" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtUserEmail" Display="Dynamic" runat="server">
                                             </asp:RequiredFieldValidator>
@@ -122,11 +122,11 @@
                                         <asp:TextBox ID="txtMobileNo" runat="server" MaxLength="10" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </div>
-                                 <div class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>
                                             User Name<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Save"
+                                            <asp:RequiredFieldValidator ID="rfvUserName" ValidationGroup="Save"
                                                 ErrorMessage="Enter User Name" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtUserName" Display="Dynamic" runat="server">
                                             </asp:RequiredFieldValidator>
@@ -136,11 +136,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" runat="server" id="Div_pass">
                                     <div class="form-group">
                                         <label>
                                             Password<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
+                                            <asp:RequiredFieldValidator ID="rfvPassword" ValidationGroup="Save"
                                                 ErrorMessage="Enter Password" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtPassword" Display="Dynamic" runat="server">
                                             </asp:RequiredFieldValidator>
@@ -148,15 +148,15 @@
                                         <asp:TextBox ID="txtPassword" TextMode="Password" runat="server" min="6" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" runat="server" id="Div_Confpass">
                                     <div class="form-group">
                                         <label>
                                             Confirm Password<span style="color: red;"><b> *</b></span>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="Save"
+                                            <asp:RequiredFieldValidator ID="rfvpasswordCon" ValidationGroup="Save"
                                                 ErrorMessage="Enter Confirm Password" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                 ControlToValidate="txtConfirmPassword" Display="Dynamic" runat="server">
                                             </asp:RequiredFieldValidator>
-                                            <asp:CompareValidator ErrorMessage="Confirm Password Not Matched" ForeColor="Red" Font-Bold="true" Display="None" ValidationGroup="Save" ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword" runat="server" />
+                                            <asp:CompareValidator ID="cvdPasscon" ErrorMessage="Confirm Password Not Matched" ForeColor="Red" Font-Bold="true" Display="None" ValidationGroup="Save" ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword" runat="server" />
                                         </label>
                                         <asp:TextBox ID="txtConfirmPassword" TextMode="Password" runat="server" min="6" AutoComplete="off" CssClass="form-control"></asp:TextBox>
                                     </div>
@@ -175,13 +175,12 @@
                             </div>
 
                         </fieldset>
-
                         <fieldset>
                             <legend>Details</legend>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdUserDetails" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="false">
+                                        <asp:GridView ID="grdUserDetails" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="false" OnRowCommand="grdUserDetails_RowCommand">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No.<br />सरल क्र.">
                                                     <ItemTemplate>
@@ -210,16 +209,28 @@
                                                 <asp:TemplateField HeaderText="Employee Name<br />कर्मचारी का नाम">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblEmployeeName" runat="server" Text='<%# Eval("EMPName") %>'></asp:Label>
+                                                        <asp:Label ID="lblEmployeeNameID" runat="server" Text='<%# Eval("EMPName") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Mobile No.<br />मोबाइल नंबर">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblMobileNo" runat="server" Text='<%# Eval("MobileNo") %>'></asp:Label>
+                                                        <asp:Label ID="lblMobileNoID" runat="server" Text='<%# Eval("MobileNo") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblEmailID" runat="server" Text='<%# Eval("UserEmail") %>' Visible="false"></asp:Label>
+                                                        <asp:Label ID="lbluserPass" runat="server" Text='<%# Eval("UserPassword") %>' Visible="false"></asp:Label>
+                                                        <asp:Label runat="server" ID="lblOicID" Text='<%# Eval("OICMaster_ID") %>' Visible="false"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="User Name<br />उपयोगकर्ता का नाम">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblUserName" runat="server" Text='<%# Eval("UserName") %>'></asp:Label>
+                                                        <asp:Label ID="lblUserNameID" runat="server" Text='<%# Eval("UserName") %>' Visible="false"></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("UserId") %>' CommandName="EditDetails" ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
+                                                        <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("UserId") %>' ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <%-- <asp:TemplateField HeaderText="Password<br />पासवर्ड">

@@ -55,14 +55,11 @@
                                                 <label>Court Type<span style="color: red;"> *</span></label>
                                                 <span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="rfv1" ValidationGroup="Save"
-                                                        ErrorMessage="Enter Court Type" Text="<i class='fa fa-exclamation-circle' title='Enter Court Type'></i>"
-                                                        ControlToValidate="txtCourtType" ForeColor="Red" Display="Dynamic" runat="server">
+                                                        ErrorMessage="Select Court Type" Text="<i class='fa fa-exclamation-circle' title='Select Court Type'></i>"
+                                                        ControlToValidate="ddlCourtType" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
                                                 </span>
-                                                <asp:TextBox runat="server" CssClass="form-control" ID="txtCourtType" onkeypress="return lettersOnly();" placeholder="Enter Case Type" autocomplete="off" onkeyup="javascript:capFirst(this);" MaxLength="100"></asp:TextBox>
-                                                <asp:RegularExpressionValidator runat="server" ID="revDesignationName" Display="Dynamic" ControlToValidate="txtCourtType"
-                                                    ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Save" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                                </asp:RegularExpressionValidator>
+                                                <asp:DropDownList runat="server" ID="ddlCourtType" CssClass="form-control select2"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -112,7 +109,7 @@
                                                 <RowStyle HorizontalAlign="Center" />
                                                 <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />
                                                 <Columns>
-                                                    <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                    <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                             <asp:Label ID="CaseSubjectID" runat="server" Text='<%#Eval("CourtType_ID") %>' Visible="false" />
@@ -121,6 +118,7 @@
                                                     <asp:TemplateField HeaderText="Court Name">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblCourName" runat="server" Text='<%#Eval("CourtTypeName") %>'></asp:Label>
+                                                            <asp:Label ID="lblCourtNameID" runat="server" Text='<%#Eval("CourtName_ID") %>' Visible="false"></asp:Label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Location">
@@ -137,7 +135,8 @@
                                                     <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnEdit" runat="server" CommandArgument='<%#Eval("CourtType_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>&nbsp;
-                                                            <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CourtType_ID") %>' ToolTip="Delete" CssClass="" OnClientClick="return confirm('Are you sure you want to delete this record?');"><i class="fa fa-trash"></i></asp:LinkButton>
+                                                            <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("CourtType_ID") %>'
+                                                                    OnClientClick="return confirm('Are you sure you want to delete this record?');" ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>

@@ -51,37 +51,48 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Zone<span style="color: red;"> *</span></label>
+                                                <label>Ho Name<span style="color: red">*</span></label>
                                                 <span class="pull-right">
+                                                    <asp:RequiredFieldValidator ErrorMessage="Select Ho." ControlToValidate="ddlHoName" runat="server"
+                                                        ValidationGroup="Save" SetFocusOnError="true" InitialValue="0" Display="Dynamic" ForeColor="Red"
+                                                        Text="<i class='fa fa-exclamation-circle' title='Select Ho.'></i>"></asp:RequiredFieldValidator>
+                                                </span>
+                                                <asp:DropDownList runat="server" ID="ddlHoName" CssClass="form-control"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Zone<%--<span style="color: red;"> *</span>--%></label>
+                                                <%--     <span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="Rfv_zone" ValidationGroup="Save"
                                                         ErrorMessage="Select Zone" Text="<i class='fa fa-exclamation-circle' title='Select Zone'></i>"
                                                         ControlToValidate="ddlzone" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
-                                                </span>
+                                                </span>--%>
                                                 <asp:DropDownList runat="server" ID="ddlzone" CssClass="form-control" OnSelectedIndexChanged="ddlzone_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Circle<span style="color: red;"> *</span></label>
-                                                <span class="pull-right">
+                                                <label>Circle<%--<span style="color: red;"> *</span>--%></label>
+                                                <%-- <span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="rfv_circle" ValidationGroup="Save"
                                                         ErrorMessage="Select Circle" Text="<i class='fa fa-exclamation-circle' title='Select Circle'></i>"
                                                         ControlToValidate="ddlcircle" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
-                                                </span>
+                                                </span>--%>
                                                 <asp:DropDownList runat="server" ID="ddlcircle" CssClass="form-control" OnSelectedIndexChanged="ddlcircle_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Division<span style="color: red;"> *</span></label>
-                                                <span class="pull-right">
+                                                <label>Division<%--<span style="color: red;"> *</span>--%></label>
+                                                <%--<span class="pull-right">
                                                     <asp:RequiredFieldValidator ID="Rfv_division" ValidationGroup="Save"
                                                         ErrorMessage="Select Division" Text="<i class='fa fa-exclamation-circle' title='Select Division'></i>"
                                                         ControlToValidate="ddldivision" ForeColor="Red" Display="Dynamic" runat="server" InitialValue="0">
                                                     </asp:RequiredFieldValidator>
-                                                </span>
+                                                </span>--%>
                                                 <asp:DropDownList runat="server" ID="ddldivision" CssClass="form-control"></asp:DropDownList>
                                             </div>
                                         </div>
@@ -102,8 +113,8 @@
                                             </div>
                                         </div>
 
-                                    </div>
-                                    <div class="row">
+                                        <%--</div>--%>
+                                        <%--<div class="row">--%>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Designation Name<span style="color: red;"> *</span></label>
@@ -172,10 +183,16 @@
                                                     <RowStyle HorizontalAlign="Center" />
                                                     <HeaderStyle Font-Bold="true" HorizontalAlign="Center" />
                                                     <Columns>
-                                                        <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                        <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
                                                                 <asp:Label ID="lblOICID" runat="server" Text='<%# Eval("OICMaster_ID") %>' Visible="false"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                          <asp:TemplateField HeaderText="Ho Name">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblHoName" runat="server" Text='<%# Eval("HoName") %>'></asp:Label>
+                                                                <asp:Label ID="lblHoID" runat="server" Text='<%# Eval("Ho_Id") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Zone Name">
@@ -196,7 +213,7 @@
                                                                 <asp:Label ID="lblDivisionID" runat="server" Text='<%# Eval("Division_ID") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                          <asp:TemplateField HeaderText="OIC Name">
+                                                        <asp:TemplateField HeaderText="OIC Name">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblOICName" runat="server" Text='<%# Eval("OICName") %>'></asp:Label>
                                                             </ItemTemplate>
@@ -207,7 +224,7 @@
                                                                 <asp:Label ID="lblDesignationId" runat="server" Text='<%# Eval("Designation_ID") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                      
+
                                                         <asp:TemplateField HeaderText="Mobile No">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblMobileNo" runat="server" Text='<%# Eval("OICMobileNo") %>'></asp:Label>
@@ -220,7 +237,9 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OICMaster_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lnkEditView" runat="server" CommandArgument='<%# Eval("OICMaster_ID") %>' CommandName="EditDetails" ToolTip="Edit" CssClass=""><i class="fa fa-edit"></i></asp:LinkButton>&nbsp;
+                                                                <asp:LinkButton ID="lnkbtndelete" runat="server" CommandName="DeleteDetails" CommandArgument='<%# Eval("OICMaster_ID") %>'
+                                                                    OnClientClick="return confirm('Are you sure you want to delete this record?');" ToolTip="Delete" CssClass=""><i class="fa fa-trash"></i></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>
