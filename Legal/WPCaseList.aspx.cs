@@ -17,7 +17,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
     {
         if (Session["Emp_Id"] != null && Session["Office_Id"] != null)
         {
-            if (!IsPostBack)
+            if (!Page.IsPostBack)
             {
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
@@ -29,7 +29,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
     }
 
@@ -125,33 +125,31 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         {
 
             lblMsg.Text = "";
-            GrdCaseDetails.DataSource = null;
-            GrdCaseDetails.DataBind();
-            if (txtFromDate.Text != "" && txtEndDate.Text != "")
-            {
-                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "FromDate", "EndDate", "Casetype_ID", "CourtID", "CaseNo", "Year" }
-                    , new string[] { Convert.ToDateTime(txtFromDate.Text, cult).ToString("yyyy/MM/dd"), 
-                        Convert.ToDateTime(txtEndDate.Text, cult).ToString("yyyy/MM/dd"), ddlCaseType.SelectedValue,ddlCourt.SelectedValue,ddlCaseNo.SelectedItem.Text,ddlCaseYear.SelectedItem.Text }, "dataset");
-
-            }
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                GrdCaseDetails.DataSource = ds;
-                GrdCaseDetails.DataBind();
-                GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
-                GrdCaseDetails.UseAccessibleHeader = true;
-            }
-            else
+            if (ddlCaseType.SelectedIndex > 0 || ddlCaseYear.SelectedIndex > 0 || ddlCourt.SelectedIndex > 0 || ddlCaseNo.SelectedIndex > 0 || ddlCaseStatus.SelectedIndex > 0)
             {
                 GrdCaseDetails.DataSource = null;
                 GrdCaseDetails.DataBind();
+                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "Casetype_ID", "CourtType_Id", "CaseNo", "Year", "CaseStatus" }
+                        , new string[] { ddlCaseType.SelectedValue, ddlCourt.SelectedValue, ddlCaseNo.SelectedItem.Text, ddlCaseYear.SelectedItem.Text, ddlCaseStatus.SelectedItem.Text }, "dataset");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    GrdCaseDetails.DataSource = ds;
+                    GrdCaseDetails.DataBind();
+                    GrdCaseDetails.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    GrdCaseDetails.UseAccessibleHeader = true;
+                }
+                else { GrdCaseDetails.DataSource = null; GrdCaseDetails.DataBind(); }
             }
-
+            else
+            {
+                GrdCaseDetails.DataSource = null; GrdCaseDetails.DataBind();
+            }
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
+        finally { ds.Clear(); }
     }
     protected void GrdCaseDetails_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -166,20 +164,8 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
+            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
-    //protected void GrdCaseDetails_PageIndexChanging(object sender, GridViewPageEventArgs e)
-    //{
-    //    try
-    //    {
-    //        GrdCaseDetails.PageIndex = e.NewPageIndex;
-    //        btnSearch_Click(sender,  e);
-    //        GrdCaseDetails.DataBind();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        lblMsg.Text = obj.Alert("fa-ban", "Alert-danger", "Sorry !", ex.Message.ToString());
-    //    }
-    //}
+
 }

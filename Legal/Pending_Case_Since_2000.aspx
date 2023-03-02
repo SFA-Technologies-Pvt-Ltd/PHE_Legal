@@ -275,7 +275,7 @@
                             <div class="card-body" style="opacity: 1;">
                                 <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found" 
                                     AutoGenerateColumns="false" CssClass="table-responsive" Width="100%" OnPageIndexChanging="grdCaseTypeDetail_PageIndexChanging"
-                                    OnRowCommand="grdCaseTypeDetail_RowCommand">
+                                    OnRowCommand="grdCaseTypeDetail_RowCommand" OnRowDataBound="grdCaseTypeDetail_RowDataBound">
                                     <Columns>
                                         <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Left">
                                             <ItemTemplate>
@@ -308,7 +308,7 @@
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="Case Subject">
                                             <ItemTemplate>
-                                                <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubjectId") %>' runat="server" />
+                                                <asp:Label ID="lblCaseSubjectId" Text='<%#Eval("CaseSubject") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:DropDownList ID="ddlCaseSubject" runat="server">
@@ -318,7 +318,7 @@
                                       
                                         <asp:TemplateField HeaderText="OIC Name">
                                             <ItemTemplate>
-                                                <asp:Label ID="lblOICName" Text='<%#Eval("OICId") %>' runat="server" />
+                                                <asp:Label ID="lblOICName" Text='<%#Eval("OICName") %>' runat="server" />
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:HiddenField ID="hdnOICId" Value='<%#Eval("OICId") %>' runat="server" />                                                

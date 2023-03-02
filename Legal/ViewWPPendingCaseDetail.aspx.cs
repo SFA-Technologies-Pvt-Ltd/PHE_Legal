@@ -23,22 +23,29 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
                 {
                     ViewState["CaseID"] = Request.QueryString["CaseID"].ToString();
                     BindCaseDetail();
+                   // PageID = 2 from Conclude Report
+                    // PageID = 3 from CaseSubject Report
+                    if (Request.QueryString["pageID"] == "2" || Request.QueryString["pageID"] == "4")
+                    {
+                        dvOrderSummary.Visible = true;
+                        dvCaseDisposalType.Visible = true;
+                        Compilance_Div.Visible = true;
+                    }
                 }
             }
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
     }
-
+    #region Bind Case Detail
     protected void BindCaseDetail()
     {
         try
         {
             // lblMsg.Text = "";
-            grdPetitionerDtl.DataSource = null;
-            grdPetitionerDtl.DataBind();
+
             GrdResponderDtl.DataSource = null;
             GrdResponderDtl.DataBind();
             GrdHearingDtl.DataSource = null;
@@ -48,21 +55,33 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
                 , new string[] { ViewState["CaseID"].ToString() }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                grdPetitionerDtl.DataSource = ds;
-                grdPetitionerDtl.DataBind();
-                GrdResponderDtl.DataSource = ds;
-                GrdResponderDtl.DataBind();
-                if (ds.Tables[0].Rows[0]["HearingDtl"].ToString() != "")
-                {
-                    FieldHearingDtl.Visible = true;
-                    GrdHearingDtl.DataSource = ds;
-                    GrdHearingDtl.DataBind();
-                }
+                if (ds.Tables[0].Rows[0]["CaseNo"].ToString() != "") lblCaseNo.Text = ds.Tables[0].Rows[0]["CaseNo"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseYear"].ToString() != "") txtCaseYear.Text = ds.Tables[0].Rows[0]["CaseYear"].ToString();
+                if (ds.Tables[0].Rows[0]["CourtTypeName"].ToString() != "") txtCourtType.Text = ds.Tables[0].Rows[0]["CourtTypeName"].ToString();
+                if (ds.Tables[0].Rows[0]["District_Name"].ToString() != "") txtCourtLocation.Text = ds.Tables[0].Rows[0]["District_Name"].ToString();
+                if (ds.Tables[0].Rows[0]["PartyName"].ToString() != "") txtParty.Text = ds.Tables[0].Rows[0]["PartyName"].ToString();
+                if (ds.Tables[0].Rows[0]["Casetype_Name"].ToString() != "") txtCasetype.Text = ds.Tables[0].Rows[0]["Casetype_Name"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseSubject"].ToString() != "") txtCaseSubject.Text = ds.Tables[0].Rows[0]["CaseSubject"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseSubSubject"].ToString() != "") txtCaseSubSubject.Text = ds.Tables[0].Rows[0]["CaseSubSubject"].ToString();
+                if (ds.Tables[0].Rows[0]["OICNAME"].ToString() != "") txtOicName.Text = ds.Tables[0].Rows[0]["OICNAME"].ToString();
+                if (ds.Tables[0].Rows[0]["OICMobileNO"].ToString() != "") txtOicMobileNo.Text = ds.Tables[0].Rows[0]["OICMobileNO"].ToString();
+                if (ds.Tables[0].Rows[0]["OICEmailID"].ToString() != "") txtOicEmailId.Text = ds.Tables[0].Rows[0]["OICEmailID"].ToString();
+                if (ds.Tables[0].Rows[0]["HighPriorityCase_Status"].ToString() != "") txtHighprioritycase.Text = ds.Tables[0].Rows[0]["HighPriorityCase_Status"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseDetail"].ToString() != "") txtCaseDetail.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseStatus"].ToString() != "") txtCaseStatus.Text = ds.Tables[0].Rows[0]["CaseStatus"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseDisposeType"].ToString() != "") txtcasedisposaltype.Text = ds.Tables[0].Rows[0]["CaseDisposeType"].ToString();
+                if (ds.Tables[0].Rows[0]["OrderSummary"].ToString() != "") txtOrderSummary.Text = ds.Tables[0].Rows[0]["OrderSummary"].ToString();
+                if (ds.Tables[0].Rows[0]["Compliance_Status"].ToString() != "") txtComplianceStatus.Text = ds.Tables[0].Rows[0]["Compliance_Status"].ToString();
+
+                if (ds.Tables[1].Rows.Count > 0) GrdPetitioner.DataSource = ds.Tables[1]; GrdPetitioner.DataBind();
+                if (ds.Tables[2].Rows.Count > 0) GrdPetiAdv.DataSource = ds.Tables[2]; GrdPetiAdv.DataBind();
+                if (ds.Tables[3].Rows.Count > 0) GrdDeptAdv.DataSource = ds.Tables[3]; GrdDeptAdv.DataBind();
+                if (ds.Tables[4].Rows.Count > 0) GrdResponderDtl.DataSource = ds.Tables[4]; GrdResponderDtl.DataBind();
+                if (ds.Tables[5].Rows[0]["CaseDoc_ID"].ToString() != "") GrdDocument.DataSource = ds.Tables[5]; GrdDocument.DataBind();
+                if (ds.Tables[6].Rows[0]["NextHearing_ID"].ToString() != "") GrdHearingDtl.DataSource = ds.Tables[6]; GrdHearingDtl.DataBind();
             }
             else
             {
-                grdPetitionerDtl.DataSource = null;
-                grdPetitionerDtl.DataBind();
                 GrdResponderDtl.DataSource = null;
                 GrdResponderDtl.DataBind();
                 GrdHearingDtl.DataSource = null;
@@ -71,7 +90,49 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
+    #region Row Command
+    protected void GrdDocument_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        try
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                HyperLink Link = (HyperLink)e.Row.FindControl("hyperLink");
+                HyperLink DocWithFolderPath = (HyperLink)e.Row.FindControl("lnkDocPath");
+                Label lbldoc = (Label)e.Row.FindControl("lbldoc");
+
+                string name = lbldoc.Text;
+                name.StartsWith("https");
+                if (name.StartsWith("https") == true)
+                    Link.Visible = true;
+                else DocWithFolderPath.Visible = true;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    #endregion
+    #region Btn Back
+    protected void lbkBack_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Request.QueryString["pageID"] == "1") Response.Redirect("../Legal/pendingwpreport.aspx", false);
+            if (Request.QueryString["pageID"] == "2") Response.Redirect("../Legal/ConcludedwpReport.aspx", false);
+            if (Request.QueryString["pageID"] == "3") Response.Redirect("../Legal/SubjectWiseCaseDtl.aspx", false);
+            if (Request.QueryString["pageID"] == "4") Response.Redirect("../Legal/disposecaserpt.aspx", false);
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    #endregion
 }

@@ -1,9 +1,12 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Legal/MainMaster.master" AutoEventWireup="true" CodeFile="~/Legal/OICWiseOldCaseDashBoard.aspx.cs" Inherits="mis_Legal_OICWiseOldCaseDashBoard" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-
+    <link href="../Main_plugins/fontawesome-free/css/fontawesome.min.css" rel="stylesheet" />
+    <script src="../Main_plugins/fontawesome-free/js/fontawesome.min.js"></script>
+    <script src="../Main_plugins/fontawesome-free/js/fontawesome.js"></script>
+    <link href="../Main_plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="../Main_plugins/fontawesome-free/css/fontawesome.css" rel="stylesheet" />
     <style>
-     
         #myModal {
             padding-right: 256px;
             /*padding: 0 256px 0 0;*/
@@ -102,7 +105,6 @@
 
         .Buttons {
             border-radius: 21%;
-
             background-color: white;
         }
 
@@ -114,14 +116,11 @@
             font-size: 18px;
             font-weight: bold;
             color: blue;
-           
         }
 
         .Space {
             margin-bottom: 0rem;
-           
-        /*     padding:1rem;*/
-             
+            /*     padding:1rem;*/
         }
 
         .NewCaseCourtImage {
@@ -137,10 +136,11 @@
         }
 
 
-        svg{
-                border-radius: 1.1rem;
+        svg {
+            border-radius: 1.1rem;
+            border: 2px solid #3366CB;
+            box-shadow: 5px 10px;
         }
-
     </style>
 
     <script type="text/javascript">
@@ -148,37 +148,39 @@
             document.forms[0].target = "_blank";
         }
     </script>
-    
+
     <style>
-        .dvpading{
-            margin-top:0.5rem;
-            margin-bottom:0.5rem;
+        .dvpading {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .card-body-custom-Color{
-         background: linear-gradient(to bottom, #e5e781 0%, #cece91 100%);
+        .card-body-custom-Color {
+            background: linear-gradient(to bottom, #fffeb6 0%, #fffeb6 100%);
         }
+
         fieldset {
-    font-family: sans-serif;
-    border: 2px solid #1F497D;
-    border-radius:0.7rem;
-    padding: 15px;
-    margin-top:1rem;
-}
+            font-family: sans-serif;
+            border: 2px solid #1F497D;
+            border-radius: 0.7rem;
+            padding: 15px;
+            margin-top: 1rem;
+        }
 
-    fieldset legend {
-        background: #1F497D;
-        color: #fff;
-        padding: 5px 10px;
-        font-size: 0.9rem;
-        border-radius: 5px;
-        box-shadow: 0 0 0 5px #ddd;
-        margin-left: 1.2rem;
-    }
-    legend{
-        width:auto !important;
-        max-width:50%;
-    }
+            fieldset legend {
+                background: #1F497D;
+                color: #fff;
+                padding: 5px 10px;
+                font-size: 0.9rem;
+                border-radius: 5px;
+                box-shadow: 0 0 0 5px #ddd;
+                margin-left: 1.2rem;
+            }
+
+        legend {
+            width: auto !important;
+            max-width: 50%;
+        }
     </style>
 
 
@@ -277,79 +279,81 @@
                         <span style="font-size: 18px; color: #e5e5e5">Running Cases Dashboard</span>
                     </div>
 
-                    <div class="align-items-center;" style="border: 5px solid; text-align: center;">
+                    <div class="align-items-center;" style=" text-align: center;">
 
                         <div class="card-body card-body-custom-Color">
                             <div class="row form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
+                                    <i class="fa-solid fa-star" style="font-size: x-large"></i>
+                                    <%-- <img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
                                     <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL <span id="spnhighpriorityCase" runat="server" style="font-weight: bold; font-size: 18px;"></span></asp:LinkButton>
                                 </div>
                             </div>
 
-                      
+                            <br />
 
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-12 col-sm-12 ">
+                            <div class="row form-group" style="text-align: left;">
+                                <div class="col-lg-6 col-md-12 col-sm-12 mt-2 ">
 
-                           
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;
+                                    <i class="fa-solid fa-scale-unbalanced-flip" style="font-size: x-large"></i>
+                                    <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;
                                 <span class="Heading">COURT WISE :
                                     <asp:Label ID="lblCaseCount" runat="server" CssClass="Heading" Style="color: #201f1e;" />
                                 </span>
-                                <div id="sbid" runat="server" class="dvpading"></div>
+                                    <div id="sbid" runat="server" class="dvpading"></div>
 
-                            </div>
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE ORDER BY DIRECTION :
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12" style="font-size: x-large">
+                                    <i class="fa-solid fa-arrows-turn-to-dots"></i>
+                                    <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">COURT WISE ORDER BY DIRECTION :
                                     <asp:Label ID="lblCaseCount1" runat="server" CssClass="Heading" Style="color: #201f1e;" />
-                                </span>
-                           
-                                <div id="sbid1" runat="server" class="dvpading" ></div>
+                                    </span>
+
+                                    <div id="sbid1" runat="server" class="dvpading"></div>
+
+                                </div>
 
                             </div>
-
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE SUBJECT WISE :
+                            <div class="row form-group" style="text-align: left; margin-top: 2.5rem;">
+                                <div class="col-lg-6 col-md-12 col-sm-12" style="display: none;">
+                                    <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE SUBJECT WISE :
                                     <asp:Label ID="lblCaseCount2" runat="server" CssClass="Heading" Style="color: #201f1e;" />
-                                </span>
-                                <div id="sbid2" runat="server" class="dvpading"></div>
-                            </div>
+                                    </span>
+                                    <div id="sbid2" runat="server" class="dvpading"></div>
+                                </div>
 
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">COURT WISE CONTEMPT CASES:
+                                <div class="col-lg-6 col-md-12 col-sm-12" style="font-size: larger">
+                                    <i class="fa-solid fa-gavel" style="font-size: x-large"></i>
+                                    <%--<img src="../image/Legal%201.png" style="height: 30px;" />--%>&nbsp;&nbsp;<span class="Heading">COURT WISE CONTEMPT CASES:
                                     <asp:Label ID="lblConcCount" runat="server" CssClass="Heading" Style="color: #201f1e;" />
-                                </span>
-                                <div id="cwcc" runat="server" class="dvpading"></div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
+                                    </span>
+                                    <div id="cwcc" runat="server" class="dvpading"></div>
+                                </div>
+                          
 
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION COMPLAINES :
+                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                    <i class="fa-solid fa-thumbs-up" style="font-size: x-large"></i>
+                                    <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION COMPLAINES :
                                     <asp:Label ID="lblCaseCount3" runat="server" CssClass="Heading" Style="color: #201f1e;" />
-                                </span>
-                                <div id="sbid3" runat="server" class="dvpading"></div>
-                            </div>
+                                    </span>
+                                    <div id="sbid3" runat="server" class="dvpading"></div>
+                                </div>
 
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <%--<img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">
+                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                    <%--<img src="../image/Legal%201.png" style="height: 30px;" />&nbsp;&nbsp;<span class="Heading">
                                     <asp:Label ID="Label2" runat="server" CssClass="Heading" Style="color: #201f1e;" />
                                 </span>--%>
-                                <div id="Div2" runat="server" class="dvpading"></div>
+                                    <div id="Div2" runat="server" class="dvpading"></div>
+                                </div>
+
+
                             </div>
-
-
                         </div>
-                              </div>
-                </div>
+                    </div>
                 </div>
 
             </div>
-            <div class="container-fluid">
+            <div class="container-fluid" style="display:none">
                 <div class="card card-body" style="background:linear-gradient(to bottom, #fbfb9d 0%, #ffffc2a3 100%);">
                     <fieldset>
                         <legend>Live Informations</legend>
@@ -396,53 +400,53 @@
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
     <script>
-        $('.datatable').DataTable({
-            paging: false,
-            columnDefs: [{
-                targets: 'no-sort',
-                orderable: false
-            }],
+                                                         $('.datatable').DataTable({
+                                                             paging: false,
+                                                             columnDefs: [{
+                                                                 targets: 'no-sort',
+                                                                 orderable: false
+                                                             }],
 
-            "bSort": false,
+                                                             "bSort": false,
 
-            dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-                '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-                '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-            fixedHeader: {
-                header: true
-            },
-            buttons: {
-                buttons: [{
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> Print',
-                    title: $('h1').text(),
-                    exportOptions: {
+                                                             dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                                                                 '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                                                                 '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+                                                             fixedHeader: {
+                                                                 header: true
+                                                             },
+                                                             buttons: {
+                                                                 buttons: [{
+                                                                     extend: 'print',
+                                                                     text: '<i class="fa fa-print"></i> Print',
+                                                                     title: $('h1').text(),
+                                                                     exportOptions: {
 
-                        // javascript: print(),
+                                                                         // javascript: print(),
 
-                        columns: [0, 1, 2, 3, 4, 5]
-                    },
-                    footer: true,
-                    autoPrint: true
-                }, {
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel-o"></i> Excel',
-                    title: $('h1').text(),
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5]
-                    },
-                    footer: true
-                }],
-                dom: {
-                    container: {
-                        className: 'dt-buttons'
-                    },
-                    button: {
-                        className: 'btn btn-default'
-                    }
-                }
-            }
-        });
+                                                                         columns: [0, 1, 2, 3, 4, 5]
+                                                                     },
+                                                                     footer: true,
+                                                                     autoPrint: true
+                                                                 }, {
+                                                                     extend: 'excel',
+                                                                     text: '<i class="fa fa-file-excel-o"></i> Excel',
+                                                                     title: $('h1').text(),
+                                                                     exportOptions: {
+                                                                         columns: [0, 1, 2, 3, 4, 5]
+                                                                     },
+                                                                     footer: true
+                                                                 }],
+                                                                 dom: {
+                                                                     container: {
+                                                                         className: 'dt-buttons'
+                                                                     },
+                                                                     button: {
+                                                                         className: 'btn btn-default'
+                                                                     }
+                                                                 }
+                                                             }
+                                                         });
 
     </script>
 </asp:Content>

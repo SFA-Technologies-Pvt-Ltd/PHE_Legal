@@ -24,7 +24,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Hearing From Date</label><span style="color: red;"><b> *</b></span>
+                                        <label>From Date</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save"
                                             ErrorMessage="Enter Hearing Date" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtHearingFromDate" Display="Dynamic" runat="server">
@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Hearing To Date</label><span style="color: red;"><b> *</b></span>
+                                        <label>To Date</label><span style="color: red;"><b> *</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Save"
                                             ErrorMessage="Enter Hearing Date" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="txtHearingToDate" Display="Dynamic" runat="server">
@@ -52,26 +52,14 @@
                                         <asp:DropDownList ID="ddlCourtType" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-                                <%--<div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>OIC Name</label><span style="color: red;"><b> *</b></span>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="Save"
-                                            ErrorMessage="Select OIC Name." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                            ControlToValidate="ddlOICName" Display="Dynamic" runat="server" InitialValue="0">
-                                        </asp:RequiredFieldValidator>
-                                        <asp:DropDownList ID="ddlOICName" runat="server" CssClass="form-control"></asp:DropDownList>
-                                    </div>
-                                </div>--%>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Search" OnClick="btnSearch_Click" />
-                                        <%-- </div>--%>
-                                        <%-- </div>
-                                <div class="col-md-3">--%>
-                                        <%--<div class="form-group">--%>
-                                        <a href="OICWiseHearingDateReport.aspx" class="btn btn-default">Clear</a>
+                                <div class="col-md-3 mt-3">
+                                    <div class="row">
+                                        <div class="col-md-4 mt-3">
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary btn-block" Text="Search" OnClick="btnSearch_Click" />
+                                        </div>
+                                        <div class="col-md-4 mt-3">
+                                            <a href="OICWiseHearingDateReport.aspx" class="btn btn-default btn-block">Clear</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +79,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="OICName" HeaderText="OIC Name" />
-                                                <asp:TemplateField HeaderText="पिछले 30 दिनो से लम्बित प्रकरण" HeaderStyle-HorizontalAlign="Center">
+                                                <asp:TemplateField HeaderText="उक्त समय से लम्बित प्रकरण" HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:HyperLink runat="server" NavigateUrl='<%# string.Format("OICWiseHearingDateShow.aspx?U={0}&F={1}&O={2}&C={3}&HF={4}&HT={5}",
                     Eval("UniqueNo1").ToString(),"1",Eval("OicId"),Eval("Court"),Eval("HearingFrom"),Eval("HearingTo")) %>'
@@ -99,7 +87,7 @@
                                                         <%--<asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("Last30daysPendingCaseCount") %>'></asp:Label>--%>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="पिछले 30 दिनों में प्राप्त प्रकरण">
+                                                <asp:TemplateField HeaderText="उक्त समय में प्राप्त प्रकरण">
                                                     <ItemTemplate>
                                                         <asp:HyperLink runat="server" NavigateUrl='<%# string.Format("OICWiseHearingDateShow.aspx?U={0}&F={1}&O={2}&C={3}&HF={4}&HT={5}",
                     Eval("UniqueNo2").ToString(),"2",Eval("OicId"),Eval("Court"),Eval("HearingFrom"),Eval("HearingTo")) %>'

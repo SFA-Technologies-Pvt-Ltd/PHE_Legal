@@ -184,7 +184,7 @@ public partial class Legal_AddNewCase : System.Web.UI.Page
     protected void FillYear()
     {
         ddlCaseYear.Items.Clear();
-        for (int i = 2018; i <= DateTime.Now.Year; i++)
+        for (int i = 1950; i <= DateTime.Now.Year; i++)
         {
             ddlCaseYear.Items.Add(i.ToString());
         }

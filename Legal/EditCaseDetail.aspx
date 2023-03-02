@@ -88,7 +88,7 @@
                                                 <span style="color: red;"><b>*</b></span>
                                                 <asp:RequiredFieldValidator ID="RfvCaseSubject" ValidationGroup="CaseDtl"
                                                     ErrorMessage="Select Case Subject." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server">
+                                                    ControlToValidate="ddlCaseSubject" Display="Dynamic" runat="server" InitialValue="0">
                                                 </asp:RequiredFieldValidator>
                                                 <asp:DropDownList ID="ddlCaseSubject" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlCaseSubject_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
@@ -135,7 +135,7 @@
                                             <div class="form-group">
                                                 <label>High Priority Case</label>
                                                 <span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvHighpriortiy" ValidationGroup="Save"
+                                                <asp:RequiredFieldValidator ID="rfvHighpriortiy" ValidationGroup="CaseDtl"
                                                     ErrorMessage="Select High Priority Case." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="ddlHighprioritycase" Display="Dynamic" runat="server" InitialValue="0">
                                                 </asp:RequiredFieldValidator>
@@ -151,15 +151,16 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>
-                                                    Case Detail/Remark</label><span style="color: red;"><b> *</b></span><br />
+                                                    Case Detail/Remark</label>
+                                               <%-- <span style="color: red;"><b> *</b></span><br />
                                                 <asp:RequiredFieldValidator ID="RFVActionByDistrict" ValidationGroup="CaseDtl"
                                                     ErrorMessage="Enter Case Detail." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtCaseDetail" Display="Dynamic" runat="server">
-                                                </asp:RequiredFieldValidator>
+                                                </asp:RequiredFieldValidator>--%>
                                                 <asp:TextBox ID="txtCaseDetail" runat="server" TextMode="MultiLine" onkeyup="javascript:capFirst(this);" CssClass="form-control" AutoComplete="off" MaxLength="250"></asp:TextBox>
-                                                <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator9" Display="Dynamic" ControlToValidate="txtCaseDetail"
+                                                <%--<asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator9" Display="Dynamic" ControlToValidate="txtCaseDetail"
                                                     ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="CaseDtl" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                                </asp:RegularExpressionValidator>
+                                                </asp:RegularExpressionValidator>--%>
                                             </div>
                                         </div>
                                     </div>
@@ -701,7 +702,7 @@
                                         <div class="col-md-9">
                                             <div class="table-responsive">
                                                 <asp:GridView ID="GrdCaseDocument" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false"
-                                                    DataKeyNames="CaseDoc_ID" OnRowCommand="GrdCaseDocument_RowCommand" EmptyDataText="NO RECORD FOUND">
+                                                    DataKeyNames="CaseDoc_ID" OnRowCommand="GrdCaseDocument_RowCommand" EmptyDataText="NO RECORD FOUND" OnRowDataBound="GrdCaseDocument_RowDataBound">
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
@@ -717,8 +718,9 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
-                                                                <asp:HyperLink ID="hyperViewDoc" runat="server" CssClass="fa fa-eye" Target="_blank" Enabled='<%#  Eval("Doc_Path").ToString() == "" ? false : true %>' NavigateUrl='<%# "../Legal/AddNewCaseCourtDoc/" +  Eval("Doc_Path") %>'></asp:HyperLink>
+                                                                <asp:HyperLink ID="hyperViewDoc" runat="server" Visible="false" CssClass="fa fa-eye" Target="_blank" Enabled='<%#  Eval("Doc_Path").ToString() == "" ? false : true %>' NavigateUrl='<%# "../Legal/AddNewCaseCourtDoc/" +  Eval("Doc_Path") %>'></asp:HyperLink>
                                                                 <asp:Label ID="lblDocPath" runat="server" Text='<%# Eval("Doc_Path") %>' Visible="false"></asp:Label>
+                                                                <asp:HyperLink ID="hyperViewLink" runat="server" CssClass="fa fa-eye" Visible="false" Target="_blank" NavigateUrl='<%# Eval("Doc_Path") %>'></asp:HyperLink>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
@@ -760,6 +762,24 @@
                                                     ControlToValidate="ddlDisponsType" Display="Dynamic" InitialValue="0" runat="server">
                                                 </asp:RequiredFieldValidator>
                                                 <asp:DropDownList ID="ddlDisponsType" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlDisponsType_SelectedIndexChanged">
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="CimplianceSt_Div" runat="server" visible="false">
+                                            <div class="form-group">
+                                                <label>
+                                                    Compliance Status
+                                                </label>
+                                                <span style="color: red;"><b>*</b></span>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ValidationGroup="CaseDispose" Enabled="false"
+                                                    ErrorMessage="Select Compliance" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="ddlCompliaceSt" Display="Dynamic" InitialValue="0" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                                <asp:DropDownList ID="ddlCompliaceSt" runat="server" CssClass="form-control">
+                                                    <asp:ListItem Value="0">Select</asp:ListItem>
+                                                    <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                    <asp:ListItem Value="2">No</asp:ListItem>
+                                                    <asp:ListItem Value="3">Pending</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
                                         </div>
@@ -836,9 +856,14 @@
                                                                 <asp:Label ID="lblDisposalStatus" runat="server" Text='<%# Eval("CaseDisposal_Status") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                         <asp:TemplateField HeaderText="Disposal<br />type" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
+                                                        <asp:TemplateField HeaderText="Disposal<br />type" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblDisposaltype" runat="server" Text='<%# Eval("CaseDisposeType") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                         <asp:TemplateField HeaderText="Compliance<br />Status" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblcomplianceSts" runat="server" Text='<%# Eval("Compliance_Status") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Compliance<br />Timeline(In Days)" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
@@ -851,7 +876,7 @@
                                                                 <asp:Label ID="lblorderSummary" runat="server" Text='<%# Eval("OrderSummary") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                              
+
                                                         <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" NavigateUrl='<%# "../Legal/DisposalDocs/" + Eval("CaseDisposal_Doc") %>' CssClass="fa fa-eye"></asp:HyperLink>

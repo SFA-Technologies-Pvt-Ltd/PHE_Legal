@@ -59,9 +59,15 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
 
         for (int i = 0; i < dsCasecount.Tables[1].Rows.Count; i++)
         {
-            tCount += Convert.ToInt32(dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"]);
-            str += "<tr><td style='font-weight:bold;'>" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "</td><td style='font-size: 22px;'><a href=\"Pending_Case_Since_2000.aspx?CaseType=" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "\" target='_blank'>" + dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"].ToString() + "</a></td>";
-            str += "</tr> ";
+            // tCount += Convert.ToInt32(dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"]);
+            // str += "<tr><td style='font-weight:bold;'>" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "</td><td style='font-size: 22px;'><a href=\"Pending_Case_Since_2000.aspx?CaseType=" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "\" target='_blank'>" + dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"].ToString() + "</a></td>";
+            // str += "</tr> ";
+			tCount += Convert.ToInt32(dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"]);
+            if (!string.IsNullOrEmpty(dsCasecount.Tables[1].Rows[i]["CaseType"].ToString()))
+            {
+                str += "<tr><td style='font-weight:bold;'>" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "</td><td style='font-size: 22px;'><a href=\"Pending_Case_Since_2000.aspx?CaseType=" + dsCasecount.Tables[1].Rows[i]["CaseType"].ToString() + "\" target='_blank'>" + dsCasecount.Tables[1].Rows[i]["CaseTypeWisePendingCases"].ToString() + "</a></td>";
+                str += "</tr> ";
+            }
         }
         str += "</table>";
         lblCasetypeCountno.Text = "(PENDENCY : " + tCount.ToString() + " No's)";

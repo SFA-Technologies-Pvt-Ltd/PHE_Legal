@@ -71,9 +71,10 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     {
         try
         {
-            dsCase = obj.ByDataSet("select distinct UniqueNo," +
-                "IsNUll((select distinct CaseType+'/'+CaseNo+'/'+CAST(year as varchar(4))+'-'+Court from  tbl_OldCaseNewEntry where UniqueNo= a.UniqueNo),'') OldFilingNo," +
-                "FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail a where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
+            //dsCase = obj.ByDataSet("select distinct UniqueNo," +
+            //    "IsNUll((select distinct CaseType+'/'+CaseNo+'/'+CAST(year as varchar(4))+'-'+Court from  tbl_OldCaseNewEntry where UniqueNo= a.UniqueNo),'') OldFilingNo," +
+            //    "FilingNo,Court,Petitioner,Respondent,RespondentOffice,OICId,OICMobileNo,CaseSubjectId,Remarks,HearingDate,CaseNo from tbl_OldCaseDetail a where CaseType='" + Convert.ToString(CaseType) + "' order by HearingDate Desc");
+            dsCase = obj.ByProcedure("USP_Select_OldCase", new string[] { "CaseType" }, new string[] { CaseType }, "dataset");
             if (dsCase.Tables[0].Rows.Count > 0)
             {
                 ViewState["dt"] = null;
@@ -502,6 +503,7 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
+    
     {
         try
         {
@@ -540,6 +542,45 @@ public partial class Legal_Pending_Case_Since_2000 : System.Web.UI.Page
         ViewState["dtsearch"] = null;
         BindGrid(Request.QueryString["CaseType"]);
         txtSearch.Text = "";
+    }
+    public string convertQuotes(string str)
+    {
+        return str.Replace("'", "''");
+    }
+    protected void grdCaseTypeDetail_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        int OICId = 0;
+        //int CaseSubjectId = 0;
+        //int RespondentOfficeId = 0;
+        string RES_Office = string.Empty;
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            Label lblRespondentOffice = (Label)e.Row.FindControl("txtRespondentOffice");
+
+            if (!string.IsNullOrEmpty(lblRespondentOffice.Text))
+            {
+
+                string[] RespondentOfficeStr = convertQuotes(lblRespondentOffice.Text).Trim().Split(',');
+
+                for (int i = 0; i < RespondentOfficeStr.Length; i++)
+                {
+                    dsCase = obj.ByDataSet("select Respondent_Office,Respondent_office_Id from  tblRespondentOffice where Respondent_office_Id=" + Convert.ToInt32(RespondentOfficeStr[i]));
+                    if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+                        RES_Office = RES_Office + dsCase.Tables[0].Rows[0]["Respondent_Office"].ToString() + ",";
+                }
+            }
+            lblRespondentOffice.Text = RES_Office;
+            // Label lblOICName = (Label)e.Row.FindControl("lblOICName");
+            // if (lblOICName.Text != "")
+            // {
+                // OICId = Convert.ToInt32(lblOICName.Text);
+                // dsCase = obj.ByDataSet("select OICMaster_ID,OICName,OICEmailID,OICMobileNo,Office_ID,Zone_ID,Circle_ID,Division_ID from tblOICMaster where OICMaster_ID=" + OICId + " and Isactive=1");
+                // if (dsCase.Tables.Count > 0 && dsCase.Tables[0].Rows.Count > 0)
+                    // lblOICName.Text = dsCase.Tables[0].Rows[0]["OICName"].ToString();
+            // }
+
+
+        }
     }
 }
 

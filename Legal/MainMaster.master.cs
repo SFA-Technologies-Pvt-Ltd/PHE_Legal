@@ -197,14 +197,16 @@ public partial class Legal_MainMaster : System.Web.UI.MasterPage
         else
         {
             //Response.Redirect("~/Login.aspx");
-            Response.Redirect("~/Login.aspx");
+            Response.Redirect("~/Login.aspx",false);
         }
 
     }
     protected void btnlogout_Click(object sender, EventArgs e)
     {
 
+      Session.Abandon();
+        Session.Clear();
         // Response.Redirect("~/Login.aspx");
-        Response.Redirect("~/Login.aspx");
+        Response.Redirect("~/Login.aspx", false);
     }
 }

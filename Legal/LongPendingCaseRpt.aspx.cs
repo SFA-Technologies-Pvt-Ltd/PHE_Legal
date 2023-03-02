@@ -22,7 +22,7 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("/Login.aspx");
+            Response.Redirect("/Login.aspx", false);
         }
     }
     private void GetCaseType()
@@ -85,7 +85,6 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
     {
         try
         {
-
             if (Page.IsValid)
             {
                 BindGrid();
@@ -133,11 +132,7 @@ public partial class Legal_LongPendingCaseRpt : System.Web.UI.Page
             txtNodalEmailID.Text = lblNodalEmail.Text;
             txtOICName.Text = lblOICName.Text;
             txtOICMObile.Text = lblOICMObile.Text;
-            txtOICEmail.Text = lblOICEmail.Text;
-            //txtAdvocatename.Text = lblAdvocateName.Text;
-            //txtAdvocatemobile.Text = lblAdvocateMobile.Text;
-            //txtAdvocateEmailID.Text = lblAdvocateEmail.Text;
-            // txtNextHearingDate.Text = lblHearingDate.Text;
+            txtOICEmail.Text = lblOICEmail.Text;            
             txtPetitionerName.Text = lblPetitionerName.Text;
             txtCasesubject.Text = lblCaseSubject.Text;
             txtCaseDtl.Text = lblCaseDetail.Text;

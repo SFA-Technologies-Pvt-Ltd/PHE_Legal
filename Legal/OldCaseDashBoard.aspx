@@ -363,7 +363,8 @@
                 </div>
 
             </div>
-            <div class="container-fluid">
+            <%-- this Div Comment By bhanu on 28/02/2023 Due to order by Utkarsh sir. --%>
+            <div class="container-fluid" style="display:none;">
                 <div class="card card-body" style="background: linear-gradient(to bottom, #fffeb6 0%, #fffeb6 100%);">
                     <fieldset>
                         <legend>Live Informations</legend>

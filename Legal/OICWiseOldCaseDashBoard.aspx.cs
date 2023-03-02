@@ -12,6 +12,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 {
     DataSet ds;
     AbstApiDBApi objdb = new APIProcedure();
+    int OicId;
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -20,7 +21,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
             {
                 if (!IsPostBack)
                 {
-                    int OicId = 1;
+                    OicId = Convert.ToInt32(Session["OICMaster_ID"]);
                     BIndWACaseCount(OicId);
                     //UpComingHearing();
                     CourtTypeCase(OicId);
@@ -35,7 +36,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
             }
             else
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
             }
         }
         catch (Exception ex)
@@ -45,6 +46,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 
     }
 
+    // Court Wise Case Count
     protected void BindCaseTypeCount(int OicId)
     {
         DataSet dsCasecount = new DataSet();
@@ -64,7 +66,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
             str += "</tr> ";
         }
         str += "</table>";
-        lblCasetypeCountno.Text = "(TOTAL PENDING CASES : " + tCount.ToString() + " No's)";
+        lblCasetypeCountno.Text = "(PENDING CASES : " + tCount.ToString() + " No's)";
         CasetypeCountID1.InnerHtml = str;
         string str2 = "";
         str2 += "<table border='1' style='text-align:center;height:573px;color:darkcyan;font-size:18px;width:100%;'><tr style='background-color: #fff;width:100%;'><td rowspan='2' style='font-weight:bold;color: black;width: 87px;'>Case Type</td><td rowspan='2' style='font-weight:bold;color: black;word-wrap: break-word'>Close Cases Since 2018</td><td rowspan='2' style='font-weight:bold;color: black;'>Order By Direction</td><td colspan='7' style='font-weight:bold;color: black;'>Complainces Status</td></tr><tr style='background-color: #fff;'><td colspan='3' style='font-weight:bold;color: black;'>Yes</td><td colspan='3' style='font-weight:bold;color: black;'>No</td><td colspan='3' style='font-weight:bold;color: black;'>Pending</td></tr>";
@@ -96,7 +98,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
         }
         str2 += " </table>";
         //CasetypeCountID2.InnerHtml = str2;
-        //lblOrderByDirectionalCases.Text = "(TOTAL PENDING CASES : " + tCount1.ToString() + " No's)";
+        //lblOrderByDirectionalCases.Text = "( PENDING CASES : " + tCount1.ToString() + " No's)";
         #region
         //try
         //{
@@ -184,7 +186,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 CaseCount = CaseCount + Convert.ToInt32(dsCase.Tables[0].Rows[i]["CourtWisePendingCases"]);
                 Sb.Append(" ['" + dsCase.Tables[0].Rows[i]["court"].ToString() + "', " + dsCase.Tables[0].Rows[i]["CourtWisePendingCases"].ToString() + " ],");
             }
-            lblCaseCount.Text = "(TOTAL PENDING CASES " + CaseCount.ToString() + " No's)";
+            lblCaseCount.Text = "(PENDING CASES " + CaseCount.ToString() + " No's)";
             Sb.Append("]);");
             Sb.Append("var options = {");
             Sb.Append(" 'title':  'COURT WISE CASE No.',");
@@ -226,13 +228,16 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 
     }
 
+    // Order by Direction Court wise case Count
     protected void CourtTypeCase1(int OicId)
     {
         try
         {
             int CaseCount1 = 0;
             DataSet dsCase = new DataSet();
-            dsCase = objdb.ByDataSet("Select Court,COUNT(distinct UniqueNo) OrderBydirectCourtWiseCount from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes' and OICId=" + OicId + "  group by Court");
+            //dsCase = objdb.ByDataSet("Select Court,COUNT(distinct UniqueNo) OrderBydirectCourtWiseCount from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes' and OICId=" + OicId + "  group by Court");
+            // With New Table
+            dsCase = objdb.ByDataSet("Select CourtTypeName as Court,COUNT(distinct UniqueNo) OrderBydirectCourtWiseCount from tblLegalCaseRegistration a left join tbl_LegalCourtType b on a.CourtType_Id = b.CourtType_ID where CaseDisposalType_Id=2 and OICMaster_Id= " + OicId + "  group by a.CourtType_Id, CourtTypeName");
             StringBuilder Sb1 = new StringBuilder();
             Sb1.Append("<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>");
             Sb1.Append("<script type='text/javascript'>");
@@ -248,7 +253,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 CaseCount1 = CaseCount1 + Convert.ToInt32(dsCase.Tables[0].Rows[i]["OrderBydirectCourtWiseCount"]);
                 Sb1.Append(" ['" + dsCase.Tables[0].Rows[i]["Court"].ToString() + "', " + dsCase.Tables[0].Rows[i]["OrderBydirectCourtWiseCount"].ToString() + " ],");
             }
-            lblCaseCount1.Text = "(TOTAL CASES " + CaseCount1.ToString() + " No's)";
+            lblCaseCount1.Text = "(CASES " + CaseCount1.ToString() + " No's)";
             Sb1.Append("]);");
             Sb1.Append("var options = {");
             Sb1.Append(" 'title':  'COURT WISE CASE No.',");
@@ -313,7 +318,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 CaseCount1 = CaseCount1 + Convert.ToInt32(dsCase.Tables[0].Rows[i]["CaseSubjectWiseCount"]);
                 Sb1.Append(" ['" + dsCase.Tables[0].Rows[i]["CaseSubject"].ToString() + "', " + dsCase.Tables[0].Rows[i]["CaseSubjectWiseCount"].ToString() + " ],");
             }
-            lblCaseCount2.Text = "(TOTAL PENDING CASES " + CaseCount1.ToString() + " No's)";
+            lblCaseCount2.Text = "(PENDING CASES " + CaseCount1.ToString() + " No's)";
             Sb1.Append("]);");
             Sb1.Append("var options = {");
             Sb1.Append(" 'title':  'COURT WISE CASE No.',");
@@ -355,13 +360,16 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 
     }
 
+    //Order By Direction Is Compliace Status
     protected void CourtTypeCase3(int OicId)
     {
         try
         {
             int CaseCount1 = 0;
             DataSet dsCase = new DataSet();
-            dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes'  and OICId=" + OicId + " group by IsComplaince");
+           // dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes'  and OICId=" + OicId + " group by IsComplaince");
+         // With New table
+            dsCase = objdb.ByDataSet(" Select Compliance_Status as IsComplaince,COUNT(distinct UniqueNo) OrderBydirectComplaincesStatus from tblLegalCaseRegistration where CaseDisposalType_Id=2 and OICMaster_Id="+ OicId + "  group by Compliance_Status");
             StringBuilder Sb1 = new StringBuilder();
             Sb1.Append("<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>");
             Sb1.Append("<script type='text/javascript'>");
@@ -377,7 +385,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 CaseCount1 = CaseCount1 + Convert.ToInt32(dsCase.Tables[0].Rows[i]["OrderBydirectComplaincesStatus"]);
                 Sb1.Append(" ['" + dsCase.Tables[0].Rows[i]["IsComplaince"].ToString() + "', " + dsCase.Tables[0].Rows[i]["OrderBydirectComplaincesStatus"].ToString() + " ],");
             }
-            lblCaseCount3.Text = "(TOTAL CASES " + CaseCount1.ToString() + " No's)";
+            lblCaseCount3.Text = "(CASES " + CaseCount1.ToString() + " No's)";
             Sb1.Append("]);");
             Sb1.Append("var options = {");
             Sb1.Append(" 'title':  'COURT WISE CASE No.',");
@@ -419,6 +427,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 
     }
 
+    // Court Wise Contemt Case Count
     protected void CourtWiseContemptCases(int OicId)
     {
         try
@@ -441,7 +450,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 CaseCountCC = CaseCountCC + Convert.ToInt32(dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"]);
                 Sb.Append(" ['" + dsCase.Tables[3].Rows[i]["court"].ToString() + "', " + dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"].ToString() + " ],");
             }
-            lblConcCount.Text = "(TOTAL " + CaseCountCC.ToString() + " No's)";
+            lblConcCount.Text = "( " + CaseCountCC.ToString() + " No's)";
             Sb.Append("]);");
             Sb.Append("var options = {");
             Sb.Append(" 'title':  'COURT WISE CASE No.',");
