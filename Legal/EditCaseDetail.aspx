@@ -152,7 +152,7 @@
                                             <div class="form-group">
                                                 <label>
                                                     Case Detail/Remark</label>
-                                               <%-- <span style="color: red;"><b> *</b></span><br />
+                                                <%-- <span style="color: red;"><b> *</b></span><br />
                                                 <asp:RequiredFieldValidator ID="RFVActionByDistrict" ValidationGroup="CaseDtl"
                                                     ErrorMessage="Enter Case Detail." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                                     ControlToValidate="txtCaseDetail" Display="Dynamic" runat="server">
@@ -833,6 +833,11 @@
                                                 <label>
                                                     Order Document
                                                 </label>
+                                                <span style="color: red;"><b>*</b></span>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator10" ValidationGroup="CaseDispose"
+                                                    ErrorMessage="Select Order Document" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                    ControlToValidate="FielUpcaseDisposeOrderDoc" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
                                                 <asp:FileUpload ID="FielUpcaseDisposeOrderDoc" runat="server" CssClass="form-control"></asp:FileUpload>
                                                 <span style="color: red; font-size: 13px; font-weight: 700;">Only PDF Files Accepted and size 200kb.</span>
                                             </div>
@@ -841,10 +846,11 @@
                                             <asp:Button ID="btnCaseDispose" runat="server" CssClass="btn btn-primary" ValidationGroup="CaseDispose" Text="Disposal" OnClick="btnCaseDispose_Click" />
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <div class="col-md-12">
                                             <div class="table-responsive">
-                                                <asp:GridView ID="GrdCaseDispose" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered text-center" AutoGenerateRows="false" EmptyDataText="NO RECORD FOUND">
+                                                <asp:GridView ID="GrdCaseDispose" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered text-center"
+                                                    DataKeyNames="Case_ID" AutoGenerateRows="false" EmptyDataText="NO RECORD FOUND"  OnRowCommand="GrdCaseDispose_RowCommand">
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
@@ -859,11 +865,13 @@
                                                         <asp:TemplateField HeaderText="Disposal<br />type" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblDisposaltype" runat="server" Text='<%# Eval("CaseDisposeType") %>'></asp:Label>
+                                                                <asp:Label ID="lblDisposaltype_ID" runat="server" Text='<%# Eval("CaseDisposalType_Id") %>' Visible="false"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                         <asp:TemplateField HeaderText="Compliance<br />Status" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
+                                                        <asp:TemplateField HeaderText="Compliance<br />Status" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
                                                             <ItemTemplate>
-                                                                <asp:Label ID="lblcomplianceSts" runat="server" Text='<%# Eval("Compliance_Status") %>'></asp:Label>
+                                                                <asp:Label ID="lblcomplianceSts" runat="server" Text='<%# Eval("ComplianceStatus_ID") %>' Visible="false"></asp:Label>
+                                                                <asp:Label ID="lblcompliance" runat="server" Text='<%# Eval("Compliance_Status") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Compliance<br />Timeline(In Days)" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%">
@@ -871,15 +879,24 @@
                                                                 <asp:Label ID="lbltimeline" runat="server" Text='<%# Eval("CaseDisposal_Timeline") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Disposal<br />Date" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="10%">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblDisposalDate" runat="server" Text='<%# Eval("CaseDisposal_Date") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Order<br />Summary">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblorderSummary" runat="server" Text='<%# Eval("OrderSummary") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-
                                                         <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
                                                                 <asp:HyperLink ID="HyperlinkOrderDoc" runat="server" Target="_blank" NavigateUrl='<%# "../Legal/DisposalDocs/" + Eval("CaseDisposal_Doc") %>' CssClass="fa fa-eye"></asp:HyperLink>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Action" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkEdit" runat="server" Enabled='<%# Eval("CaseDisposalType_Id").ToString() == "2" ? true : false %>' CommandArgument='<%# Eval("Case_ID") %>' CommandName="EditDoc" ToolTip="Edit" CssClass="fa fa-edit"></asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>

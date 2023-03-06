@@ -21,6 +21,7 @@ public partial class mis_Legal_PendingWPReport : System.Web.UI.Page
             {
                 FillCasetype();
                 FillYear();
+                ViewState["OIC_ID"] = Session["OICMaster_ID"];
             }
         }
         else
@@ -69,12 +70,13 @@ public partial class mis_Legal_PendingWPReport : System.Web.UI.Page
         {
             if (Page.IsValid)
             {
+                string OIC = "";
                 lblMsg.Text = "";
                 GrdPendingReport.DataSource = null;
                 GrdPendingReport.DataBind();
-
-                ds = obj.ByProcedure("USP_GetWPPendingRpt", new string[] { "CaseYear", "Casetype_ID" }
-                    , new string[] { ddlCaseYear.SelectedValue, ddlCasetype.SelectedValue }, "dataset");
+                if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null) OIC = Session["OICMaster_ID"].ToString();
+                ds = obj.ByProcedure("USP_GetWPPendingRpt", new string[] { "CaseYear", "Casetype_ID", "OICMaster_Id" }
+                    , new string[] { ddlCaseYear.SelectedValue, ddlCasetype.SelectedValue, OIC }, "dataset");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     GrdPendingReport.DataSource = ds;
@@ -103,7 +105,7 @@ public partial class mis_Legal_PendingWPReport : System.Web.UI.Page
         {
             if (e.CommandName == "ViewDetail")
             {
-                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;               
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 string ID = e.CommandArgument.ToString();
                 string pageID = "1";
                 Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + Server.UrlEncode(ID) + "&pageID=" + pageID, false);

@@ -23,8 +23,6 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
                 {
                     ViewState["CaseID"] = Request.QueryString["CaseID"].ToString();
                     BindCaseDetail();
-                   // PageID = 2 from Conclude Report
-                    // PageID = 3 from CaseSubject Report
                     if (Request.QueryString["pageID"] == "2" || Request.QueryString["pageID"] == "4")
                     {
                         dvOrderSummary.Visible = true;
@@ -124,10 +122,13 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
     {
         try
         {
-            if (Request.QueryString["pageID"] == "1") Response.Redirect("../Legal/pendingwpreport.aspx", false);
-            if (Request.QueryString["pageID"] == "2") Response.Redirect("../Legal/ConcludedwpReport.aspx", false);
-            if (Request.QueryString["pageID"] == "3") Response.Redirect("../Legal/SubjectWiseCaseDtl.aspx", false);
-            if (Request.QueryString["pageID"] == "4") Response.Redirect("../Legal/disposecaserpt.aspx", false);
+            if (Request.QueryString["pageID"] == "1") Response.Redirect("../Legal/pendingwpreport.aspx", false); //Pendig Rpt
+            if (Request.QueryString["pageID"] == "2") Response.Redirect("../Legal/ConcludedwpReport.aspx", false);//Concolude Rpt
+            if (Request.QueryString["pageID"] == "3") Response.Redirect("../Legal/SubjectWiseCaseDtl.aspx", false);// SubjectWise Case Rpt
+            if (Request.QueryString["pageID"] == "4") Response.Redirect("../Legal/disposecaserpt.aspx", false);// Disposal Case Rpt
+            if (Request.QueryString["pageID"] == "5") Response.Redirect("../Legal/MonthlyHearingDtl.aspx", false);// Monthly Hearing Case Rpt
+            if (Request.QueryString["pageID"] == "6") Response.Redirect("../Legal/WeekelyHearingCaseRpt.aspx", false);// Weekely Hearing Case Rpt
+            if (Request.QueryString["pageID"] == "7") Response.Redirect("../Legal/LongPendingCaseRpt.aspx", false);// Long Pendinh Case Rpt
         }
         catch (Exception ex)
         {

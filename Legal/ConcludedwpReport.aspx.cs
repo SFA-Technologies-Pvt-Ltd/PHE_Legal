@@ -21,6 +21,7 @@ public partial class mis_Legal_ConcludedwpReport : System.Web.UI.Page
             {
                 FillCasetype();
                 FillYear();
+                ViewState["OIC_ID"] = Session["OICMaster_ID"];
             }
         }
         else
@@ -69,12 +70,12 @@ public partial class mis_Legal_ConcludedwpReport : System.Web.UI.Page
         {
             if (Page.IsValid)
             {
-                lblMsg.Text = "";
+                lblMsg.Text = ""; string OIC = "";
                 GrdConcludeReport.DataSource = null;
                 GrdConcludeReport.DataBind();
-
-                ds = obj.ByProcedure("USP_GetWPConcludeRpt", new string[] { "CaseYear", "Casetype_ID" }
-                    , new string[] { ddlCaseYear.SelectedValue, ddlCasetype.SelectedValue }, "dataset");
+                if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null) OIC = Session["OICMaster_ID"].ToString();
+                ds = obj.ByProcedure("USP_GetWPConcludeRpt", new string[] { "CaseYear", "Casetype_ID", "OICMaster_Id" }
+                    , new string[] { ddlCaseYear.SelectedValue, ddlCasetype.SelectedValue,OIC }, "dataset");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     GrdConcludeReport.DataSource = ds;

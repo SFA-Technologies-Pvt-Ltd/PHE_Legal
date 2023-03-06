@@ -17,15 +17,29 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             if (!IsPostBack)
             {
                 GetCaseType();
-              //  ddlMonth.Items.FindByValue("12").Selected = true;
-               // ddlYear.Items.FindByText("2022").Selected = true;
+                FillYear();
             }
         }
         else
         {
-            Response.Redirect("/Login.aspx");
+            Response.Redirect("/Login.aspx", false);
         }
     }
+
+    #region Fill Year
+    protected void FillYear()
+    {
+        ddlYear.Items.Clear();
+        for (int i = 1950; i <= DateTime.Now.Year; i++)
+        {
+            ddlYear.Items.Add(i.ToString());
+        }
+        ddlYear.Items.Insert(0, new ListItem("Select", "0"));
+
+    }
+    #endregion
+
+
     private void GetCaseType()
     {
         try
@@ -47,8 +61,9 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
                 ddlCaseType.Items.Insert(0, new ListItem("Select", "0"));
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -57,12 +72,17 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         try
         {
             ds = new DataSet();
-            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "C_Year", "C_Month" }, new string[] { "6", ddlCaseType.SelectedItem.Value, ddlYear.SelectedItem.Text, ddlMonth.SelectedValue }, "dataset");
+            grdMonthlyHearingdtl.DataSource = null;
+            grdMonthlyHearingdtl.DataBind();
+            string OICID = Session["OICMaster_ID"] != null ? Session["OICMaster_ID"].ToString() : null;
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseYear", "C_Month", "OICMaster_Id" },
+                new string[] { "6", ddlCaseType.SelectedItem.Value, ddlYear.SelectedItem.Text, ddlMonth.SelectedItem.Text, OICID }, "dataset");
             if (ds.Tables[0].Rows.Count > 0)
             {
-                DataTable dt = ds.Tables[0];
-                grdMonthlyHearingdtl.DataSource = dt;
+                grdMonthlyHearingdtl.DataSource = ds;
                 grdMonthlyHearingdtl.DataBind();
+                grdMonthlyHearingdtl.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdMonthlyHearingdtl.UseAccessibleHeader = true;
             }
             else
             {
@@ -72,7 +92,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -88,7 +108,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
     protected void grdMonthlyHearingdtl_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -97,47 +117,8 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         if (e.CommandName == "ViewDtl")
         {
             GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+            Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + e.CommandArgument.ToString() + "&pageID=" + 5, false);
 
-            Label lblCaseSubject = (Label)row.FindControl("lblCaseSubject");
-            Label lblOICName = (Label)row.FindControl("LabelOICName");
-            Label lblOICMObile = (Label)row.FindControl("LabelOICMObile");
-            Label lblOICEmail = (Label)row.FindControl("LabelOICEmail");
-            Label lblNodalName = (Label)row.FindControl("LabelNodalName");
-            Label lblNodalMobile = (Label)row.FindControl("LabelNodalMobile");
-            Label lblNodalEmail = (Label)row.FindControl("LabelNodalEmail");
-            Label lblAdvocateName = (Label)row.FindControl("LabelAdvocateName");
-            Label lblAdvocateMobile = (Label)row.FindControl("LabelAdvocateMobile");
-            Label lblAdvocateEmail = (Label)row.FindControl("LabelAdvocateEmail");
-            Label lblHearingDate = (Label)row.FindControl("LabelHearingDate");
-            Label lblRespondertype = (Label)row.FindControl("LabelRespondertype");
-            Label lblCaseNO = (Label)row.FindControl("lblCaseNO");
-            Label lblPetitionerName = (Label)row.FindControl("lblPetitionerName");
-            Label lblCourtName = (Label)row.FindControl("lblCourtName");
-            Label lblCaseDetail = (Label)row.FindControl("lblCaseDetail");
-            Label lblCasetype = (Label)row.FindControl("lblCasetype");
-            Label lblRespondentName = (Label)row.FindControl("lblRespondentName");
-            Label lblRespondentMobileNo = (Label)row.FindControl("lblRespondentMobileNo");
-
-            txtCaseno.Text = lblCaseNO.Text;
-            txtCourtName.Text = lblCourtName.Text;
-            txtRespondertype.Text = lblRespondertype.Text;
-            txtRespondentName.Text = lblRespondentName.Text;
-            txtRespondentMobileno.Text = lblRespondentMobileNo.Text;
-            txtNodalName.Text = lblNodalName.Text;
-            txtNodalMobile.Text = lblNodalMobile.Text;
-            txtNodalEmailID.Text = lblNodalEmail.Text;
-            txtOICName.Text = lblOICName.Text;
-            txtOICMObile.Text = lblOICMObile.Text;
-            txtOICEmail.Text = lblOICEmail.Text;
-            //txtAdvocatename.Text = lblAdvocateName.Text;
-            //txtAdvocatemobile.Text = lblAdvocateMobile.Text;
-            //txtAdvocateEmailID.Text = lblAdvocateEmail.Text;
-            // txtNextHearingDate.Text = lblHearingDate.Text;
-            txtPetitionerName.Text = lblPetitionerName.Text;
-            txtCasesubject.Text = lblCaseSubject.Text;
-            txtCaseDtl.Text = lblCaseDetail.Text;
-            txtCasetype.Text = lblCasetype.Text;
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
         }
     }
     protected void grdMonthlyHearingdtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -150,7 +131,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 }

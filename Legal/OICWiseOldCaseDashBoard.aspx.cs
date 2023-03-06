@@ -23,15 +23,13 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
                 {
                     OicId = Convert.ToInt32(Session["OICMaster_ID"]);
                     BIndWACaseCount(OicId);
-                    //UpComingHearing();
                     CourtTypeCase(OicId);
-                    CourtTypeCase1(OicId);
-                    CourtTypeCase2(OicId);
-                    CourtTypeCase3(OicId);
-                    BindCaseTypeCount(OicId);
                     CourtWiseContemptCases(OicId);
-
-
+                    OrderByDireCaseCount(OicId);
+                    SubjectWiseCaseCount(OicId);
+                    OrderByDireCompliance(OicId);
+                    // BindCaseTypeCount(OicId);
+                    //UpComingHearing();    
                 }
             }
             else
@@ -46,7 +44,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
 
     }
 
-    // Court Wise Case Count
+    // Case type wise Case Count and Remove Query from Procudure
     protected void BindCaseTypeCount(int OicId)
     {
         DataSet dsCasecount = new DataSet();
@@ -163,7 +161,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
         //}
         #endregion
     }
-
+    //court wise pending case
     protected void CourtTypeCase(int OicId)
     {
         try
@@ -229,7 +227,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
     }
 
     // Order by Direction Court wise case Count
-    protected void CourtTypeCase1(int OicId)
+    protected void OrderByDireCaseCount(int OicId)
     {
         try
         {
@@ -294,8 +292,8 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
         }
 
     }
-
-    protected void CourtTypeCase2(int OicId)
+    // subject wise Count
+    protected void SubjectWiseCaseCount(int OicId)
     {
         try
         {
@@ -361,15 +359,15 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
     }
 
     //Order By Direction Is Compliace Status
-    protected void CourtTypeCase3(int OicId)
+    protected void OrderByDireCompliance(int OicId)
     {
         try
         {
             int CaseCount1 = 0;
             DataSet dsCase = new DataSet();
-           // dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes'  and OICId=" + OicId + " group by IsComplaince");
-         // With New table
-            dsCase = objdb.ByDataSet(" Select Compliance_Status as IsComplaince,COUNT(distinct UniqueNo) OrderBydirectComplaincesStatus from tblLegalCaseRegistration where CaseDisposalType_Id=2 and OICMaster_Id="+ OicId + "  group by Compliance_Status");
+            // dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes'  and OICId=" + OicId + " group by IsComplaince");
+            // With New table
+            dsCase = objdb.ByDataSet(" Select Compliance_Status as IsComplaince,COUNT(distinct UniqueNo) OrderBydirectComplaincesStatus from tblLegalCaseRegistration where CaseDisposalType_Id=2 and OICMaster_Id=" + OicId + "  group by Compliance_Status");
             StringBuilder Sb1 = new StringBuilder();
             Sb1.Append("<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>");
             Sb1.Append("<script type='text/javascript'>");
@@ -445,10 +443,10 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
             Sb.Append("{");
             Sb.Append("var data = google.visualization.arrayToDataTable([");
             Sb.Append(" ['Court', 'Case No.'],");
-            for (int i = 0; i < dsCase.Tables[3].Rows.Count; i++)
+            for (int i = 0; i < dsCase.Tables[2].Rows.Count; i++)
             {
-                CaseCountCC = CaseCountCC + Convert.ToInt32(dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"]);
-                Sb.Append(" ['" + dsCase.Tables[3].Rows[i]["court"].ToString() + "', " + dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"].ToString() + " ],");
+                CaseCountCC = CaseCountCC + Convert.ToInt32(dsCase.Tables[2].Rows[i]["CourtWisePendingContemptCases"]);
+                Sb.Append(" ['" + dsCase.Tables[2].Rows[i]["court"].ToString() + "', " + dsCase.Tables[2].Rows[i]["CourtWisePendingContemptCases"].ToString() + " ],");
             }
             lblConcCount.Text = "( " + CaseCountCC.ToString() + " No's)";
             Sb.Append("]);");
@@ -558,11 +556,11 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
             //    lblTBCCases.Text = ds.Tables[0].Rows[0]["TBCCase"].ToString() + " No's";
             //}
             //else { lblTBCCases.Text = "00 No's"; }
-            if (ds.Tables.Count >= 1 && ds.Tables[2].Rows.Count > 0)
+            if (ds.Tables.Count >= 1 && ds.Tables[1].Rows.Count > 0)
             {
-                if (ds.Tables[2].Rows[0]["HighPriorityCase"].ToString() != "")
+                if (ds.Tables[1].Rows[0]["HighPriorityCase"].ToString() != "")
                 {
-                    spnhighpriorityCase.InnerHtml = "&nbsp;" + ds.Tables[2].Rows[0]["HighPriorityCase"].ToString() + " No's";
+                    spnhighpriorityCase.InnerHtml = "&nbsp;" + ds.Tables[1].Rows[0]["HighPriorityCase"].ToString() + " No's";
                 }
             }
             else
@@ -583,9 +581,10 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
         {
             if (Page.IsValid)
             {
-
-                int Oicid = 1;
-                ds = objdb.ByDataSet("select distinct UniqueNo, FilingNo, Court, Petitioner, Respondent, HearingDate,(Select CaseSubject from tbl_LegalMstCaseSubject b where b.CaseSubjectID = a.CaseSubjectId) CaseSubject,(select OICName from tblOICMaster c where c.OICMaster_ID = a.OICId) OICName from tbl_OldCaseDetail a where a.CaseType = 'CONC' and OicId=" + Oicid);
+                //ds = objdb.ByDataSet("select distinct UniqueNo, FilingNo, Court, Petitioner, Respondent, HearingDate,(Select CaseSubject from tbl_LegalMstCaseSubject b where b.CaseSubjectID = a.CaseSubjectId) CaseSubject,(select OICName from tblOICMaster c where c.OICMaster_ID = a.OICId) OICName from tbl_OldCaseDetail a where a.CaseType = 'CONC' and OicId=" + Oicid);
+                string OIC_ID = Session["OICMaster_ID"] != null ? Session["OICMaster_ID"].ToString() : null;
+                ds = objdb.ByProcedure("USP_Select_ContCaseForOICDashboard", new string[] { "OICMaster_Id" },
+                    new string[] { OIC_ID }, "dataset");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     ViewState["dt"] = ds.Tables[0];

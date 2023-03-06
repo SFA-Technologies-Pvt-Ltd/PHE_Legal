@@ -88,8 +88,10 @@ public partial class Legal_SubjectWiseCaseDtl : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseSubject_Id" },
-                    new string[] { "1", ddlCaseType.SelectedItem.Value, ddlCaseSubject.SelectedItem.Value }, "dataset");
+            string OIC = "";
+            if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null) OIC = Session["OICMaster_ID"].ToString();
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseSubject_Id", "OICMaster_Id" },
+                    new string[] { "1", ddlCaseType.SelectedItem.Value, ddlCaseSubject.SelectedItem.Value,OIC }, "dataset");
             if (ds.Tables[0].Rows.Count > 0)
             {
                 grdSubjectWiseCasedtl.DataSource = ds;

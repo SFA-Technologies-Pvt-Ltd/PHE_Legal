@@ -252,8 +252,8 @@
                                                             <asp:BoundField DataField="Court" HeaderText="Court" />
                                                             <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
                                                             <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
-                                                            <asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
-                                                            <asp:BoundField DataField="CaseSubject" HeaderText="CaseSubject" />
+                                                            <%--<asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
+                                                            <asp:BoundField DataField="CaseSubject" HeaderText="CaseSubject" />--%>
                                                             <asp:BoundField DataField="OICName" HeaderText="OICName" />
                                                         </Columns>
                                                     </asp:GridView>
@@ -288,7 +288,13 @@
                         <div class="card-body card-body-custom-Color">
                       
                             <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="col-lg-6 col-md-6 col-sm-6">
+
+                                    <i class="fa-solid fa-magnifying-glass" style="font-size: x-large"></i>
+                                    
+                                     <a href="WPCaseList.aspx" class="Heading" target="_blank">SEARCH CASES</a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
                                    
                                           <i class="fa-solid fa-star" style="font-size:x-large"></i>
                                     <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>

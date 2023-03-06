@@ -89,7 +89,21 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "CaseDisposeType_Id" }, new string[] { "9", ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value }, "dataset");
+            string OIC = "";
+            grdSubjectWiseCasedtl.DataSource = null;
+            grdSubjectWiseCasedtl.DataBind();
+            string Compliance = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedItem.Text : null;
+            
+            if (Session["OICMaster_ID"] != null)
+            {
+                ds = obj.ByProcedure("USP_Select_CaseDisposalRpt", new string[] { "Casetype_ID", "CaseDisposeType_Id", "Compliance_Status", "OICMaster_Id", "flag" },
+                    new string[] { ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value, Compliance, OIC,"1" }, "dataset");
+            }
+            else
+            {
+                ds = obj.ByProcedure("USP_Select_CaseDisposalRpt", new string[] { "Casetype_ID", "CaseDisposeType_Id", "Compliance_Status", "flag" },
+                    new string[] { ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value, Compliance, "2" }, "dataset");
+            }
             if (ds.Tables[0].Rows.Count > 0)
             {
                 grdSubjectWiseCasedtl.DataSource = ds;

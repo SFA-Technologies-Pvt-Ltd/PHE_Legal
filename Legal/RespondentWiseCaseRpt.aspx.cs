@@ -82,8 +82,9 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
     {
         try
         {
-            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "OfficeType_Id" },
-                new string[] { "3", ddlCaseType.SelectedItem.Value, ddlofficetype.SelectedItem.Value }, "dataset");
+            string OICID =  Session["OICMaster_ID"] != null ? Session["OICMaster_ID"].ToString() : null;
+            ds = obj.ByProcedure("USP_Legal_CaseRpt", new string[] { "flag", "Casetype_ID", "OfficeType_Id", "OICMaster_Id" },
+                new string[] { "3", ddlCaseType.SelectedItem.Value, ddlofficetype.SelectedItem.Value, OICID }, "dataset");
             if (ds.Tables[0].Rows.Count > 0)
             {
 
@@ -127,7 +128,7 @@ public partial class Legal_RespondentWiseCaseRpt : System.Web.UI.Page
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 grdSubjectWiseCasedtl.HeaderRow.TableSection = TableRowSection.TableHeader;
                 grdSubjectWiseCasedtl.UseAccessibleHeader = true;
-                Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?ID=" + e.CommandArgument.ToString() + "&PageID=" + 5, false);
+                Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + e.CommandArgument.ToString() + "&pageID=" + 5, false);
             }
         }
         catch (Exception ex)

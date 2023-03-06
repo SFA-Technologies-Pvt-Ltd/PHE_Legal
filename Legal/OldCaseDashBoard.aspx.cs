@@ -26,7 +26,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
                     CourtTypeCase1();
                     CourtTypeCase2();
                     CourtTypeCase3();
-                    BindCaseTypeCount();
+                   // BindCaseTypeCount();
                     CourtWiseContemptCases();
                   
                    
@@ -34,13 +34,13 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
             }
             else
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
             }
         }
 
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
@@ -227,7 +227,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
@@ -292,7 +292,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
@@ -358,18 +358,19 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
-
+    // Order ByDirection With Compliance
     protected void CourtTypeCase3()
     {
         try
         {
             int CaseCount1 = 0;
             DataSet dsCase = new DataSet();
-            dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes' group by IsComplaince");
+           // dsCase = objdb.ByDataSet("Select IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tbl_OrderByDirectionPendingCase where IsOrderByDirection='Yes' group by IsComplaince");
+            dsCase = objdb.ByDataSet("Select Compliance_Status as IsComplaince,COUNT(distinct UniqueNo ) OrderBydirectComplaincesStatus from tblLegalCaseRegistration where CaseDisposalType_Id= 2 group by Compliance_Status");
             StringBuilder Sb1 = new StringBuilder();
             Sb1.Append("<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>");
             Sb1.Append("<script type='text/javascript'>");
@@ -422,7 +423,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
@@ -444,10 +445,10 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
             Sb.Append("{");
             Sb.Append("var data = google.visualization.arrayToDataTable([");
             Sb.Append(" ['Court', 'Case No.'],");
-            for (int i = 0; i < dsCase.Tables[3].Rows.Count; i++)
+            for (int i = 0; i < dsCase.Tables[2].Rows.Count; i++)
             {
-                CaseCountCC = CaseCountCC + Convert.ToInt32(dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"]);
-                Sb.Append(" ['" + dsCase.Tables[3].Rows[i]["court"].ToString() + "', " + dsCase.Tables[3].Rows[i]["CourtWisePendingContemptCases"].ToString() + " ],");
+                CaseCountCC = CaseCountCC + Convert.ToInt32(dsCase.Tables[2].Rows[i]["CourtWisePendingContemptCases"]);
+                Sb.Append(" ['" + dsCase.Tables[2].Rows[i]["court"].ToString() + "', " + dsCase.Tables[2].Rows[i]["CourtWisePendingContemptCases"].ToString() + " ],");
             }
             lblConcCount.Text = "(" + CaseCountCC.ToString() + " No's)";
             Sb.Append("]);");
@@ -486,7 +487,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
 
     }
@@ -518,50 +519,12 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
     {
         try
         {
-            ds = objdb.ByProcedure("Sp_OldCasesDashboard", new string[] { }, new string[] { }, "dataset");
-
-            //// PP Case
-            //if (ds.Tables[0].Rows[0]["PPCase"].ToString() != "")
-            //{
-            //    lblPPCase.Text = ds.Tables[0].Rows[0]["PPCase"].ToString() + " No's";
-            //}
-            //else { lblPPCase.Text = "00 No's"; }
-
-            //// DPI Case
-            //if (ds.Tables[0].Rows[0]["DPICase"].ToString() != "")
-            //{
-            //    lblDPICase.Text = ds.Tables[0].Rows[0]["DPICase"].ToString() + " No's";
-            //}
-            //else { lblDPICase.Text = "00 No's"; }
-            //// JD Case
-            //if (ds.Tables[0].Rows[0]["JDCase"].ToString() != "")
-            //{
-            //    lblJDCases.Text = ds.Tables[0].Rows[0]["JDCase"].ToString() + " No's";
-            //}
-            //else { lblJDCases.Text = "00 No's"; }
-            //// DEO Case
-            //if (ds.Tables[0].Rows[0]["DEOCase"].ToString() != "")
-            //{
-            //    lblDEOCases.Text = ds.Tables[0].Rows[0]["DEOCase"].ToString() + " No's";
-            //}
-            //else { lblDEOCases.Text = "00 No's"; }
-            //// RSK Case
-            //if (ds.Tables[0].Rows[0]["RSKCase"].ToString() != "")
-            //{
-            //    lblRskCases.Text = ds.Tables[0].Rows[0]["RSKCase"].ToString() + " No's";
-            //}
-            //else { lblRskCases.Text = "00 No's"; }
-            //// TBC Case
-            //if (ds.Tables[0].Rows[0]["TBCCase"].ToString() != "")
-            //{
-            //    lblTBCCases.Text = ds.Tables[0].Rows[0]["TBCCase"].ToString() + " No's";
-            //}
-            //else { lblTBCCases.Text = "00 No's"; }
-            if (ds.Tables.Count >= 1 && ds.Tables[2].Rows.Count > 0)
+            ds = objdb.ByProcedure("Sp_OldCasesDashboard", new string[] { }, new string[] { }, "dataset");           
+            if (ds.Tables.Count >= 1 && ds.Tables[1].Rows.Count > 0)
             {
-                if (ds.Tables[2].Rows[0]["HighPriorityCase"].ToString() != "")
+                if (ds.Tables[1].Rows[0]["HighPriorityCase"].ToString() != "")
                 {
-                    spnhighpriorityCase.InnerHtml = "&nbsp;" + ds.Tables[2].Rows[0]["HighPriorityCase"].ToString() + " No's";
+                    spnhighpriorityCase.InnerHtml = "&nbsp;" + ds.Tables[1].Rows[0]["HighPriorityCase"].ToString() + " No's";
                 }
             }
             else
@@ -571,7 +534,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 
@@ -602,7 +565,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
+            ErrorLogCls.SendErrorToText(ex);
         }
     }
 

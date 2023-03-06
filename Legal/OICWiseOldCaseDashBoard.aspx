@@ -215,7 +215,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
     <asp:ScriptManager runat="server" />
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div style="display: table; height: 100%; width: 80%; position: absolute; left: 10%;">
+        <div style="display: table; height: 100%; width: 100%; position: absolute;">
             <div class="modal-dialog" style="width: 80%; display: table-cell; vertical-align: middle;">
                 <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
                     <div class="modal-header" style="background-color: #D9D9D9;">
@@ -244,12 +244,16 @@
                                                                     <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                                 </ItemTemplate>
                                                             </asp:TemplateField>
-                                                            <asp:BoundField DataField="FilingNo" HeaderText="Filing No" />
+                                                            <asp:BoundField DataField="FilingNo" HeaderText="Case No" />
+                                                            <asp:BoundField DataField="CaseYear" HeaderText="Case Year" />
                                                             <asp:BoundField DataField="Court" HeaderText="Court" />
                                                             <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
                                                             <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
-                                                            <asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
-                                                            <asp:BoundField DataField="CaseSubject" HeaderText="CaseSubject" />
+                                                            <asp:TemplateField HeaderText="Case Status">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblCaseStatus" runat="server" Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Pending" ? System.Drawing.Color.Red : System.Drawing.Color.Green %>' Text='<%# Eval("CaseStatus") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
                                                             <asp:BoundField DataField="OICName" HeaderText="OICName" />
                                                         </Columns>
                                                     </asp:GridView>
@@ -279,11 +283,17 @@
                         <span style="font-size: 18px; color: #e5e5e5">Running Cases Dashboard</span>
                     </div>
 
-                    <div class="align-items-center;" style=" text-align: center;">
+                    <div class="align-items-center;" style="text-align: center;">
 
                         <div class="card-body card-body-custom-Color">
                             <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+
+                                    <i class="fa-solid fa-magnifying-glass" style="font-size: x-large"></i>
+
+                                    <a href="WPCaseList.aspx" class="Heading" target="_blank">SEARCH CASES</a>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
                                     <i class="fa-solid fa-star" style="font-size: x-large"></i>
                                     <%-- <img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
                                     <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL <span id="spnhighpriorityCase" runat="server" style="font-weight: bold; font-size: 18px;"></span></asp:LinkButton>
@@ -329,7 +339,7 @@
                                     </span>
                                     <div id="cwcc" runat="server" class="dvpading"></div>
                                 </div>
-                          
+
 
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <i class="fa-solid fa-thumbs-up" style="font-size: x-large"></i>
@@ -353,8 +363,8 @@
                 </div>
 
             </div>
-            <div class="container-fluid" style="display:none">
-                <div class="card card-body" style="background:linear-gradient(to bottom, #fbfb9d 0%, #ffffc2a3 100%);">
+            <div class="container-fluid" style="display: none">
+                <div class="card card-body" style="background: linear-gradient(to bottom, #fbfb9d 0%, #ffffc2a3 100%);">
                     <fieldset>
                         <legend>Live Informations</legend>
                         <div class="row form-group ">
@@ -365,7 +375,7 @@
                                 </span>
                                 <div id="CasetypeCountID1" runat="server" style="50%"></div>
                             </div>
-                        <%--    <div class="col-lg-6 col-md-12 col-sm-12">
+                            <%--    <div class="col-lg-6 col-md-12 col-sm-12">
                                 <img src="../image/Legal%201.png" style="height: 25px;" />
                                 &nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION :<asp:Label ID="lblOrderByDirectionalCases" runat="server" class="Heading" Style="color: #201f1e;"></asp:Label>
                                 </span>
@@ -373,12 +383,12 @@
                             </div>--%>
                         </div>
                     </fieldset>
-                
-            </div>
-            </div>
-            
 
-            
+                </div>
+            </div>
+
+
+
 
 
         </section>
@@ -400,53 +410,53 @@
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
     <script>
-                                                         $('.datatable').DataTable({
-                                                             paging: false,
-                                                             columnDefs: [{
-                                                                 targets: 'no-sort',
-                                                                 orderable: false
-                                                             }],
+        $('.datatable').DataTable({
+            paging: false,
+            columnDefs: [{
+                targets: 'no-sort',
+                orderable: false
+            }],
 
-                                                             "bSort": false,
+            "bSort": false,
 
-                                                             dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-                                                                 '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-                                                                 '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-                                                             fixedHeader: {
-                                                                 header: true
-                                                             },
-                                                             buttons: {
-                                                                 buttons: [{
-                                                                     extend: 'print',
-                                                                     text: '<i class="fa fa-print"></i> Print',
-                                                                     title: $('h1').text(),
-                                                                     exportOptions: {
+            dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+            fixedHeader: {
+                header: true
+            },
+            buttons: {
+                buttons: [{
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    title: $('h1').text(),
+                    exportOptions: {
 
-                                                                         // javascript: print(),
+                        // javascript: print(),
 
-                                                                         columns: [0, 1, 2, 3, 4, 5]
-                                                                     },
-                                                                     footer: true,
-                                                                     autoPrint: true
-                                                                 }, {
-                                                                     extend: 'excel',
-                                                                     text: '<i class="fa fa-file-excel-o"></i> Excel',
-                                                                     title: $('h1').text(),
-                                                                     exportOptions: {
-                                                                         columns: [0, 1, 2, 3, 4, 5]
-                                                                     },
-                                                                     footer: true
-                                                                 }],
-                                                                 dom: {
-                                                                     container: {
-                                                                         className: 'dt-buttons'
-                                                                     },
-                                                                     button: {
-                                                                         className: 'btn btn-default'
-                                                                     }
-                                                                 }
-                                                             }
-                                                         });
+                        columns: [0, 1, 2, 3, 4, 5]
+                    },
+                    footer: true,
+                    autoPrint: true
+                }, {
+                    extend: 'excel',
+                    text: '<i class="fa fa-file-excel-o"></i> Excel',
+                    title: $('h1').text(),
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    },
+                    footer: true
+                }],
+                dom: {
+                    container: {
+                        className: 'dt-buttons'
+                    },
+                    button: {
+                        className: 'btn btn-default'
+                    }
+                }
+            }
+        });
 
     </script>
 </asp:Content>
