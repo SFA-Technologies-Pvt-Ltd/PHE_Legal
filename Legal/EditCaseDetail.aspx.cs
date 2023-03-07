@@ -1060,7 +1060,6 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                         if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
                         {
                             lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                            txtDocumentName.Text = "";
                             ViewState["HearingDoc"] = "";
                             BindDetails(sender, e);
                             btnSaveDoc.Text = "Save";
@@ -1171,7 +1170,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
     {
         try
         {
-            
+
             caseDisposeYes.Visible = false;
             if (rdCaseDispose.SelectedValue == "1")
             {
@@ -1258,8 +1257,8 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                     }
                     else if (btnCaseDispose.Text == "Update" && ViewState["Dispose_ID"] != null)
                     {
-                        ds = obj.ByProcedure("USP_UpdateCaseDisOrderByDirec", new string[] { "Compliance_Status", "ComplianceStatus_ID", "LastupdatedBy", "LastupdatedByIp", "Case_ID" }
-                        , new string[] { ddlCompliaceSt.SelectedItem.Text.Trim(), ddlCompliaceSt.SelectedValue, Session["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Dispose_ID"].ToString() }, "dataset");
+                        ds = obj.ByProcedure("USP_UpdateCaseDisOrderByDirec", new string[] { "Compliance_Status", "OrderSummary", "ComplianceStatus_ID", "LastupdatedBy", "LastupdatedByIp", "Case_ID" }
+                        , new string[] { ddlCompliaceSt.SelectedItem.Text.Trim(), txtorderSummary.Text.Trim(), ddlCompliaceSt.SelectedValue, Session["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Dispose_ID"].ToString() }, "dataset");
                     }
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
@@ -1268,6 +1267,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                         {
                             lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
                             txtOrderimpletimeline.Text = "";
+                            txtorderSummary.Text = "";
                             rdCaseDispose.ClearSelection();
                             ddlDisponsType.ClearSelection();
                             ddlCompliaceSt.ClearSelection();
@@ -1307,11 +1307,16 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 Label lblDisposalStatus = (Label)row.FindControl("lblDisposalStatus");
                 Label lblDisposaltype_ID = (Label)row.FindControl("lblDisposaltype_ID");
                 Label lblcomplianceSts = (Label)row.FindControl("lblcomplianceSts");
+                Label lblorderSummary = (Label)row.FindControl("lblorderSummary");
+                if (lblorderSummary.Text != "")
+                {
+                    txtorderSummary.Text = lblorderSummary.Text;
+                }
                 if (lblDisposaltype_ID.Text != "")
                 {
                     ddlDisponsType.ClearSelection();
                     ddlDisponsType.Items.FindByValue(lblDisposaltype_ID.Text).Selected = true; caseDisposeYes.Visible = true;
-                    
+
                 }
                 if (lblDisposaltype_ID.Text == "2")
                 {
@@ -1321,10 +1326,11 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                         ddlCompliaceSt.ClearSelection();
                         ddlCompliaceSt.Items.FindByValue(lblcomplianceSts.Text).Selected = true; CimplianceSt_Div.Visible = true;
                         HearingDtl_CaseDispose.Visible = true;
+                        OrderSummary_Div.Visible = true;
                     }
                     ViewState["Dispose_ID"] = e.CommandArgument.ToString();
                     btnCaseDispose.Text = "Update";
-                }                
+                }
             }
         }
         catch (Exception ex)

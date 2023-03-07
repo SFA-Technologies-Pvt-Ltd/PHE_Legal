@@ -32,7 +32,7 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             Response.Redirect("../Login.aspx", false);
         }
     }
-
+    #region FillCourt
     protected void FillCourt()
     {
         try
@@ -54,7 +54,8 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion 
+    #region FillYear
     protected void FillYear()
     {
         try
@@ -75,19 +76,24 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion
+    #region FillCaseNo
     protected void FillCaseNo()
     {
         try
         {
+            DataSet DsCaseNo = new DataSet();
             ddlCaseNo.Items.Clear();
-            Helper CaseNo = new Helper();
-            DataTable dtCN = CaseNo.GetCaseNo() as DataTable;
-            if (dtCN != null && dtCN.Rows.Count > 0)
+            string OIC_ID = Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null ? Session["OICMaster_ID"].ToString() : null;
+            if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null)
+                DsCaseNo = obj.ByDataSet("select Distinct CaseNo, Case_ID from tblLegalCaseRegistration where OICMaster_Id =" + OIC_ID);
+            else
+                DsCaseNo = obj.ByDataSet("select Distinct CaseNo, Case_ID from tblLegalCaseRegistration");
+            if (DsCaseNo != null && DsCaseNo.Tables[0].Rows.Count > 0)
             {
                 ddlCaseNo.DataValueField = "Case_ID";
                 ddlCaseNo.DataTextField = "CaseNo";
-                ddlCaseNo.DataSource = dtCN;
+                ddlCaseNo.DataSource = DsCaseNo;
                 ddlCaseNo.DataBind();
             }
             ddlCaseNo.Items.Insert(0, new ListItem("Select", "0"));
@@ -97,7 +103,8 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion
+    #region Casetype
     protected void FillCasetype()
     {
         try
@@ -118,19 +125,25 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion
+    #region SearchButton
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
         {
 
             lblMsg.Text = "";
-            if (ddlCaseType.SelectedIndex > 0 || ddlCaseYear.SelectedIndex > 0 || ddlCourt.SelectedIndex > 0 || ddlCaseNo.SelectedIndex > 0 || ddlCaseStatus.SelectedIndex > 0)
-            {
+            //if (ddlCaseType.SelectedIndex > 0 || ddlCaseYear.SelectedIndex > 0 || ddlCourt.SelectedIndex > 0 || ddlCaseNo.SelectedIndex > 0 || ddlCaseStatus.SelectedIndex > 0)
+            //{
                 GrdCaseDetails.DataSource = null;
                 GrdCaseDetails.DataBind();
-                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "Casetype_ID", "CourtType_Id", "CaseNo", "Year", "CaseStatus" }
-                        , new string[] { ddlCaseType.SelectedValue, ddlCourt.SelectedValue, ddlCaseNo.SelectedItem.Text, ddlCaseYear.SelectedItem.Text, ddlCaseStatus.SelectedItem.Text }, "dataset");
+                string OICMaster_Id = "";
+                if (!string.IsNullOrEmpty(Session["OICMaster_ID"].ToString()))
+                {
+                    OICMaster_Id = Session["OICMaster_ID"].ToString();
+                }
+                ds = obj.ByProcedure("USP_GetCaseRegisDetail", new string[] { "Casetype_ID", "CourtType_Id", "CaseNo", "Year", "CaseStatus" ,"OICMaster_ID"}
+                        , new string[] { ddlCaseType.SelectedValue, ddlCourt.SelectedValue, ddlCaseNo.SelectedItem.Text, ddlCaseYear.SelectedItem.Text, ddlCaseStatus.SelectedItem.Text, OICMaster_Id }, "dataset");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     GrdCaseDetails.DataSource = ds;
@@ -139,11 +152,11 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
                     GrdCaseDetails.UseAccessibleHeader = true;
                 }
                 else { GrdCaseDetails.DataSource = null; GrdCaseDetails.DataBind(); }
-            }
-            else
-            {
-                GrdCaseDetails.DataSource = null; GrdCaseDetails.DataBind();
-            }
+            //}
+            //else
+            //{
+            //    GrdCaseDetails.DataSource = null; GrdCaseDetails.DataBind();
+            //}
         }
         catch (Exception ex)
         {
@@ -151,6 +164,8 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
         }
         finally { ds.Clear(); }
     }
+    #endregion
+    #region RowCommand
     protected void GrdCaseDetails_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
@@ -167,5 +182,6 @@ public partial class Legal_WPCaseList : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+    #endregion
 
 }

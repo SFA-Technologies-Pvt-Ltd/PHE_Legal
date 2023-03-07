@@ -117,7 +117,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         if (e.CommandName == "ViewDtl")
         {
             GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-            Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + e.CommandArgument.ToString() + "&pageID=" + 5, false);
+            Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + e.CommandArgument.ToString() + "&pageID=" + 8, false);
 
         }
     }

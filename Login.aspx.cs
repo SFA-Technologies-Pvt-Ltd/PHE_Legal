@@ -79,6 +79,15 @@ public partial class Legal_Login : System.Web.UI.Page
                             Session["AccessModule"] = ds.Tables[1];
                             Session["AccessForm"] = ds.Tables[2];
                             if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0]["OICMaster_ID"].ToString()))
+                            {
+                                Session["OICMaster_ID"] = ds.Tables[0].Rows[0]["OICMaster_ID"].ToString();
+                            }
+                            else
+                            {
+                                Session["OICMaster_ID"] = "";
+
+                            }
+                            if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0]["OICMaster_ID"].ToString()))
                                 Session["OICMaster_ID"] = ds.Tables[0].Rows[0]["OICMaster_ID"].ToString();
                             if (Session["OICMaster_ID"] != "" && Session["OICMaster_ID"] != null)
                                 Response.Redirect("~/Legal/OICWiseOldCaseDashBoard.aspx", false);

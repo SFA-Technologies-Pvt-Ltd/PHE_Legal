@@ -167,24 +167,19 @@
                                                         <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case No.">
+                                                <asp:TemplateField HeaderText="Filling No.">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("CaseNo") %>'></asp:Label>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case Year">
+                                                </asp:TemplateField>                                               
+                                                <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCaseYear" runat="server" Text='<%# Eval("CaseYear") %>'></asp:Label>
+                                                        <asp:Label ID="lblPetitioner" runat="server" Text='<%# Eval("PetitinoerName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Court Name">
+                                                 <asp:TemplateField HeaderText="Case Status">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCourtName" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Court Location">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCourtlocation" runat="server" Text='<%# Eval("District_Name") %>'></asp:Label>
+                                                        <asp:Label ID="lblRespondent" runat="server" Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Pending" ? System.Drawing.Color.Red : System.Drawing.Color.Green %>' Text='<%# Eval("CaseStatus") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">

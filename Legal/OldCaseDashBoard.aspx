@@ -149,6 +149,14 @@
             document.forms[0].target = "_blank";
         }
     </script>
+    <script>
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function () {
+            OneSignal.init({
+                appId: "11f50716-acf4-47d0-860f-1e710aa4d638",
+            });
+        });
+    </script>
 
     <style>
         .dvpading {
@@ -157,7 +165,7 @@
         }
 
         .card-body-custom-Color {
-           background: linear-gradient(to bottom, #fffeb6 0%, #fffeb6 100%);
+            background: linear-gradient(to bottom, #fffeb6 0%, #fffeb6 100%);
         }
 
         fieldset {
@@ -182,12 +190,16 @@
             width: auto !important;
             max-width: 50%;
         }
-
-
-   
     </style>
 
-
+    <style>
+        /*Gridview Paging*/
+        tr.myclass a {
+            padding-right: 15px;
+            padding-left: 15px;
+            font-size: 15px;
+        }
+    </style>
     <%-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                                 <script type="text/javascript">
                                     google.charts.load('current', { 'packages': ['corechart'] });
@@ -238,27 +250,26 @@
                                 <div class="row">
                                     <div class="col-lg col-md col-sm">
                                         <div class="table-responsive">
-                                            <asp:UpdatePanel runat="server" ID="up1">
-                                                <ContentTemplate>
-                                                    <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table-responsive" Width="100%" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdHighpriorityCase_PageIndexChanging"
-                                                        AutoGenerateColumns="false">
-                                                        <Columns>
-                                                            <asp:TemplateField HeaderText="S.No.">
-                                                                <ItemTemplate>
-                                                                    <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:BoundField DataField="FilingNo" HeaderText="Filing No" />
-                                                            <asp:BoundField DataField="Court" HeaderText="Court" />
-                                                            <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
-                                                            <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
-                                                            <%--<asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
+                                            <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table-responsive" Width="100%" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdHighpriorityCase_PageIndexChanging"
+                                                AutoGenerateColumns="false">
+                                                <PagerSettings Mode="NumericFirstLast" PageButtonCount="15" LastPageText="Last" PreviousPageText="Prev" NextPageText="Next" FirstPageText="First" />
+                                                <PagerStyle CssClass="myclass" />
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="S.No.">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="FilingNo" HeaderText="Filing No." />
+                                                    <asp:BoundField DataField="Court" HeaderText="Court" />
+                                                    <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
+                                                    <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
+                                                    <%--<asp:BoundField DataField="HearingDate" HeaderText="HearingDate" />
                                                             <asp:BoundField DataField="CaseSubject" HeaderText="CaseSubject" />--%>
-                                                            <asp:BoundField DataField="OICName" HeaderText="OICName" />
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
+                                                    <asp:BoundField DataField="OICName" HeaderText="OICName" />
+                                                </Columns>
+                                            </asp:GridView>
+
                                         </div>
                                     </div>
                                 </div>
@@ -279,29 +290,29 @@
             <div class="container-fluid">
                 <asp:Label ID="lblMsg" runat="server"></asp:Label>
                 <div class="card">
-                    <div class="card-header" style="text-align: center;">   
+                    <div class="card-header" style="text-align: center;">
                         <span style="font-size: 18px; color: #e5e5e5">Cases Dashboard</span>
                     </div>
 
-                    <div class="align-items-center;" style=" text-align: center;">
+                    <div class="align-items-center;" style="text-align: center;">
 
                         <div class="card-body card-body-custom-Color">
-                      
+
                             <div class="row form-group">
-							<div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
 
                                     <i class="fa-solid fa-magnifying-glass" style="font-size: x-large"></i>
-                                    
-                                     <a href="WPCaseList.aspx" class="Heading" target="_blank">SEARCH CASES</a>
+
+                                    <a href="WPCaseList.aspx" class="Heading" target="_blank">SEARCH CASES</a>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                   
-                                          <i class="fa-solid fa-star" style="font-size:x-large"></i>
+
+                                    <i class="fa-solid fa-star" style="font-size: x-large"></i>
                                     <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">HIGH PRIORITY CASE :</span>
                                     <asp:LinkButton ID="btnHighPriorityCase" runat="server" CssClass="btn-sm label label-warning" OnClick="btnHighPriorityCase_Click">TOTAL <span id="spnhighpriorityCase" runat="server" style="font-weight: bold; font-size: 18px;"></span></asp:LinkButton>
-                                
-                                    </div>
-                                 
+
+                                </div>
+
                             </div>
                             <br />
 
@@ -309,7 +320,7 @@
                             <div class="row form-group" style="text-align: left;">
                                 <div class="col-lg-6 col-md-12 col-sm-12 mt-2 ">
 
-                                    <i class="fa-solid fa-scale-unbalanced-flip" style="font-size:x-large"></i>&nbsp;&nbsp;
+                                    <i class="fa-solid fa-scale-unbalanced-flip" style="font-size: x-large"></i>&nbsp;&nbsp;
                                    
                                     <%-- <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;--%>
                                     <span class="Heading">COURT WISE :
@@ -327,28 +338,28 @@
                                     <div id="sbid1" runat="server" class="dvpading"></div>
 
                                 </div>
-                             
+
                             </div>
-                            <div class="row form-group" style="text-align: left; margin-top:2.5rem;">
-                                <div class="col-lg-6 col-md-12 col-sm-12" style="display:none;">
+                            <div class="row form-group" style="text-align: left; margin-top: 2.5rem;">
+                                <div class="col-lg-6 col-md-12 col-sm-12" style="display: none;">
                                     <img src="../image/Legal%201.png" style="height: 25px;" />&nbsp;&nbsp;<span class="Heading">CASE SUBJECT WISE :
                                     <asp:Label ID="lblCaseCount2" runat="server" CssClass="Heading" Style="color: #201f1e;" />
                                     </span>
                                     <div id="sbid2" runat="server" class="dvpading"></div>
                                 </div>
 
-                                <div class="col-lg-6 col-md-12 col-sm-12" style="font-size:larger">
-                                    <i class="fa-solid fa-gavel" style="font-size:x-large"></i>
+                                <div class="col-lg-6 col-md-12 col-sm-12" style="font-size: larger">
+                                    <i class="fa-solid fa-gavel" style="font-size: x-large"></i>
                                     <%--<img src="../image/Legal%201.png" style="height: 30px;" />--%>&nbsp;&nbsp;<span class="Heading">COURT WISE CONTEMPT CASES:
                                     <asp:Label ID="lblConcCount" runat="server" CssClass="Heading" Style="color: #201f1e;" />
                                     </span>
                                     <div id="cwcc" runat="server" class="dvpading"></div>
                                 </div>
-                           
-                      
+
+
 
                                 <div class="col-lg-6 col-md-12 col-sm-12">
-                                    <i class="fa-solid fa-thumbs-up" style="font-size:x-large"></i>
+                                    <i class="fa-solid fa-thumbs-up" style="font-size: x-large"></i>
                                     <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>&nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION COMPLAINES :
                                     <asp:Label ID="lblCaseCount3" runat="server" CssClass="Heading" Style="color: #201f1e;" />
                                     </span>
@@ -370,21 +381,21 @@
 
             </div>
             <%-- this Div Comment By bhanu on 28/02/2023 Due to order by Utkarsh sir. --%>
-            <div class="container-fluid" style="display:none;">
+            <div class="container-fluid" style="display: none;">
                 <div class="card card-body" style="background: linear-gradient(to bottom, #fffeb6 0%, #fffeb6 100%);">
                     <fieldset>
                         <legend>Live Informations</legend>
                         <div class="row form-group ">
 
                             <div class="col-lg-6 col-md-12 col-sm-12">
-                                <i class="fa-solid fa-bars" style="font-size:x-large"></i>
+                                <i class="fa-solid fa-bars" style="font-size: x-large"></i>
                                 <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>
                                 &nbsp;&nbsp;<span class="Heading">CASE TYPE WISE :<asp:Label ID="lblCasetypeCountno" runat="server" class="Heading" Style="color: #201f1e;"></asp:Label>
                                 </span>
                                 <div id="CasetypeCountID1" runat="server" style="50%"></div>
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12">
-                                <i class="fa-regular fa-arrow-alt-circle-up" style="font-size:x-large"></i>
+                                <i class="fa-regular fa-arrow-alt-circle-up" style="font-size: x-large"></i>
                                 <%--<img src="../image/Legal%201.png" style="height: 25px;" />--%>
                                 &nbsp;&nbsp;<span class="Heading">ORDER BY DIRECTION :<asp:Label ID="lblOrderByDirectionalCases" runat="server" class="Heading" Style="color: #201f1e;"></asp:Label>
                                 </span>

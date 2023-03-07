@@ -126,9 +126,10 @@ public partial class Legal_ViewWPPendingCaseDetail : System.Web.UI.Page
             if (Request.QueryString["pageID"] == "2") Response.Redirect("../Legal/ConcludedwpReport.aspx", false);//Concolude Rpt
             if (Request.QueryString["pageID"] == "3") Response.Redirect("../Legal/SubjectWiseCaseDtl.aspx", false);// SubjectWise Case Rpt
             if (Request.QueryString["pageID"] == "4") Response.Redirect("../Legal/disposecaserpt.aspx", false);// Disposal Case Rpt
-            if (Request.QueryString["pageID"] == "5") Response.Redirect("../Legal/MonthlyHearingDtl.aspx", false);// Monthly Hearing Case Rpt
+            if (Request.QueryString["pageID"] == "5") Response.Redirect("../Legal/respondentwisecaserpt.aspx", false);// Respondent Case Rpt
             if (Request.QueryString["pageID"] == "6") Response.Redirect("../Legal/WeekelyHearingCaseRpt.aspx", false);// Weekely Hearing Case Rpt
             if (Request.QueryString["pageID"] == "7") Response.Redirect("../Legal/LongPendingCaseRpt.aspx", false);// Long Pendinh Case Rpt
+            if (Request.QueryString["pageID"] == "8") Response.Redirect("../Legal/monthlyhearingdtl.aspx", false);// Monthly Hearing Case Rpt
         }
         catch (Exception ex)
         {

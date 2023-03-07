@@ -44,7 +44,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
 
     }
-
+    //Case type Wise Count
     protected void BindCaseTypeCount()
     {
         DataSet dsCasecount = new DataSet();
@@ -167,7 +167,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         //}
         #endregion
     }
-
+    // Court Wise Count
     protected void CourtTypeCase()
     {
         try
@@ -232,6 +232,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
 
     }
 
+    // OrderByDirection Court Wise
     protected void CourtTypeCase1()
     {
         try
@@ -296,7 +297,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
 
     }
-
+    // SubjectWise Count
     protected void CourtTypeCase2()
     {
         try
@@ -427,7 +428,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         }
 
     }
-
+    //CourtWise ContCase Count
     protected void CourtWiseContemptCases()
     {
         try
@@ -514,7 +515,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
             // spnHearing.InnerHtml = Marquee;
         }
     }
-
+    // HighPriority Case Count
     protected void BIndWACaseCount()
     {
         try
@@ -537,7 +538,6 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
 
     protected void btnHighPriorityCase_Click(object sender, EventArgs e)
     {
@@ -575,7 +575,7 @@ public partial class mis_Legal_OldCaseDashBoard : System.Web.UI.Page
         DataTable dt = (DataTable)ViewState["dt"];
         GrdHighpriorityCase.DataSource = dt;
         GrdHighpriorityCase.DataBind();
-
+        Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
     }
 
 

@@ -23,7 +23,7 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("/Login.aspx");
+            Response.Redirect("/Login.aspx", false);
         }
     }
     #region Get Case Dispose Type
@@ -93,8 +93,8 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
             grdSubjectWiseCasedtl.DataSource = null;
             grdSubjectWiseCasedtl.DataBind();
             string Compliance = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedItem.Text : null;
-            
-            if (Session["OICMaster_ID"] != null)
+
+            if (Session["OICMaster_ID"] != null && Session["OICMaster_ID"] != "")
             {
                 ds = obj.ByProcedure("USP_Select_CaseDisposalRpt", new string[] { "Casetype_ID", "CaseDisposeType_Id", "Compliance_Status", "OICMaster_Id", "flag" },
                     new string[] { ddlCaseType.SelectedItem.Value, ddlDisposetype.SelectedItem.Value, Compliance, OIC,"1" }, "dataset");
@@ -108,6 +108,8 @@ public partial class Legal_DisposeCaseRpt : System.Web.UI.Page
             {
                 grdSubjectWiseCasedtl.DataSource = ds;
                 grdSubjectWiseCasedtl.DataBind();
+                grdSubjectWiseCasedtl.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdSubjectWiseCasedtl.UseAccessibleHeader = true;
             }
             else
             {

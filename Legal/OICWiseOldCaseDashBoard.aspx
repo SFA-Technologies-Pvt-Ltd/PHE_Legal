@@ -182,7 +182,14 @@
             max-width: 50%;
         }
     </style>
-
+    <style>
+        /*Gridview Paging*/
+        tr.myclass a {
+            padding-right: 15px;
+            padding-left: 15px;
+            font-size: 15px;
+        }
+    </style>
 
     <%-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                                 <script type="text/javascript">
@@ -234,31 +241,32 @@
                                 <div class="row">
                                     <div class="col-lg col-md col-sm">
                                         <div class="table-responsive">
-                                            <asp:UpdatePanel runat="server" ID="up1">
-                                                <ContentTemplate>
-                                                    <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table-responsive" Width="100%" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdHighpriorityCase_PageIndexChanging"
-                                                        AutoGenerateColumns="false">
-                                                        <Columns>
-                                                            <asp:TemplateField HeaderText="S.No.">
-                                                                <ItemTemplate>
-                                                                    <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:BoundField DataField="FilingNo" HeaderText="Case No" />
-                                                            <asp:BoundField DataField="CaseYear" HeaderText="Case Year" />
-                                                            <asp:BoundField DataField="Court" HeaderText="Court" />
-                                                            <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
-                                                            <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
-                                                            <asp:TemplateField HeaderText="Case Status">
-                                                                <ItemTemplate>
-                                                                    <asp:Label ID="lblCaseStatus" runat="server" Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Pending" ? System.Drawing.Color.Red : System.Drawing.Color.Green %>' Text='<%# Eval("CaseStatus") %>'></asp:Label>
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:BoundField DataField="OICName" HeaderText="OICName" />
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
+                                            <asp:GridView ID="GrdHighpriorityCase" runat="server" CssClass="table table-borderd" Width="100%" AllowPaging="true" PageSize="10" OnPageIndexChanging="GrdHighpriorityCase_PageIndexChanging"
+                                                AutoGenerateColumns="false">
+                                                
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="S.No.">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblSrno" runat="server" Text='<%# Container.DataItemIndex +1 %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="FilingNo" HeaderText="Filing No." />
+                                                    <asp:BoundField DataField="CaseYear" HeaderText="Case Year" />
+                                                    <asp:BoundField DataField="Court" HeaderText="Court" />
+                                                    <asp:BoundField DataField="Petitioner" HeaderText="Petitioner" />
+                                                    <asp:BoundField DataField="Respondent" HeaderText="Respondent" />
+                                                    <asp:TemplateField HeaderText="Case Status">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblCaseStatus" runat="server" Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Pending" ? System.Drawing.Color.Red : System.Drawing.Color.Green %>' Text='<%# Eval("CaseStatus") %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField DataField="OICName" HeaderText="OICName" />
+                                                </Columns>
+                                                <PagerSettings Mode="NumericFirstLast" PageButtonCount="15" LastPageText="Last" PreviousPageText="Prev" NextPageText="Next" FirstPageText="First" />
+                                                <PagerStyle CssClass="myclass" />
+                                            </asp:GridView>
+
+
                                         </div>
                                     </div>
                                 </div>

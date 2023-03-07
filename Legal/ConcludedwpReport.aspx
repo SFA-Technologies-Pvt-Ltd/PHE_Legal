@@ -202,19 +202,14 @@
                                                         <asp:Label ID="lblWpCaseNo" runat="server" Text='<%# Eval("CaseNo") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Case Year" ItemStyle-HorizontalAlign="Center">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseYear" runat="server" Text='<%# Eval("CaseYear") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Petitioner Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitonerName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                 <asp:TemplateField HeaderText="Case type" ItemStyle-HorizontalAlign="Center">
+                                                 <asp:TemplateField HeaderText="Respondent Name" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblOfficeName" runat="server" Text='<%# Eval("Casetype_Name") %>'></asp:Label>
+                                                        <asp:Label ID="lblRes" runat="server" Text='<%# Eval("RespondentName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>       
                                                 <asp:TemplateField HeaderText="Case Status" ItemStyle-HorizontalAlign="Center">

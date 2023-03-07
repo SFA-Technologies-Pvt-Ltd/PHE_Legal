@@ -611,7 +611,7 @@ public partial class mis_Legal_OICWiseOldCaseDashBoard : System.Web.UI.Page
         DataTable dt = (DataTable)ViewState["dt"];
         GrdHighpriorityCase.DataSource = dt;
         GrdHighpriorityCase.DataBind();
-
+        Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "myModal()", true);
     }
 
 

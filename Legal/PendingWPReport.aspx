@@ -131,7 +131,7 @@
                                             ControlToValidate="ddlCaseYear" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator><br />
                                            प्रकरण वर्ष</label>
-                                       <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
+                                       <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control select2"></asp:DropDownList>
                                        
                                     </div>
                                 </div>
@@ -202,19 +202,14 @@
                                                         <asp:Label ID="lblCaseNO" runat="server" Text='<%# Eval("CaseNo") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Case Year">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblCaseYear" runat="server" Text='<%# Eval("CaseYear") %>'></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Petitioner Name">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblPetitionerName" runat="server" Text='<%# Eval("PetitonerName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Court">
+                                                <asp:TemplateField HeaderText="Respondent Name">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCourt" runat="server" Text='<%# Eval("CourtTypeName") %>'></asp:Label>
+                                                        <asp:Label ID="lblResP" runat="server" Text='<%# Eval("RespondentName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>             
                                                 <asp:TemplateField HeaderText="Case Status">

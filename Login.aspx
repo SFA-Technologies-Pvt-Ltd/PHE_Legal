@@ -13,6 +13,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
+		<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  window.OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "11f50716-acf4-47d0-860f-1e710aa4d638",
+    });
+  });
+</script>
     <style>
         .bgleft_login {
             display: block;
@@ -56,8 +65,8 @@
                     <div class="col-lg-12 p-5 shadow-sm border rounded-5 border-primary bg-white" style="border: none !important">
                         <h2 class="text-center mb-4 text-primary" style="margin-top: -12px;">
                             <img runat="server" src="../image/logo/ssmsLogo.png" alt="" style="width: 80px;" /></h2>
-                        <h5 style="text-align: center; color: #59afd9; font-size: 25px; font-family: 'Times New Roman';">Public Health Engineering Department</h5>
-                        <h5 style="text-align: center; color: #f98023; font-size: 21px;">Legal Cases Monitoring System</h5>
+                        <h5 style="text-align: center; color: #154c79; font-size: 25px; font-family: 'Calibri';">PHED MP</h5>
+                        <h5 style="text-align: center; color: #f98023; font-size: 18px; font-family: 'Calibri';">Legal Cases Monitoring System</h5>
                         <div class="mb-5">
                             <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                         </div>
@@ -76,10 +85,13 @@
                             </div>
                         </div>
                         <div class="d-grid pt-3">
-                            <a href="Legal/ForgotPassword.aspx"  style="text-align: left; color:#0c59e7; font-size: 18px; font-family: 'Times New Roman';text-decoration:none;">Forget Password</a>
-                        </div>
+                            <a href="Legal/ForgotPassword.aspx"  style="text-align: center; color:#0c59e7; font-size: 18px; font-family: 'Calibri';text-decoration:none;">Forget Password</a>
+							<br>
+                        <a href="Legal/phelegal.apk"  style="text-align: center; color:#0c59e7; font-size: 18px; font-family: 'Calibri';text-decoration:none;">Download Mobile App</a>
+						</div>
                     </div>
                 </div>
+				
             </div>
         </div>
     </form>
