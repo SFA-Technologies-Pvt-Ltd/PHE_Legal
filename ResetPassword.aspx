@@ -59,8 +59,8 @@
                     <div class="col-lg-12 p-5 shadow-sm border rounded-5 border-primary bg-white" style="border: none !important">
                         <h2 class="text-center mb-4 text-primary" style="margin-top: -12px;">
                             <img runat="server" src="../image/logo/ssmsLogo.png" alt="" style="width: 80px;" /></h2>
-                        <h5 style="text-align: center; color: #59afd9; font-size: 25px; font-family: 'Times New Roman';">Public Health Engineering Department</h5>
-                        <h5 style="text-align: center; color: #f98023; font-size: 21px;">Legal Cases Monitoring System</h5>
+                        <h5 style="text-align: center; color: #154c79; font-size: 25px; font-family: 'Calibri';">PHED MP</h5>
+                        <h5 style="text-align: center; color: #f98023; font-size: 18px; font-family: 'Calibri';">Legal Cases Monitoring System</h5>
                         <div class="mb-5">
                             <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                         </div>

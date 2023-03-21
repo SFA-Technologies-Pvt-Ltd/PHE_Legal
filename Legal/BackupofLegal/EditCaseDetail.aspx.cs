@@ -1120,9 +1120,12 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 HearingDtl_CaseDispose.Visible = true;
                 DivOrderTimeline.Visible = true;
                 OrderSummary_Div.Visible = true;
-                if(ddlDisponsType.SelectedValue == "2")
+                CimplianceSt_Div.Visible = false;
+                if (ddlDisponsType.SelectedIndex == 2)
                 {
-                    Isacompliance_Div.Visible = true;
+                    ddlCompliaceSt.ClearSelection();
+                    CimplianceSt_Div.Visible = true;
+                    RequiredFieldValidator6.Enabled = true;
                 }
             }
             else
@@ -1132,6 +1135,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 OrderBy2.Visible = false;
                 DivOrderTimeline.Visible = false;
                 OrderSummary_Div.Visible = false;
+                CimplianceSt_Div.Visible = false;
             }
         }
         catch (Exception ex)
@@ -1158,6 +1162,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 ddlDisponsType.ClearSelection();
                 HearingDtl_CaseDispose.Visible = false;
                 OrderSummary_Div.Visible = false;
+                CimplianceSt_Div.Visible = false;
             }
         }
         catch (Exception ex)
@@ -1222,8 +1227,8 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                     if (btnCaseDispose.Text == "Disposal")
                     {
                         string DisposalDate = txtCaseDisposeDate.Text != "" ? Convert.ToDateTime(txtCaseDisposeDate.Text, cult).ToString("yyyy/MM/dd") : "";
-                        ds = obj.ByProcedure("USP_Update_CaseRegisDtl", new string[] { "flag", "Case_ID", "UniqueNo", "CaseDisposal_Status", "CaseDisposalType_Id", "CaseDisposal_Date", "CaseDisposal_Timeline", "CaseDisposal_Doc", "OrderSummary", "LastupdatedBy", "LastupdatedByIP" }
-                            , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), rdCaseDispose.SelectedItem.Text, ddlDisponsType.SelectedValue, DisposalDate, txtOrderimpletimeline.Text.Trim(), ViewState["DisposeDOC"].ToString(), txtorderSummary.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                        ds = obj.ByProcedure("USP_Update_CaseRegisDtl", new string[] { "flag", "Case_ID", "UniqueNo", "CaseDisposal_Status", "CaseDisposalType_Id", "CaseDisposal_Date", "CaseDisposal_Timeline", "CaseDisposal_Doc", "OrderSummary", "LastupdatedBy", "LastupdatedByIP", "Compliance_Status" }
+                            , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), rdCaseDispose.SelectedItem.Text, ddlDisponsType.SelectedValue, DisposalDate, txtOrderimpletimeline.Text.Trim(), ViewState["DisposeDOC"].ToString(), txtorderSummary.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ddlCompliaceSt.SelectedItem.Text.Trim() }, "dataset");
                     }
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
@@ -1234,6 +1239,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                             txtOrderimpletimeline.Text = "";
                             rdCaseDispose.ClearSelection();
                             ddlDisponsType.ClearSelection();
+                            ddlCompliaceSt.ClearSelection();
                             txtCaseDisposeDate.Text = "";
                             ViewState["DisposeDOC"] = "";
                             BindDetails(sender, e);
@@ -1623,6 +1629,30 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 }
                 else
                     lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", disable.Tables[0].Rows[0]["ErrMsg"].ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void GrdCaseDocument_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        try
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                HyperLink Link = (HyperLink)e.Row.FindControl("hyperViewLink");
+                HyperLink DocWithFolderPath = (HyperLink)e.Row.FindControl("hyperViewDoc");
+                Label lbldoc = (Label)e.Row.FindControl("lblDocPath");
+                int coul = GrdCaseDocument.Columns.Count;
+
+                string name = lbldoc.Text;
+                name.StartsWith("https");
+                if (name.StartsWith("https") == true)
+                    Link.Visible = true;
+                else DocWithFolderPath.Visible = true;
+
             }
         }
         catch (Exception ex)
