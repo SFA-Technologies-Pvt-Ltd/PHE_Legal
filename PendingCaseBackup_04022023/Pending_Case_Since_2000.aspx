@@ -273,11 +273,8 @@
                                 </div>
                             </div>
                             <div class="card-body" style="opacity: 1;">
-                                <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found" 
-                                    AutoGenerateColumns="false" CssClass="table-responsive" Width="100%" 
-                                    OnRowEditing="grdCaseTypeDetail_RowEditing" OnRowCommand="grdCaseTypeDetail_RowCommand"
-                                    OnRowUpdating="grdCaseTypeDetail_RowUpdating" OnRowCancelingEdit="grdCaseTypeDetail_RowCancelingEdit"
-                                    OnRowDataBound="grdCaseTypeDetail_RowDataBound" >
+                                <asp:GridView runat="server" ID="grdCaseTypeDetail" EmptyDataText="No Record Found" AutoGenerateColumns="false" CssClass="table-responsive" Width="100%" 
+                                     OnRowCommand="grdCaseTypeDetail_RowCommand" OnRowDataBound="grdCaseTypeDetail_RowDataBound" >
                                     <Columns>
                                         <asp:TemplateField HeaderText="S.No." ItemStyle-HorizontalAlign="Left">
                                             <ItemTemplate>
