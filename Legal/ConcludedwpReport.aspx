@@ -131,7 +131,7 @@
                                             ControlToValidate="ddlCaseYear" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator><br />
                                             प्रकरण वर्ष</label>
-                                       <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control"></asp:DropDownList>
+                                       <asp:DropDownList ID="ddlCaseYear" runat="server" CssClass="form-control select2"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="col-md-3" style="display:none">

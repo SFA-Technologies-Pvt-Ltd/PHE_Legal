@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
 
 public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
 {
@@ -22,7 +25,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("/Login.aspx", false);
+            Response.Redirect("~/Login.aspx", false);
         }
     }
 
@@ -38,8 +41,7 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
 
     }
     #endregion
-
-
+    #region FillCasetype
     private void GetCaseType()
     {
         try
@@ -66,7 +68,8 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion
+    #region FillGridView
     protected void BindGrid()
     {
         try
@@ -95,7 +98,8 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
+    #endregion
+    #region SearchButton
     protected void btnSearch_Click(object sender, EventArgs e)
     {
         try
@@ -111,16 +115,28 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
+    #region RowCommand Event
     protected void grdMonthlyHearingdtl_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         lblMsg.Text = "";
         if (e.CommandName == "ViewDtl")
         {
             GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-            Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + e.CommandArgument.ToString() + "&pageID=" + 8, false);
-
+            string ID = HttpUtility.UrlEncode(Encrypt(e.CommandArgument.ToString()));
+            string page_ID = HttpUtility.UrlEncode(Encrypt("8"));
+            string CaseID = HttpUtility.UrlEncode(Encrypt("CaseID"));
+            string pageID = HttpUtility.UrlEncode(Encrypt("pageID"));
+            Response.Redirect("~/Legal/ViewWPPendingCaseDetail.aspx?" + CaseID + "=" + ID + "&" + pageID + "=" + page_ID, false);
+        }
+        if(grdMonthlyHearingdtl.Rows.Count > 0)
+        {
+            grdMonthlyHearingdtl.HeaderRow.TableSection = TableRowSection.TableHeader;
+            grdMonthlyHearingdtl.UseAccessibleHeader = true;
         }
     }
+    #endregion
+    #region PageIndexChanging
     protected void grdMonthlyHearingdtl_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
         try
@@ -133,5 +149,27 @@ public partial class Legal_MonthlyHearingDtl : System.Web.UI.Page
         {
             ErrorLogCls.SendErrorToText(ex);
         }
+    }
+    #endregion
+    private string Encrypt(string clearText)
+    {
+        string EncryptionKey = "MAKV2SPBNI99212";
+        byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+        using (Aes encryptor = Aes.Create())
+        {
+            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+            encryptor.Key = pdb.GetBytes(32);
+            encryptor.IV = pdb.GetBytes(16);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(clearBytes, 0, clearBytes.Length);
+                    cs.Close();
+                }
+                clearText = Convert.ToBase64String(ms.ToArray());
+            }
+        }
+        return clearText;
     }
 }

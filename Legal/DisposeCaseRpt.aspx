@@ -192,7 +192,7 @@
                                                 </asp:TemplateField> 
                                                 <asp:TemplateField HeaderText="Case Status" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblCaseStatus" runat="server" Text='<%# Eval("CaseStatus") %>' Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Dispose" ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>
+                                                        <asp:Label ID="lblCaseStatus" runat="server" Text='<%# Eval("CaseStatus") %>' Font-Bold="true" ForeColor='<%# Eval("CaseStatus").ToString() == "Disposed" ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="View" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">

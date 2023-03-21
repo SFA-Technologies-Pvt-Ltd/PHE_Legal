@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
 
 public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
 {
@@ -22,7 +25,7 @@ public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
         }
         else
         {
-            Response.Redirect("/Login.aspx", false);
+            Response.Redirect("~/Login.aspx", false);
         }
     }
 
@@ -77,11 +80,8 @@ public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
             {
                 grdWeekelyWiseCasedtl.DataSource = ds;
                 grdWeekelyWiseCasedtl.DataBind();
-                if (grdWeekelyWiseCasedtl.Rows.Count > 0)
-                {
-                    grdWeekelyWiseCasedtl.HeaderRow.TableSection = TableRowSection.TableHeader;
-                    grdWeekelyWiseCasedtl.UseAccessibleHeader = true;
-                }
+                grdWeekelyWiseCasedtl.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdWeekelyWiseCasedtl.UseAccessibleHeader = true;
             }
             else
             {
@@ -113,7 +113,7 @@ public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
     }
     #endregion
     #region Row Command
-    protected void grdSubjectWiseCasedtl_RowCommand(object sender, GridViewCommandEventArgs e)
+    protected void grdWeekelyWiseCasedtl_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
         {
@@ -121,10 +121,16 @@ public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
             if (e.CommandName == "ViewDtl")
             {
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-                string ID = e.CommandArgument.ToString();
-                string pageID = "6";
-                Response.Redirect("../Legal/ViewWPPendingCaseDetail.aspx?CaseID=" + Server.UrlEncode(ID) + "&pageID=" + pageID, false);
-
+                string ID = HttpUtility.UrlEncode(Encrypt(e.CommandArgument.ToString()));
+                string page_ID = HttpUtility.UrlEncode(Encrypt("6"));
+                string CaseID = HttpUtility.UrlEncode(Encrypt("CaseID"));
+                string pageID = HttpUtility.UrlEncode(Encrypt("pageID"));
+                Response.Redirect("~/Legal/ViewWPPendingCaseDetail.aspx?" + CaseID + "=" + ID + "&" + pageID + "=" + page_ID, false);
+            }
+            if (grdWeekelyWiseCasedtl.Rows.Count > 0)
+            {
+                grdWeekelyWiseCasedtl.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdWeekelyWiseCasedtl.UseAccessibleHeader = true;
             }
         }
         catch (Exception ex)
@@ -133,6 +139,26 @@ public partial class Legal_WeekelyHearingCaseRpt : System.Web.UI.Page
         }
     }
     #endregion
-
-
+    private string Encrypt(string clearText)
+    {
+        string EncryptionKey = "MAKV2SPBNI99212";
+        byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+        using (Aes encryptor = Aes.Create())
+        {
+            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+            encryptor.Key = pdb.GetBytes(32);
+            encryptor.IV = pdb.GetBytes(16);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(clearBytes, 0, clearBytes.Length);
+                    cs.Close();
+                }
+                clearText = Convert.ToBase64String(ms.ToArray());
+            }
+        }
+        return clearText;
+    }
+   
 }

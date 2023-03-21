@@ -183,9 +183,7 @@
                                             ControlToValidate="txtCaseDetail" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtCaseDetail" runat="server" class="form-control" onkeyup="javascript:capFirst(this);" TextMode="MultiLine"></asp:TextBox>
-                                        <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator" Display="Dynamic" ControlToValidate="txtCaseDetail"
-                                            ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Save" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                        </asp:RegularExpressionValidator>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -348,9 +346,7 @@
                                             Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-                                        <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator3" Display="Dynamic" ControlToValidate="txtPetiAddRess"
-                                            ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Petitioner" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                        </asp:RegularExpressionValidator>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-md-1">

@@ -162,7 +162,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <asp:GridView ID="grdWeekelyWiseCasedtl" runat="server" CssClass="datatable table table-bordered" EmptyDataText="NO RECORD FOUND" AutoGenerateColumns="false" OnRowCommand="grdSubjectWiseCasedtl_RowCommand" DataKeyNames="Case_ID">
+                                        <asp:GridView ID="grdWeekelyWiseCasedtl" runat="server" CssClass="datatable table table-bordered" EmptyDataText="NO RECORD FOUND" AutoGenerateColumns="false" OnRowCommand="grdWeekelyWiseCasedtl_RowCommand" DataKeyNames="Case_ID">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                     <ItemTemplate>

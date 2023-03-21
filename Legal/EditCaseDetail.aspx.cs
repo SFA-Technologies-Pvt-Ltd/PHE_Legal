@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 public partial class Legal_EditCaseDetail : System.Web.UI.Page
 {
@@ -20,8 +22,12 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                ViewState["ID"] = Request.QueryString["ID"];
-                ViewState["UniqueNO"] = Request.QueryString["UniqueNO"];
+                string multiCharString = Request.QueryString.ToString();
+                string[] multiArray = multiCharString.Split(new Char[] { '=', '&' });
+                string CaseID = Decrypt(HttpUtility.UrlDecode(multiArray[1]));
+                string UniqueNO = Decrypt(HttpUtility.UrlDecode(multiArray[3]));
+                ViewState["ID"] = CaseID;
+                ViewState["UniqueNO"] = UniqueNO;
                 ViewState["Emp_Id"] = Session["Emp_Id"].ToString();
                 ViewState["Office_Id"] = Session["Office_Id"].ToString();
                 Session["PAGETOKEN"] = Server.UrlEncode(System.DateTime.Now.ToString());
@@ -37,11 +43,22 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 CaseDisposeStatus(); // by deafult Case Dispose on NO text.
                 FillCasetype();
                 BindDetails(sender, e);
+                //By Default Set No for OldCase.
+                foreach (ListItem item in RbOldCaseAsk.Items)
+                {
+                    if (item.Text.Contains("No"))
+                    {
+                        item.Selected = true;
+                        break;
+
+                    }
+                    DivOldCase.Visible = false;
+                }
             }
         }
         else
         {
-            Response.Redirect("../Login.aspx");
+            Response.Redirect("../Login.aspx", false);
         }
 
     }
@@ -337,10 +354,13 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         }
     }
     #endregion
+
+    #region Bind MainDtl
     protected void BindDetails(object sender, EventArgs e)
     {
         try
         {
+            ViewState["SubjectID"] = "";
             ds = obj.ByProcedure("USP_Select_NewCaseRegis", new string[] { "Case_ID" }
                 , new string[] { ViewState["ID"].ToString() }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -363,7 +383,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 {
                     ddlCaseSubject.ClearSelection();
                     ddlCaseSubject.Items.FindByValue(ds.Tables[0].Rows[0]["CaseSubjectID"].ToString().Trim()).Selected = true;
+                    ViewState["SubjectID"] = ds.Tables[0].Rows[0]["CaseSubjectID"].ToString();// for check before Case Dispose.
                 }
+                else { ViewState["SubjectID"] = "NA"; }
                 if (ds.Tables[0].Rows[0]["CaseSubSubj_Id"].ToString() != "")
                 {
                     ddlCaseSubject_SelectedIndexChanged(sender, e);
@@ -411,7 +433,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         }
 
     }
-    //Petitioner Dtl 1.0
+    #endregion
+
+    #region Update_MainDetail_Button
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
         try
@@ -452,6 +476,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", ex.Message.ToString());
         }
     }
+    #endregion
     protected void ddlCourtType_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -520,7 +545,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         }
     }
 
-    //Petitioner Dtl 1.1
+    #region PetitionerDtl
     protected void GrdPetiDtl_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
@@ -536,14 +561,15 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 Label lblPetitionermobileNo = (Label)row.FindControl("lblPetitionermobileNo");
                 Label lblAddress = (Label)row.FindControl("lblAddress");
                 ViewState["Petitioner_ID"] = e.CommandArgument;
-                hdnUniqueNo.Value = lblUniqNO.Text;
-                txtPetiName.Text = lblPetitionerName.Text;
-                txtPetiMobileNo.Text = lblPetitionermobileNo.Text;
-                txtPetiAddRess.Text = lblAddress.Text;
-                if (lblDesignation_Id.Text != "")
-                    ddlPetiDesigNation.ClearSelection();
-                ddlPetiDesigNation.Items.FindByValue(lblDesignation_Id.Text).Selected = true;
                 btnPetitioner.Text = "Update";
+                if (lblPetitionerName.Text != "") txtPetiName.Text = lblPetitionerName.Text;
+                if (lblPetitionermobileNo.Text != "") txtPetiMobileNo.Text = lblPetitionermobileNo.Text;
+                if (lblAddress.Text != "") txtPetiAddRess.Text = lblAddress.Text;
+                if (lblDesignation_Id.Text != "")
+                {
+                    ddlPetiDesigNation.ClearSelection();
+                    ddlPetiDesigNation.Items.FindByValue(lblDesignation_Id.Text).Selected = true;
+                }
             }
             if (e.CommandName == "DeleteRecord")
             {
@@ -606,8 +632,92 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
 
-    //Respondent Dtl 
+    #region Petitioner_AdvDtl
+    protected void btnPetiAdvSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Page.IsValid)
+            {
+                lblMsg.Text = "";
+                if (btnPetiAdvSave.Text == "Save")
+                {
+                    ds = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "Case_ID", "UniqueNo", "PetiAdv_Name", "PetiAdv_MobileNo", "CreatedBy", "CreatedByIP" }
+                        , new string[] { "1", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), txtPetiAdvocateName.Text.Trim(), txtPetiAdvocateMobileNo.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                }
+                else if (btnPetiAdvSave.Text == "Update" && ViewState["PetiAdv_Id"].ToString().ToString() != "" && ViewState["PetiAdv_Id"].ToString() != null)
+                {
+                    ds = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "Case_ID", "UniqueNo", "PetiAdv_Id", "PetiAdv_Name", "PetiAdv_MobileNo", "LastupdatedBy", "LastupdatedByIP" }
+                        , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), ViewState["PetiAdv_Id"].ToString(), txtPetiAdvocateName.Text.Trim(), txtPetiAdvocateMobileNo.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                }
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                    if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                    {
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                        txtPetiAdvocateName.Text = "";
+                        txtPetiAdvocateMobileNo.Text = "";
+                        ViewState["PetiAdv_Id"] = "";
+                        BindDetails(sender, e);
+                        btnPetiAdvSave.Text = "Save";
+                    }
+                    else
+                        lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    protected void GrdPetiAdv_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            ViewState["PetiAdv_Id"] = "";
+            if (e.CommandName == "EditRecord")
+            {
+                lblMsg.Text = "";
+                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+                Label lblPetiAdvocatename = (Label)row.FindControl("lblPetiAdvocatename");
+                Label lblPetiAdvocatMObile = (Label)row.FindControl("lblPetiAdvocatMObile");
+
+
+                ViewState["PetiAdv_Id"] = e.CommandArgument;
+                btnPetiAdvSave.Text = "Update";
+                if (lblPetiAdvocatename.Text != "") txtPetiAdvocateName.Text = lblPetiAdvocatename.Text;
+                if (lblPetiAdvocatMObile.Text != "") txtPetiAdvocateMobileNo.Text = lblPetiAdvocatMObile.Text;
+            }
+            else if (e.CommandName == "DeleteRecord")
+            {
+                GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
+                DataSet disable = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "UniqueNo", "PetiAdv_Id", "LastisactiveBy", "LastisactiveByIP" }
+                   , new string[] { "3", ViewState["UniqueNO"].ToString(), e.CommandArgument.ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                if (disable != null && disable.Tables[0].Rows.Count > 0)
+                {
+                    string ErrMsg = disable.Tables[0].Rows[0]["ErrMsg"].ToString();
+                    if (disable.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                    {
+                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                        BindDetails(sender, e);
+                    }
+                }
+                else
+                    lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", disable.Tables[0].Rows[0]["ErrMsg"].ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
+    #endregion
+
+    #region RespondentDtl
     protected void ddlResOfficetypeName_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -647,23 +757,29 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 Label lblDepartent = (Label)row.FindControl("lblDepartment");
                 Label lblAddress = (Label)row.FindControl("lblAddress");
 
-                txtResName.Text = lblResName.Text;
-                txtResMobileNo.Text = lblResMobileNo.Text;
-                txtResDepartment.Text = lblDepartent.Text;
-                txtResAddress.Text = lblAddress.Text;
                 ViewState["RespondentID"] = e.CommandArgument;
                 btnRespondent.Text = "Update";
-                if (lblDesignation_Id.Text != "")
-                    ddlResDesig.ClearSelection();
-                ddlResDesig.Items.FindByValue(lblDesignation_Id.Text).Selected = true;
-                if (lblOfficetype_ID.Text != "")
-                    ddlResOfficetypeName.ClearSelection();
-                ddlResOfficetypeName.Items.FindByValue(lblOfficetype_ID.Text).Selected = true;
 
+                if (lblResName.Text != "") txtResName.Text = lblResName.Text;
+                if (lblResMobileNo.Text != "") txtResMobileNo.Text = lblResMobileNo.Text;
+                if (lblDepartent.Text != "") txtResDepartment.Text = lblDepartent.Text;
+                if (lblAddress.Text != "") txtResAddress.Text = lblAddress.Text;
+                if (lblDesignation_Id.Text != "")
+                {
+                    ddlResDesig.ClearSelection();
+                    ddlResDesig.Items.FindByValue(lblDesignation_Id.Text).Selected = true;
+                }
+                if (lblOfficetype_ID.Text != "")
+                {
+                    ddlResOfficetypeName.ClearSelection();
+                    ddlResOfficetypeName.Items.FindByValue(lblOfficetype_ID.Text).Selected = true;
+                }
                 if (lblOffice_Id.Text != "")
+                {
                     ddlResOfficetypeName_SelectedIndexChanged(sender, e);
-                ddlResOfficeName.ClearSelection();
-                ddlResOfficeName.Items.FindByValue(lblOffice_Id.Text).Selected = true;
+                    ddlResOfficeName.ClearSelection();
+                    ddlResOfficeName.Items.FindByValue(lblOffice_Id.Text).Selected = true;
+                }
             }
             else if (e.CommandName == "DeleteRecord")
             {
@@ -730,8 +846,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
 
-    // Dept Advocate Dtl
+    #region Dept_AdvocateDtl
     protected void btnDeptAdvocate_Click(object sender, EventArgs e)
     {
         try
@@ -779,13 +896,10 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
                 Label lblAdvocateName = (Label)row.FindControl("lblAdvocateName");
                 Label lblMobileNo = (Label)row.FindControl("lblMobileNo");
-                if (lblMobileNo.Text != "")
-                    txtDeptAdvocateMobileNo.Text = lblMobileNo.Text;
-                if (lblAdvocateName.Text != "")
-                    txtDeptAdvocateName.Text = lblAdvocateName.Text;
                 ViewState["DeptAdv_Id"] = e.CommandArgument;
                 btnDeptAdvocate.Text = "Update";
-
+                if (lblMobileNo.Text != "") txtDeptAdvocateMobileNo.Text = lblMobileNo.Text;
+                if (lblAdvocateName.Text != "") txtDeptAdvocateName.Text = lblAdvocateName.Text;
             }
             else if (e.CommandName == "DeleteRecord")
             {
@@ -810,8 +924,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
 
-    //Documents Dtl
+    #region DocumentDtl
     protected void btnSaveDoc_Click(object sender, EventArgs e)
     {
         if (Page.IsValid)
@@ -900,8 +1015,12 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 }
                 else
                 {
-                    ViewState["AddNewCaseDoc"] = "";
                     ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
+                    if (ViewState["AddNewCaseDoc"] != "")
+                    {
+                        string path = ViewState["AddNewCaseDoc"].ToString();
+                        if (File.Exists(path)) File.Delete(path); ViewState["AddNewCaseDoc"] = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -981,8 +1100,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
 
-    // Hearing Dtl
+    #region HearingDtl
     protected void btnAddHeairng_Click(object sender, EventArgs e)
     {
         if (Page.IsValid)
@@ -1070,8 +1190,8 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 }
                 else
                 {
-                    ViewState["HearingDoc"] = "";
                     ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
+                    if (ViewState["HearingDoc"] != "") { if (File.Exists(ViewState["HearingDoc"].ToString()))File.Exists(ViewState["HearingDoc"].ToString()); ViewState["HearingDoc"] = ""; }
                 }
             }
             catch (Exception ex)
@@ -1098,8 +1218,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                     ViewState["HearingDoc"] = lblHearingDocPath.Text;
                     rfvhearingFile.Enabled = false;
                 }
-                if (lblHearingDate.Text != "")
-                    txtNextHearingDate.Text = lblHearingDate.Text;
+                if (lblHearingDate.Text != "") txtNextHearingDate.Text = lblHearingDate.Text;
                 ViewState["Hearing_Id"] = e.CommandArgument;
                 btnAddHeairng.Text = "Update";
 
@@ -1127,8 +1246,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
+    #endregion
 
-    //Case Dispose
+    #region CaseDispose
     protected void ddlDisponsType_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -1247,45 +1367,53 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
 
                 if (errormsg == "")
                 {
-                    if (btnCaseDispose.Text == "Disposal")
+                    if (ViewState["SubjectID"].ToString() != "NA")
                     {
-                        string Compliance_Status = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedItem.Text : null;
-                        string ComplianceStatus_ID = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedValue : null;
-                        string DisposalDate = txtCaseDisposeDate.Text != "" ? Convert.ToDateTime(txtCaseDisposeDate.Text, cult).ToString("yyyy/MM/dd") : "";
-                        ds = obj.ByProcedure("USP_Update_CaseRegisDtl", new string[] { "flag", "Case_ID", "UniqueNo", "CaseDisposal_Status", "CaseDisposalType_Id", "CaseDisposal_Date", "CaseDisposal_Timeline", "CaseDisposal_Doc", "OrderSummary", "LastupdatedBy", "LastupdatedByIP", "Compliance_Status", "ComplianceStatus_ID" }
-                           , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), rdCaseDispose.SelectedItem.Text, ddlDisponsType.SelectedValue, DisposalDate, txtOrderimpletimeline.Text.Trim(), ViewState["DisposeDOC"].ToString(), txtorderSummary.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), Compliance_Status, ComplianceStatus_ID }, "dataset");
-                    }
-                    else if (btnCaseDispose.Text == "Update" && ViewState["Dispose_ID"] != null)
-                    {
-                        ds = obj.ByProcedure("USP_UpdateCaseDisOrderByDirec", new string[] { "Compliance_Status", "OrderSummary", "ComplianceStatus_ID", "LastupdatedBy", "LastupdatedByIp", "Case_ID" }
-                        , new string[] { ddlCompliaceSt.SelectedItem.Text.Trim(), txtorderSummary.Text.Trim(), ddlCompliaceSt.SelectedValue, Session["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Dispose_ID"].ToString() }, "dataset");
-                    }
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-                        if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                        if (btnCaseDispose.Text == "Disposal")
                         {
-                            lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                            txtOrderimpletimeline.Text = "";
-                            txtorderSummary.Text = "";
-                            rdCaseDispose.ClearSelection();
-                            ddlDisponsType.ClearSelection();
-                            ddlCompliaceSt.ClearSelection();
-                            txtCaseDisposeDate.Text = "";
-                            ViewState["DisposeDOC"] = "";
-                            BindDetails(sender, e);
-                            btnCaseDispose.Text = "Disposal";
-                            rdCaseDispose_SelectedIndexChanged(sender, e);
-
+                            string Compliance_Status = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedItem.Text : null;
+                            string ComplianceStatus_ID = ddlCompliaceSt.SelectedIndex > 0 ? ddlCompliaceSt.SelectedValue : null;
+                            string DisposalDate = txtCaseDisposeDate.Text != "" ? Convert.ToDateTime(txtCaseDisposeDate.Text, cult).ToString("yyyy/MM/dd") : "";
+                            ds = obj.ByProcedure("USP_Update_CaseRegisDtl", new string[] { "flag", "Case_ID", "UniqueNo", "CaseDisposal_Status", "CaseDisposalType_Id", "CaseDisposal_Date", "CaseDisposal_Timeline", "CaseDisposal_Doc", "OrderSummary", "LastupdatedBy", "LastupdatedByIP", "Compliance_Status", "ComplianceStatus_ID" }
+                               , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), rdCaseDispose.SelectedItem.Text, ddlDisponsType.SelectedValue, DisposalDate, txtOrderimpletimeline.Text.Trim(), ViewState["DisposeDOC"].ToString(), txtorderSummary.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress(), Compliance_Status, ComplianceStatus_ID }, "dataset");
                         }
-                        else
-                            lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
+                        else if (btnCaseDispose.Text == "Update" && ViewState["Dispose_ID"] != null)
+                        {
+                            ds = obj.ByProcedure("USP_UpdateCaseDisOrderByDirec", new string[] { "Compliance_Status", "OrderSummary", "ComplianceStatus_ID", "LastupdatedBy", "LastupdatedByIp", "Case_ID" }
+                            , new string[] { ddlCompliaceSt.SelectedItem.Text.Trim(), txtorderSummary.Text.Trim(), ddlCompliaceSt.SelectedValue, Session["Emp_Id"].ToString(), obj.GetLocalIPAddress(), ViewState["Dispose_ID"].ToString() }, "dataset");
+                        }
+                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                            if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                            {
+                                lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+                                txtOrderimpletimeline.Text = "";
+                                txtorderSummary.Text = "";
+                                rdCaseDispose.ClearSelection();
+                                ddlDisponsType.ClearSelection();
+                                ddlCompliaceSt.ClearSelection();
+                                txtCaseDisposeDate.Text = "";
+                                ViewState["DisposeDOC"] = "";
+                                BindDetails(sender, e);
+                                btnCaseDispose.Text = "Disposal";
+                                rdCaseDispose_SelectedIndexChanged(sender, e);
+
+                            }
+                            else
+                                lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Basic Detail OIC And Case Subject is Mandatory.')", true);
+                        if (ViewState["DisposeDOC"] != "") { string path = ViewState["DisposeDOC"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["DisposeDOC"] = ""; }
                     }
                 }
                 else
                 {
-                    ViewState["DisposeDOC"] = "";
                     ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
+                    if (ViewState["DisposeDOC"] != "") { string path = ViewState["DisposeDOC"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["DisposeDOC"] = ""; }
                 }
             }
         }
@@ -1338,8 +1466,28 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             ErrorLogCls.SendErrorToText(ex);
         }
     }
-
-    // Old Case No. Dtl
+    #endregion
+    #region OldCaseDtl
+    protected void RbOldCaseAsk_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Text = "";
+            DivOldCase.Visible = false;
+            if (RbOldCaseAsk.SelectedValue == "1")
+            {
+                DivOldCase.Visible = true;
+            }
+            else
+            {
+                DivOldCase.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLogCls.SendErrorToText(ex);
+        }
+    }
     protected void btnOldCase_Click(object sender, EventArgs e)
     {
         try
@@ -1536,6 +1684,17 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                             ddloldCourtLoca_Id.ClearSelection();
                             ddloldCaseCourt.ClearSelection();
                             ViewState["FU1"] = ""; ViewState["FU2"] = ""; ViewState["FU3"] = ""; ViewState["FU4"] = "";
+                            //By Default Set No for OldCase.
+                            foreach (ListItem item in RbOldCaseAsk.Items)
+                            {
+                                if (item.Text.Contains("No"))
+                                {
+                                    item.Selected = true;
+                                    break;
+
+                                }
+                                DivOldCase.Visible = false;
+                            }
                             BindDetails(sender, e);
                         }
                         else lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
@@ -1543,11 +1702,13 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 }
                 else
                 {
-                    ViewState["FU1"] = ""; ViewState["FU2"] = ""; ViewState["FU3"] = ""; ViewState["FU4"] = "";
                     ScriptManager.RegisterClientScriptBlock(Page, Page.GetType(), "alertMessage", "alert('Please Select \\n " + errormsg + "')", true);
+                    if (ViewState["FU1"] != "") { string path = ViewState["FU1"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["FU1"] = ""; }
+                    if (ViewState["FU2"] != "") { string path = ViewState["FU2"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["FU2"] = ""; }
+                    if (ViewState["FU3"] != "") { string path = ViewState["FU3"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["FU3"] = ""; }
+                    if (ViewState["FU4"] != "") { string path = ViewState["FU4"].ToString(); if (File.Exists(path)) File.Delete(path); ViewState["FU4"] = ""; }
                 }
             }
-
         }
         catch (Exception ex)
         {
@@ -1580,8 +1741,16 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 {
                     ddloldCaseCourt_SelectedIndexChanged(sender, e);
                     ddloldCourtLoca_Id.ClearSelection();
-
                     ddloldCourtLoca_Id.Items.FindByValue(lblOldCourtLoca_Id.Text).Selected = true;
+                    // Visible All Control
+                    foreach (ListItem item in RbOldCaseAsk.Items)
+                    {
+                        if (item.Text.Contains("Yes"))
+                        {
+                            item.Selected = true;
+                            DivOldCase.Visible = true;
+                        }
+                    }
                 }
                 Div_Doc1.Visible = false; Div_Doc2.Visible = false; Div_Doc3.Visible = false; Div_Doc4.Visible = false;
             }
@@ -1629,87 +1798,30 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         }
 
     }
+    #endregion
 
-    // Petitioner Advocate Dtl
-    protected void btnPetiAdvSave_Click(object sender, EventArgs e)
+    // Decrypt Method
+    private string Decrypt(string cipherText)
     {
-        try
+        string EncryptionKey = "MAKV2SPBNI99212";
+        cipherText = cipherText.Replace(" ", "+");
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);
+        using (Aes encryptor = Aes.Create())
         {
-            if (Page.IsValid)
+            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+            encryptor.Key = pdb.GetBytes(32);
+            encryptor.IV = pdb.GetBytes(16);
+            using (MemoryStream ms = new MemoryStream())
             {
-                lblMsg.Text = "";
-                if (btnPetiAdvSave.Text == "Save")
+                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
                 {
-                    ds = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "Case_ID", "UniqueNo", "PetiAdv_Name", "PetiAdv_MobileNo", "CreatedBy", "CreatedByIP" }
-                        , new string[] { "1", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), txtPetiAdvocateName.Text.Trim(), txtPetiAdvocateMobileNo.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
+                    cs.Write(cipherBytes, 0, cipherBytes.Length);
+                    cs.Close();
                 }
-                else if (btnPetiAdvSave.Text == "Update" && ViewState["PetiAdv_Id"].ToString().ToString() != "" && ViewState["PetiAdv_Id"].ToString() != null)
-                {
-                    ds = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "Case_ID", "UniqueNo", "PetiAdv_Id", "PetiAdv_Name", "PetiAdv_MobileNo", "LastupdatedBy", "LastupdatedByIP" }
-                        , new string[] { "2", ViewState["ID"].ToString(), ViewState["UniqueNO"].ToString(), ViewState["PetiAdv_Id"].ToString(), txtPetiAdvocateName.Text.Trim(), txtPetiAdvocateMobileNo.Text.Trim(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
-                }
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-                    if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
-                    {
-                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                        txtPetiAdvocateName.Text = "";
-                        txtPetiAdvocateMobileNo.Text = "";
-                        ViewState["PetiAdv_Id"] = "";
-                        BindDetails(sender, e);
-                        btnPetiAdvSave.Text = "Save";
-                    }
-                    else
-                        lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
-                }
+                cipherText = Encoding.Unicode.GetString(ms.ToArray());
             }
         }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
-    }
-    protected void GrdPetiAdv_RowCommand(object sender, GridViewCommandEventArgs e)
-    {
-        try
-        {
-            ViewState["PetiAdv_Id"] = "";
-            if (e.CommandName == "EditRecord")
-            {
-                lblMsg.Text = "";
-                GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
-                Label lblPetiAdvocatename = (Label)row.FindControl("lblPetiAdvocatename");
-                Label lblPetiAdvocatMObile = (Label)row.FindControl("lblPetiAdvocatMObile");
-
-
-                ViewState["PetiAdv_Id"] = e.CommandArgument;
-                btnPetiAdvSave.Text = "Update";
-                if (lblPetiAdvocatename.Text != "") txtPetiAdvocateName.Text = lblPetiAdvocatename.Text;
-                if (lblPetiAdvocatMObile.Text != "") txtPetiAdvocateMobileNo.Text = lblPetiAdvocatMObile.Text;
-            }
-            else if (e.CommandName == "DeleteRecord")
-            {
-                GridViewRow row = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
-                DataSet disable = obj.ByProcedure("USP_InsertUpdate_PetiAdvForCaseRegis", new string[] { "flag", "UniqueNo", "PetiAdv_Id", "LastisactiveBy", "LastisactiveByIP" }
-                   , new string[] { "3", ViewState["UniqueNO"].ToString(), e.CommandArgument.ToString(), ViewState["Emp_Id"].ToString(), obj.GetLocalIPAddress() }, "dataset");
-                if (disable != null && disable.Tables[0].Rows.Count > 0)
-                {
-                    string ErrMsg = disable.Tables[0].Rows[0]["ErrMsg"].ToString();
-                    if (disable.Tables[0].Rows[0]["Msg"].ToString() == "OK")
-                    {
-                        lblMsg.Text = obj.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
-                        BindDetails(sender, e);
-                    }
-                }
-                else
-                    lblMsg.Text = obj.Alert("fa-ban", "alert-danger", "Sorry !", disable.Tables[0].Rows[0]["ErrMsg"].ToString());
-            }
-        }
-        catch (Exception ex)
-        {
-            ErrorLogCls.SendErrorToText(ex);
-        }
+        return cipherText;
     }
 
 }

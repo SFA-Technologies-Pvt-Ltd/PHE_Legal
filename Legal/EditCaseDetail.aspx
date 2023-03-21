@@ -228,9 +228,9 @@
                                                     Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                                 </asp:RequiredFieldValidator>
                                                 <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-                                                <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator8" Display="Dynamic" ControlToValidate="txtPetiAddRess"
+                                               <%-- <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator8" Display="Dynamic" ControlToValidate="txtPetiAddRess"
                                                     ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Petitioner" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                                </asp:RegularExpressionValidator>
+                                                </asp:RegularExpressionValidator>--%>
                                             </div>
                                         </div>
                                         <div class="col-md-1">
@@ -516,9 +516,9 @@
                                                     ControlToValidate="txtResAddress" Display="Dynamic" runat="server">
                                                 </asp:RequiredFieldValidator>
                                                 <asp:TextBox ID="txtResAddress" runat="server" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" AutoComplete="off" MaxLength="70"></asp:TextBox>
-                                                <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator7" Display="Dynamic" ControlToValidate="txtResAddress"
+                                              <%--  <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator7" Display="Dynamic" ControlToValidate="txtResAddress"
                                                     ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Responder" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                                </asp:RegularExpressionValidator>
+                                                </asp:RegularExpressionValidator>--%>
                                             </div>
                                         </div>
                                         <div class="col-md-1" style="padding-top: 2rem! important;">
@@ -850,7 +850,7 @@
                                         <div class="col-md-12">
                                             <div class="table-responsive">
                                                 <asp:GridView ID="GrdCaseDispose" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered text-center"
-                                                    DataKeyNames="Case_ID" AutoGenerateRows="false" EmptyDataText="NO RECORD FOUND"  OnRowCommand="GrdCaseDispose_RowCommand">
+                                                    DataKeyNames="Case_ID" AutoGenerateRows="false" EmptyDataText="NO RECORD FOUND" OnRowCommand="GrdCaseDispose_RowCommand">
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
                                                             <ItemTemplate>
@@ -910,80 +910,110 @@
                                 <fieldset id="FieldViewOldCaseDtl" runat="server" visible="true">
                                     <legend>Old Case No. Detail</legend>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Old Case No</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="OldCase"
-                                                    ErrorMessage="Enter Old Case No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="txtoldCaseNo" Display="Dynamic" runat="server">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control" MaxLength="10" AutoComplete="off" onkeypress="return NumberOnly();"></asp:TextBox>
-                                            </div>
+                                        <div class="col-md-12">
+                                            <span style="color: red;"><b>Did You have Any Old Case Detail :</b></span>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Year</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCaseYear" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCaseYear" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>CaseType</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Case type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCasetype" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCasetype" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Court</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Court" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCaseCourt" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCaseCourt" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddloldCaseCourt_SelectedIndexChanged">
-                                                </asp:DropDownList>
+                                                <asp:RadioButtonList ID="RbOldCaseAsk" runat="server" CssClass="rbl form-control" RepeatDirection="Horizontal" OnSelectedIndexChanged="RbOldCaseAsk_SelectedIndexChanged" AutoPostBack="true">
+                                                    <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                    <asp:ListItem Value="2">No</asp:ListItem>
+                                                </asp:RadioButtonList>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Court Location</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Court Location" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCourtLoca_Id" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCourtLoca_Id" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
+                                    <div id="DivOldCase" runat="server" visible="false">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Old Case No</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="OldCase"
+                                                        ErrorMessage="Enter Old Case No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="txtoldCaseNo" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control" MaxLength="10" AutoComplete="off" onkeypress="return NumberOnly();"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Year</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCaseYear" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCaseYear" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>CaseType</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Case type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCasetype" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCasetype" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Court</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Court" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCaseCourt" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCaseCourt" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddloldCaseCourt_SelectedIndexChanged">
+                                                    </asp:DropDownList>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" id="Div_Doc1" runat="server">
-                                            <label>केस का विवरण</label><br />
-                                            <asp:FileUpload ID="FU1" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3" id="Div_Doc2" runat="server">
-                                            <label>कार्यवाही का विवरण</label><br />
-                                            <asp:FileUpload ID="FU2" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3" id="Div_Doc3" runat="server">
-                                            <label>निर्णय</label><br />
-                                            <asp:FileUpload ID="FU3" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3" id="Div_Doc4" runat="server">
-                                            <label>अन्य</label><br />
-                                            <asp:FileUpload ID="FU4" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-1 mt-3">
-                                            <asp:Button ID="btnOldCase" runat="server" Text="Save" OnClick="btnOldCase_Click" ValidationGroup="OldCase" CssClass="btn btn-primary btn-block mt-3" />
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Court Location</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Court Location" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCourtLoca_Id" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCourtLoca_Id" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3" id="Div_Doc1" runat="server">
+                                                <label>केस का विवरण</label>
+                                               <%-- <span style="color: red;"><b>*</b></span>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ValidationGroup="OldCase"
+                                                        ErrorMessage="केस का विवरण" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="FU1" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>--%>
+                                                <asp:FileUpload ID="FU1" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3" id="Div_Doc2" runat="server">
+                                                <label>कार्यवाही का विवरण</label>
+                                                <%--<span style="color: red;"><b>*</b></span>
+                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator12" ValidationGroup="OldCase"
+                                                        ErrorMessage="कार्यवाही का विवरण" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="FU2" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>--%>
+                                                <asp:FileUpload ID="FU2" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3" id="Div_Doc3" runat="server">
+                                                <label>निर्णय</label>
+                                               <%-- <span style="color: red;"><b>*</b></span>
+                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator13" ValidationGroup="OldCase"
+                                                        ErrorMessage="निर्णय" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="FU3" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>--%>
+                                                <asp:FileUpload ID="FU3" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3" id="Div_Doc4" runat="server">
+                                                <label>अन्य</label><br />
+                                                <asp:FileUpload ID="FU4" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-1 mt-3">
+                                                <asp:Button ID="btnOldCase" runat="server" Text="Save" OnClick="btnOldCase_Click" ValidationGroup="OldCase" CssClass="btn btn-primary btn-block mt-3" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
@@ -1047,6 +1077,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </fieldset>
                                 <%--End Here DeptAdv Detail --%>
                                 <%---End Here For Edit Case Details ---%>
