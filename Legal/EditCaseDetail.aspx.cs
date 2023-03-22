@@ -364,7 +364,8 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 lblCaseNo.Text = ds.Tables[0].Rows[0]["CaseNo"].ToString();
-                txtCaseDetail.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();
+                if (ds.Tables[0].Rows[0]["CaseDetail"].ToString() != "")txtCaseDetail.Text = ds.Tables[0].Rows[0]["CaseDetail"].ToString();
+                else txtCaseDetail.Text = "Not Available";
 
                 ddlCourtType.ClearSelection();
                 if (ddlCourtType.Items.Count > 0)
@@ -520,17 +521,16 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
     {
         try
         {
-            DataSet dsOic = obj.ByDataSet("select * from tblOICMaster where OICMaster_Id = " + ddlOicName.SelectedValue);
+            DataSet dsOic = obj.ByDataSet("select OICMobileNo,OICEmailID from tblOICMaster where OICMaster_Id = " + ddlOicName.SelectedValue);
             if (dsOic.Tables[0].Rows.Count > 0)
             {
-                txtOicMobileNo.Text = dsOic.Tables[0].Rows[0]["OICMobileNo"].ToString();
-                txtOicEmailId.Text = dsOic.Tables[0].Rows[0]["OICEmailID"].ToString();
+                 txtOicMobileNo.Text = dsOic.Tables[0].Rows[0]["OICMobileNo"].ToString(); 
+                 txtOicEmailId.Text = dsOic.Tables[0].Rows[0]["OICEmailID"].ToString(); 
             }
             else
             {
                 txtOicMobileNo.Text = "";
-                txtOicEmailId.Text = "";
-
+                txtOicEmailId.Text =  "";
             }
         }
         catch (Exception ex)
@@ -1462,6 +1462,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
         }
     }
     #endregion
+
     #region OldCaseDtl
     protected void ddlOldCaseAsk_SelectedIndexChanged(object sender, EventArgs e)
     {

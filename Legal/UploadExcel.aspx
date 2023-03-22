@@ -104,32 +104,6 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div style="display: table; height: 100%; width: 100%;">
-            <div class="modal-dialog" style="width: 340px; display: table-cell; vertical-align: middle;">
-                <div class="modal-content" style="width: inherit; height: inherit; margin: 0 auto;">
-                    <div class="modal-header" style="background-color: #D9D9D9;">
-                        <span class="modal-title" style="float: left" id="myModalLabel">Confirmation</span>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="modal-body">
-                        <p>
-                            <i class="fa fa-question-circle"></i>
-                            <asp:Label ID="lblPopupAlert" runat="server"></asp:Label>
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <asp:Button runat="server" CssClass="btn btn-success" Text="Yes" ID="btnYes" OnClick="btnSave_Click" Style="margin-top: 20px; width: 50px;" />
-                        <asp:Button ID="btnCancel" ValidationGroup="no" runat="server" CssClass="btn btn-danger" OnClick="btnCancel_Click" Text="No" Style="margin-top: 20px; width: 50px;" />
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -202,7 +176,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <fieldset id="Field_ExistRecord" runat="server" visible="false">
                                     <legend>Existing Record</legend>
                                     <div class="row">
@@ -304,6 +277,9 @@
                                     </div>
                                     <div class="col-md-1 mt-1">
                                         <asp:Button ID="btnSave" runat="server" CssClass="btn btn-primary btn-block" Visible="false" Text="Save" OnClick="btnSave_Click" OnClientClick="return confirm('Are you sure you want to Save records?');" />
+                                    </div>
+                                     <div class="col-md-1 mt-1">
+                                        <asp:Button ID="btnCancelUpload" runat="server" CssClass="btn btn-danger btn-block" Visible="false" Text="Cancel" OnClick="btnCancelUpload_Click" OnClientClick="return confirm('Are you sure you want to Cancel Operation?');" />
                                     </div>
                                 </div>
                             </div>
