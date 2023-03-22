@@ -108,7 +108,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="body" runat="Server">
-    <%--<asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />--%>
+    <asp:ValidationSummary ID="VDS" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Save" />
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -126,7 +126,7 @@
                                         <label>Court</label>
                                         <span style="color: red;"><b>*</b></span>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Save" CssClass="fa fa-pull-right"
-                                            ErrorMessage="Select Case Sratus." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                            ErrorMessage="Select Court." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
                                             ControlToValidate="ddlCourt" Display="Dynamic" runat="server" InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                         <asp:DropDownList ID="ddlCourt" runat="server" CssClass="form-control select2" OnSelectedIndexChanged="ddlCourt_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
