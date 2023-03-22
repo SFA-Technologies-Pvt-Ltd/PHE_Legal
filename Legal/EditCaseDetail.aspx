@@ -516,9 +516,6 @@
                                                     ControlToValidate="txtResAddress" Display="Dynamic" runat="server">
                                                 </asp:RequiredFieldValidator>
                                                 <asp:TextBox ID="txtResAddress" runat="server" CssClass="form-control" onkeyup="javascript:capFirst(this);" onkeypress="return chcode();" AutoComplete="off" MaxLength="70"></asp:TextBox>
-                                              <%--  <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator7" Display="Dynamic" ControlToValidate="txtResAddress"
-                                                    ValidationExpression="^[a-zA-Z]+(([\s][a-zA-Z])?[a-zA-Z]*)*$" ValidationGroup="Responder" ForeColor="Red" ErrorMessage="Please Enter Valid Text">
-                                                </asp:RegularExpressionValidator>--%>
                                             </div>
                                         </div>
                                         <div class="col-md-1" style="padding-top: 2rem! important;">
@@ -908,17 +905,14 @@
                                 <%-- End Here Case Dispose Detail --%>
                                 <%--Start Here OldCase Detail --%>
                                 <fieldset id="FieldViewOldCaseDtl" runat="server" visible="true">
-                                    <legend>Old Case No. Detail</legend>
+                                    <legend>Did You have Any Old Case Detail</legend>
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <span style="color: red;"><b>Did You have Any Old Case Detail :</b></span>
-                                        </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <asp:RadioButtonList ID="RbOldCaseAsk" runat="server" CssClass="rbl form-control" RepeatDirection="Horizontal" OnSelectedIndexChanged="RbOldCaseAsk_SelectedIndexChanged" AutoPostBack="true">
+                                                <asp:DropDownList ID="ddlOldCaseAsk" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlOldCaseAsk_SelectedIndexChanged">
                                                     <asp:ListItem Value="1">Yes</asp:ListItem>
                                                     <asp:ListItem Value="2">No</asp:ListItem>
-                                                </asp:RadioButtonList>
+                                                </asp:DropDownList>
                                             </div>
                                         </div>
                                     </div>

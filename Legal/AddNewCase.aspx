@@ -183,7 +183,7 @@
                                             ControlToValidate="txtCaseDetail" Display="Dynamic" runat="server">
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtCaseDetail" runat="server" class="form-control" onkeyup="javascript:capFirst(this);" TextMode="MultiLine"></asp:TextBox>
-                                      
+
                                     </div>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@
                                             Text="<i class='fa fa-exclamation-circle' title='Required !'></i>">
                                         </asp:RequiredFieldValidator>
                                         <asp:TextBox ID="txtPetiAddRess" runat="server" placeholder="Address" AutoComplete="off" CssClass="form-control" MaxLength="100" onkeyup="javascript:capFirst(this);"></asp:TextBox>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -719,143 +719,153 @@
                                     </div>
                                 </fieldset>
                                 <fieldset>
-                                    <legend>Old Case Detail</legend>
+                                    <legend>Did You have Any Old Case Detail</legend>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Old Case No</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvoldCsseno" ValidationGroup="OldCase"
-                                                    ErrorMessage="Enter Old Case No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="txtoldCaseNo" Display="Dynamic" runat="server">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control" MaxLength="10" AutoComplete="off" onkeypress="return NumberOnly();"></asp:TextBox>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Year</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvoldYear" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCaseYear" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCaseYear" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>CaseType</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvOldCasetype" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Case type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCasetype" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCasetype" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Court</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvOldCourt" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Court type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCaseCourt" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCaseCourt" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddloldCaseCourt_SelectedIndexChanged">
+                                                <asp:DropDownList ID="ddlOldCaseAsk" runat="server" CssClass="form-control"  AutoPostBack="true" OnSelectedIndexChanged="ddlOldCaseAsk_SelectedIndexChanged">
+                                                    <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                    <asp:ListItem Value="2">No</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Court Location</label><span style="color: red;"><b>*</b></span>
-                                                <asp:RequiredFieldValidator ID="rfvoldCourtLocation" ValidationGroup="OldCase"
-                                                    ErrorMessage="Select Court Location" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
-                                                    ControlToValidate="ddloldCourtLoca_Id" Display="Dynamic" runat="server" InitialValue="0">
-                                                </asp:RequiredFieldValidator>
-                                                <asp:DropDownList ID="ddloldCourtLoca_Id" runat="server" CssClass="form-control">
-                                                </asp:DropDownList>
+                                    <div id="DivOldCase" class="m-2" runat="server" visible="false">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Old Case No</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="rfvoldCsseno" ValidationGroup="OldCase"
+                                                        ErrorMessage="Enter Old Case No." ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="txtoldCaseNo" Display="Dynamic" runat="server">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:TextBox ID="txtoldCaseNo" runat="server" CssClass="form-control" MaxLength="10" AutoComplete="off" onkeypress="return NumberOnly();"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Year</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="rfvoldYear" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Case Year" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCaseYear" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCaseYear" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>CaseType</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="rfvOldCasetype" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Case type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCasetype" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCasetype" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Court</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="rfvOldCourt" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Court type" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCaseCourt" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCaseCourt" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddloldCaseCourt_SelectedIndexChanged">
+                                                    </asp:DropDownList>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>केस का विवरण</label><br />
-                                            <asp:FileUpload ID="FU1" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>कार्यवाही का विवरण</label><br />
-                                            <asp:FileUpload ID="FU2" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>निर्णय</label><br />
-                                            <asp:FileUpload ID="FU3" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>अन्य</label><br />
-                                            <asp:FileUpload ID="FU4" runat="server" CssClass="form-control" />
-                                        </div>
-                                        <div class="col-md-2 mt-3">
-                                            <div class="row">
-                                                <div class="col-md-6 mt-3">
-                                                    <asp:Button ID="btnSaveOldCase" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="OldCase" Text="Add" OnClick="btnSaveOldCase_Click" />
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Court Location</label><span style="color: red;"><b>*</b></span>
+                                                    <asp:RequiredFieldValidator ID="rfvoldCourtLocation" ValidationGroup="OldCase"
+                                                        ErrorMessage="Select Court Location" ForeColor="Red" Text="<i class='fa fa-exclamation-circle' title='Required !'></i>"
+                                                        ControlToValidate="ddloldCourtLoca_Id" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                    <asp:DropDownList ID="ddloldCourtLoca_Id" runat="server" CssClass="form-control">
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>केस का विवरण</label><br />
+                                                <asp:FileUpload ID="FU1" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>कार्यवाही का विवरण</label><br />
+                                                <asp:FileUpload ID="FU2" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>निर्णय</label><br />
+                                                <asp:FileUpload ID="FU3" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>अन्य</label><br />
+                                                <asp:FileUpload ID="FU4" runat="server" CssClass="form-control" />
+                                            </div>
+                                            <div class="col-md-2 mt-3">
+                                                <div class="row">
+                                                    <div class="col-md-6 mt-3">
+                                                        <asp:Button ID="btnSaveOldCase" runat="server" CssClass="btn btn-primary btn-block" ValidationGroup="OldCase" Text="Add" OnClick="btnSaveOldCase_Click" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-md-12">
-                                            <div class="table-responsive">
-                                                <asp:GridView ID="GrdOldCaseDtl" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND">
-                                                    <Columns>
-                                                        <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Old Case No.">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldCaseNo" runat="server" Text='<%# Eval("OldCaseNo") %>'></asp:Label>
-                                                                <asp:Label ID="lblOldFillingNO" runat="server" Text='<%# Eval("OldFillingNo") %>' Visible="false"></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Case Year">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldCaseYear" runat="server" Text='<%# Eval("CaseYear") %>'></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Case type">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldCasetype" runat="server" Text='<%# Eval("Casetype") %>'></asp:Label>
-                                                                <asp:Label ID="lblOldCasetype_Id" runat="server" Text='<%# Eval("Casetype_ID") %>' Visible="false"></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Court">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldCourt" runat="server" Text='<%# Eval("Court") %>'></asp:Label>
-                                                                <asp:Label ID="lblOldCourt_Id" runat="server" Text='<%# Eval("Court_ID") %>' Visible="false"></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Court Location">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldCourtLoca" runat="server" Text='<%# Eval("CourtLocation") %>'></asp:Label>
-                                                                <asp:Label ID="lblOldCourtLoca_Id" runat="server" Text='<%# Eval("CourtLocation_ID") %>' Visible="false"></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="Doc Name">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblOldDocName" runat="server" Text='<%# Eval("DocName") %>'></asp:Label>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="View">
-                                                            <ItemTemplate>
-                                                                <asp:HyperLink ID="hypOldCaseDtl" runat="server" Enabled='<%# Eval("Document").ToString() == "" ? false : true %>' Target="_blank" NavigateUrl='<%# "~/Legal/OldCaseDocument/" +  Eval("Document") %>' CssClass="fa fa-eye"></asp:HyperLink>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </div>
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <asp:GridView ID="GrdOldCaseDtl" runat="server" CssClass="table table-bordered text-center" AutoGenerateColumns="false" EmptyDataText="NO RECORD FOUND">
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="Sr#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="5%">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblId" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Old Case No.">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldCaseNo" runat="server" Text='<%# Eval("OldCaseNo") %>'></asp:Label>
+                                                            <asp:Label ID="lblOldFillingNO" runat="server" Text='<%# Eval("OldFillingNo") %>' Visible="false"></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Case Year">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldCaseYear" runat="server" Text='<%# Eval("CaseYear") %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Case type">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldCasetype" runat="server" Text='<%# Eval("Casetype") %>'></asp:Label>
+                                                            <asp:Label ID="lblOldCasetype_Id" runat="server" Text='<%# Eval("Casetype_ID") %>' Visible="false"></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Court">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldCourt" runat="server" Text='<%# Eval("Court") %>'></asp:Label>
+                                                            <asp:Label ID="lblOldCourt_Id" runat="server" Text='<%# Eval("Court_ID") %>' Visible="false"></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Court Location">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldCourtLoca" runat="server" Text='<%# Eval("CourtLocation") %>'></asp:Label>
+                                                            <asp:Label ID="lblOldCourtLoca_Id" runat="server" Text='<%# Eval("CourtLocation_ID") %>' Visible="false"></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="Doc Name">
+                                                        <ItemTemplate>
+                                                            <asp:Label ID="lblOldDocName" runat="server" Text='<%# Eval("DocName") %>'></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="View">
+                                                        <ItemTemplate>
+                                                            <asp:HyperLink ID="hypOldCaseDtl" runat="server" Enabled='<%# Eval("Document").ToString() == "" ? false : true %>' Target="_blank" NavigateUrl='<%# "~/Legal/OldCaseDocument/" +  Eval("Document") %>' CssClass="fa fa-eye"></asp:HyperLink>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                            </asp:GridView>
                                         </div>
                                     </div>
+
                                 </fieldset>
                             </div>
                         </div>

@@ -44,16 +44,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 FillCasetype();
                 BindDetails(sender, e);
                 //By Default Set No for OldCase.
-                foreach (ListItem item in RbOldCaseAsk.Items)
-                {
-                    if (item.Text.Contains("No"))
-                    {
-                        item.Selected = true;
-                        break;
-
-                    }
-                    DivOldCase.Visible = false;
-                }
+                OldCase_BydefaultNO();
             }
         }
         else
@@ -66,6 +57,13 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
     protected void Page_PreRender(object sender, EventArgs e)
     {
         ViewState["UPAGETOKEN"] = Session["PAGETOKEN"];
+    }
+    protected void OldCase_BydefaultNO()
+    {
+        ddlOldCaseAsk.ClearSelection();
+        ddlOldCaseAsk.Items.FindByText("No").Selected = true;
+        DivOldCase.Visible = false;
+
     }
     #region Fill CaseDispose Status
     protected void CaseDisposeStatus() // Case Dispose By Default On NO condtiton
@@ -499,10 +497,8 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
     }
     protected void ddlCaseSubject_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         try
         {
-
             ddlCaseSubSubject.Items.Clear();
             DataSet DsSubs = obj.ByDataSet("select CaseSubSubj_Id, CaseSubSubject from tbl_CaseSubSubjectMaster where CaseSubjectID=" + ddlCaseSubject.SelectedValue);
             if (DsSubs != null && DsSubs.Tables[0].Rows.Count > 0)
@@ -513,7 +509,6 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                 ddlCaseSubSubject.DataBind();
             }
             ddlCaseSubSubject.Items.Insert(0, new ListItem("Select", "0"));
-
         }
         catch (Exception ex)
         {
@@ -1468,20 +1463,15 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
     }
     #endregion
     #region OldCaseDtl
-    protected void RbOldCaseAsk_SelectedIndexChanged(object sender, EventArgs e)
+    protected void ddlOldCaseAsk_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
         {
             lblMsg.Text = "";
             DivOldCase.Visible = false;
-            if (RbOldCaseAsk.SelectedValue == "1")
-            {
-                DivOldCase.Visible = true;
-            }
+            if (ddlOldCaseAsk.SelectedValue == "1") DivOldCase.Visible = true;
             else
-            {
                 DivOldCase.Visible = false;
-            }
         }
         catch (Exception ex)
         {
@@ -1685,16 +1675,7 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                             ddloldCaseCourt.ClearSelection();
                             ViewState["FU1"] = ""; ViewState["FU2"] = ""; ViewState["FU3"] = ""; ViewState["FU4"] = "";
                             //By Default Set No for OldCase.
-                            foreach (ListItem item in RbOldCaseAsk.Items)
-                            {
-                                if (item.Text.Contains("No"))
-                                {
-                                    item.Selected = true;
-                                    break;
-
-                                }
-                                DivOldCase.Visible = false;
-                            }
+                            OldCase_BydefaultNO();
                             BindDetails(sender, e);
                         }
                         else lblMsg.Text = obj.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
@@ -1743,14 +1724,9 @@ public partial class Legal_EditCaseDetail : System.Web.UI.Page
                     ddloldCourtLoca_Id.ClearSelection();
                     ddloldCourtLoca_Id.Items.FindByValue(lblOldCourtLoca_Id.Text).Selected = true;
                     // Visible All Control
-                    foreach (ListItem item in RbOldCaseAsk.Items)
-                    {
-                        if (item.Text.Contains("Yes"))
-                        {
-                            item.Selected = true;
-                            DivOldCase.Visible = true;
-                        }
-                    }
+                    ddlOldCaseAsk.ClearSelection();
+                    ddlOldCaseAsk.Items.FindByValue("1").Selected = true;
+                    ddlOldCaseAsk_SelectedIndexChanged( sender,  e);
                 }
                 Div_Doc1.Visible = false; Div_Doc2.Visible = false; Div_Doc3.Visible = false; Div_Doc4.Visible = false;
             }
