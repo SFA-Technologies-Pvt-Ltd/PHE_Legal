@@ -192,7 +192,7 @@ public partial class Legal_UploadExcel : System.Web.UI.Page
                                     s.SetField<String>("UniqueNo", Convert.ToString((s.Field<String>("CourtTypeID"))) + "_" + Convert.ToString(s.Field<String>("CourtLocation_ID")) + "_" + s.Field<String>("CaseYear") + "_" + s.Field<String>("Casetype") + "_" + s.Field<String>("Caseno")); // Here Create Uniqueno.
                                 });
                             });
-
+                            
                             dtCtype.AsEnumerable().ToList().ForEach(m => // To Update dt1 From Casetype master.
                             {
                                 dt1.AsEnumerable().Where(r => m.Field<String>("Casetype_Name").Trim() == r.Field<String>("Casetype").Trim()).ToList().ForEach(s =>

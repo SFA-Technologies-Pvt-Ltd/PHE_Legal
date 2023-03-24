@@ -107,12 +107,15 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
             {
                 GrddivisionMst.DataSource = ds;
                 GrddivisionMst.DataBind();
+                GrddivisionMst.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrddivisionMst.UseAccessibleHeader = true;
             }
             else
             {
                 GrddivisionMst.DataSource = null;
                 GrddivisionMst.DataBind();
             }
+          
         }
         catch (Exception ex)
         {
@@ -206,6 +209,8 @@ public partial class Legal_DivisionMaster : System.Web.UI.Page
                 ddlCircleName.ClearSelection();
                 ddlCircleName.Items.FindByValue(lblCircleID.Text).Selected = true;
                 ViewState["DivisionID"] = e.CommandArgument;
+                GrddivisionMst.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrddivisionMst.UseAccessibleHeader = true;
                 btnSave.Text = "Update";
             }
             if (e.CommandName == "DeleteDetails")

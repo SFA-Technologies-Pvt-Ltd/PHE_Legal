@@ -86,6 +86,8 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
             {
                 GrdZoneCircle.DataSource = ds;
                 GrdZoneCircle.DataBind();
+                GrdZoneCircle.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdZoneCircle.UseAccessibleHeader = true;
             }
             else
             {
@@ -210,6 +212,8 @@ public partial class Legal_zonetocircle : System.Web.UI.Page
                 ddlzone.ClearSelection();
                 ddlzone.Items.FindByValue(lblZoneID.Text).Selected = true;
                 ViewState["CircleID"] = e.CommandArgument;
+                GrdZoneCircle.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdZoneCircle.UseAccessibleHeader = true;
                 btnSave.Text = "Update";
             }
             if (e.CommandName == "DeleteDetails")

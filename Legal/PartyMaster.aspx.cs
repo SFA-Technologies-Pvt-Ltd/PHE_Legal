@@ -60,6 +60,8 @@ public partial class Legal_PartyMaster : System.Web.UI.Page
             {
                 GrdPartyName.DataSource = ds;
                 GrdPartyName.DataBind();
+                GrdPartyName.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdPartyName.UseAccessibleHeader = true;
             }
             else
             {
@@ -147,6 +149,8 @@ public partial class Legal_PartyMaster : System.Web.UI.Page
                     ddlDesignationName.Items.FindByValue(lblDesignationId.Text).Selected = true;
                 }
                 ViewState["Party_ID"] = e.CommandArgument;
+                GrdPartyName.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdPartyName.UseAccessibleHeader = true;
                 btnSave.Text = "Update";
 
             }

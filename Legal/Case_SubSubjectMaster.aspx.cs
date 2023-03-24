@@ -41,6 +41,8 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
             {
                 grdSub_Subect.DataSource = ds;
                 grdSub_Subect.DataBind();
+                grdSub_Subect.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdSub_Subect.UseAccessibleHeader = true;
             }
             
         }
@@ -149,6 +151,8 @@ public partial class Legal_Case_SubSubjectMaster : System.Web.UI.Page
                 txtSubsubject.Text = lblCaseSub_Subject.Text;
                 ddlcaseSubject.ClearSelection();
                 ddlcaseSubject.Items.FindByValue(lblCaseSubjectID.Text).Selected = true;
+                grdSub_Subect.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdSub_Subect.UseAccessibleHeader = true;
             }
             if (e.CommandName == "DeleteDetails")
             {

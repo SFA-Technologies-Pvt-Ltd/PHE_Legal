@@ -45,6 +45,8 @@ public partial class Legal_CaseSubjectMaster : System.Web.UI.Page
                 DataTable dt = ds.Tables[0];
                 grdCaseSubject.DataSource = dt;
                 grdCaseSubject.DataBind();
+                grdCaseSubject.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdCaseSubject.UseAccessibleHeader = true;
             }
         }
         catch (Exception ex)
@@ -113,6 +115,8 @@ public partial class Legal_CaseSubjectMaster : System.Web.UI.Page
                 txtCaseSubjectDetail.Text = lblCaseSubjectDetail.Text;
                 btnSave.Text = "Update";
                 ViewState["EditID"] = e.CommandArgument;
+                grdCaseSubject.HeaderRow.TableSection = TableRowSection.TableHeader;
+                grdCaseSubject.UseAccessibleHeader = true;
             }
             if (e.CommandName == "DeleteDetails")
             {

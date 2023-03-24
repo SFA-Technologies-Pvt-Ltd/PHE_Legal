@@ -63,6 +63,8 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
             {
                 GrdOfficeMaster.DataSource = ds;
                 GrdOfficeMaster.DataBind();
+                GrdOfficeMaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdOfficeMaster.UseAccessibleHeader = true;
             }
             else
             {
@@ -171,6 +173,8 @@ public partial class Legal_OfficeMaster : System.Web.UI.Page
 
                 btnSave.Text = "Update";
                 ViewState["OfficeID"] = e.CommandArgument;
+                GrdOfficeMaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdOfficeMaster.UseAccessibleHeader = true;
                 if (lblofficelevel.Text != "")
                 {
                     ddlOfficeLevel.ClearSelection();

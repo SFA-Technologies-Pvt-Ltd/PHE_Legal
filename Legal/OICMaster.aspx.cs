@@ -43,6 +43,8 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
             {
                 gridoicmaster.DataSource = ds;
                 gridoicmaster.DataBind();
+                gridoicmaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                gridoicmaster.UseAccessibleHeader = true;
             }
             else
             {
@@ -222,6 +224,10 @@ public partial class Legal_Oicmaster : System.Web.UI.Page
                 Label lblEmailID = (Label)row.FindControl("lblEmailID");
 
                 ViewState["OICID"] = e.CommandArgument;
+
+                gridoicmaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                gridoicmaster.UseAccessibleHeader = true;
+
                 btnSave.Text = "Update";
                 txtoicnme.Text = lblOICName.Text;
                 txtEmailID.Text = lblEmailID.Text;

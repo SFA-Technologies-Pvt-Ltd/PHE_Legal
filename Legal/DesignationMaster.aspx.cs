@@ -41,6 +41,8 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
             {
                 GrdDesignation.DataSource = ds;
                 GrdDesignation.DataBind();
+                GrdDesignation.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdDesignation.UseAccessibleHeader = true;
             }
             else
             {
@@ -191,6 +193,8 @@ public partial class Legal_DesignationMaster : System.Web.UI.Page
                     ddlOfficeLevel.ClearSelection();
                     ddlOfficeLevel.Items.FindByValue(lblOfficelevelID.Text).Selected = true;
                 }
+                GrdDesignation.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdDesignation.UseAccessibleHeader = true;
                 ViewState["ID"] = e.CommandArgument;
                 btnSave.Text = "Update";
 

@@ -92,6 +92,8 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
             {
                 GrdZoneMaster.DataSource = ds;
                 GrdZoneMaster.DataBind();
+                GrdZoneMaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdZoneMaster.UseAccessibleHeader = true;
             }
             else
             {
@@ -179,7 +181,10 @@ public partial class Legal_ZoneMaster : System.Web.UI.Page
                     ddlOfficeLevel.ClearSelection();
                     ddlOfficeLevel.Items.FindByValue(OfficeLevel_Id.Text).Selected = true;
                 }
-                txtZoneOfficeLocation.Text = OfficeLocation.Text;
+                if (OfficeLocation.Text != "")
+                { txtZoneOfficeLocation.Text = OfficeLocation.Text; }
+                GrdZoneMaster.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GrdZoneMaster.UseAccessibleHeader = true;
                 ViewState["ZoneID"] = e.CommandArgument.ToString();
                 btnSave.Text = "Update";
 
